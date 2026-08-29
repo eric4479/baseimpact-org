@@ -1,75 +1,59 @@
-# React + TypeScript + Vite
+# Base Impact
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Mobile-first community resource directory for Scottsmoor, Titusville, and Brevard County, Florida.
 
-Currently, two official plugins are available:
+Live site: [baseimpact.org](https://baseimpact.org)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Local development
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+## Production build
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm run build
 ```
+
+Output is static files in `dist/`.
+
+## Cloudflare Pages
+
+This repo is set up so a push to `main` can deploy to Cloudflare Pages.
+
+**Build settings** (Cloudflare dashboard → Pages project → Settings):
+
+| Setting | Value |
+|---|---|
+| Framework preset | Vite |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Node version | `22` (also in `NODE_VERSION` and `.nvmrc`) |
+| Production branch | `main` |
+
+SPA routes are handled by `public/_redirects` (`/* → /index.html`).
+
+### If Git integration is already connected
+
+A successful `npm run build` on `main` is enough. The previous deploy failed because:
+
+1. `tsc -b` ran as part of `build` and TypeScript errors aborted the job (`build-error.txt`).
+2. Tailwind was never installed, so utility classes in the UI did not generate CSS.
+3. `#root { width: 1126px }` in the Vite template CSS broke phones.
+
+Those are fixed in this tree.
+
+### Optional GitHub Action deploy
+
+[`.github/workflows/cloudflare-pages.yml`](.github/workflows/cloudflare-pages.yml) builds on every push. To also deploy from Actions, add repository secrets:
+
+- `CLOUDFLARE_API_TOKEN` — token with **Cloudflare Pages: Edit**
+- `CLOUDFLARE_ACCOUNT_ID` — from the Cloudflare dashboard URL / Workers & Pages overview
+
+If those secrets are missing, the Action still **builds** (so you can see a red X if the site would fail to compile) and skips deploy. Native Cloudflare Git integration can remain the deployer.
+
+## Stack
+
+Vite + React + TypeScript + Tailwind CSS v4. No server required at runtime.
