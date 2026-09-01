@@ -42,10 +42,8 @@ export function ContactPage() {
               <a href="tel:211" className="font-semibold text-sea hover:underline">Call 211</a>
             </li>
             <li>
-              <strong>Base Impact station (Scottsmoor Community Care Hub):</strong>{" "}
-              <a href="tel:3215550199" className="font-semibold text-sea hover:underline">
-                Call 321-555-0199
-              </a>
+              <strong>Mailing address:</strong>{" "}
+              Available on request. Write first so we can direct your mail correctly.
             </li>
           </ul>
         </div>
@@ -61,19 +59,18 @@ export function ContactPage() {
 
         <div className="rounded-2xl bg-paper-raised p-5 shadow-[var(--shadow-border)]">
           <h2 className="font-display text-xl font-semibold">By mail</h2>
-          <address className="mt-3 text-sm not-italic text-ink-soft">
-            Base Impact Inc.<br />
-            3750 Magoon Ave<br />
-            Scottsmoor, FL 32775
-          </address>
+          <p className="mt-3 text-sm text-ink-soft">
+            Write to us at hello@baseimpact.org and we will provide the correct mailing address
+            once your message is received. This keeps mail directed to the right place.
+          </p>
         </div>
 
         <div className="rounded-2xl bg-paper-raised p-5 shadow-[var(--shadow-border)]">
           <h2 className="font-display text-xl font-semibold">In person</h2>
           <p className="mt-3 text-sm text-ink-soft">
-            <strong>Scottsmoor Community Care Hub</strong><br />
-            3750 Magoon Ave, Scottsmoor, FL 32775<br />
-            Mon / Wed / Fri, 1:00 PM – 5:00 PM
+            We are not open for walk-in visits at this time. We partner with local churches and
+            community spaces for outreach — contact us and we will tell you where and when the
+            next available session is.
           </p>
         </div>
       </section>

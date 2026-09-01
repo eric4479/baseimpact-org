@@ -12,18 +12,10 @@ const ORG_SCHEMA = {
   url: "https://baseimpact.org",
   description:
     "Pre-filing nonprofit in Scottsmoor, FL building a neighborhood navigation desk for Brevard, Volusia, and Orange Counties.",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "3750 Magoon Ave",
-    addressLocality: "Scottsmoor",
-    addressRegion: "FL",
-    postalCode: "32775",
-    addressCountry: "US",
-  },
   contactPoint: {
     "@type": "ContactPoint",
-    telephone: "+1-321-323-0999",
     contactType: "customer service",
+    email: "hello@baseimpact.org",
   },
 };
 
