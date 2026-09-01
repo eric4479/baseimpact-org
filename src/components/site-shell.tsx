@@ -121,6 +121,9 @@ export function SiteShell({ children }: { children: ReactNode }) {
           </div>
           <div className="text-right">
             <p>© {new Date().getFullYear()} Base Impact Inc.</p>
+            <Link to="/privacy" className="mt-1 inline-block text-paper-raised underline-offset-2 hover:underline">
+              Privacy policy
+            </Link>
             <Link to="/feedback" className="mt-1 inline-block text-paper-raised underline-offset-2 hover:underline">
               Share feedback
             </Link>
