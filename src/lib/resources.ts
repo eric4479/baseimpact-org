@@ -227,6 +227,42 @@ export const BREVARD_RESOURCES: Resource[] = [
     triageCategory: "food",
     county: "Brevard",
   },
+  {
+    id: "res-9",
+    name: "Life Pointe Ministries",
+    category: "Churches & Faith-Based",
+    address: "3910 S Washington Ave, Titusville, FL 32780",
+    lat: 28.6128,
+    lng: -80.8091,
+    phone: "(321) 383-0254",
+    description:
+      "Hot meals, clothing, blankets, and cold night shelter. Food pantry distribution available on select Fridays.",
+    hoursText: "Mon–Sat 10:00 AM – 2:00 PM; shelter as needed",
+    schedule: { 1: [10, 14], 2: [10, 14], 3: [10, 14], 4: [10, 14], 5: [10, 14], 6: [10, 14] },
+    tags: ["Hot Meals", "Clothing", "Shelter", "North Brevard", "Faith-Based"],
+    partnerType: "Faith Partner",
+    capacityStatus: "High Demand",
+    triageCategory: "shelter",
+    county: "Brevard",
+  },
+  {
+    id: "res-10",
+    name: "Under The Bridge Ministries",
+    category: "Churches & Faith-Based",
+    address: "A. Max Brewer Bridge / Sand Point Park, Titusville, FL 32780",
+    lat: 28.6133,
+    lng: -80.8234,
+    phone: "",
+    description:
+      "Monday night outreach under the Max Brewer Bridge: hot meals, supplies, blankets, and pastoral care for unhoused neighbors.",
+    hoursText: "Mondays 6:00 PM – 8:00 PM",
+    schedule: { 1: [18, 20] },
+    tags: ["Hot Meals", "Outreach", "Shelter", "North Brevard", "Faith-Based"],
+    partnerType: "Faith Partner",
+    capacityStatus: "Open & Ready",
+    triageCategory: "shelter",
+    county: "Brevard",
+  },
 ];
 
 const VOLUSIA_RESOURCES: Resource[] = [

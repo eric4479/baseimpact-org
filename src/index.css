@@ -24,6 +24,9 @@
   --color-closed-soft: #ece7dc;
   --color-danger: #8b2e2e;
 
+  --color-black: #000000;
+  --color-white: #ffffff;
+
   --radius-xs: 0.25rem;
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
@@ -41,6 +44,8 @@
     0px 2px 4px 0px rgb(28 25 21 / 0.06);
 }
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   html {
     -webkit-font-smoothing: antialiased;
@@ -49,11 +54,16 @@
     color: var(--color-ink);
   }
 
+  html.dark {
+    background: #050505;
+    color: var(--color-white);
+  }
+
   body {
     margin: 0;
     min-height: 100dvh;
-    background: var(--color-paper);
-    color: var(--color-ink);
+    background: inherit;
+    color: inherit;
     font-family: var(--font-sans);
     font-size: 1.0625rem;
     line-height: 1.5;
@@ -66,7 +76,13 @@
     text-wrap: balance;
     letter-spacing: -0.03em;
     line-height: 1.15;
-    color: var(--color-ink);
+    color: inherit;
+  }
+
+  html.dark h1,
+  html.dark h2,
+  html.dark h3 {
+    color: var(--color-white);
   }
 
   p {
@@ -87,6 +103,36 @@
   select,
   textarea {
     font: inherit;
+  }
+}
+
+@layer components {
+  .dark .bg-paper {
+    background-color: #050505;
+  }
+  .dark .bg-paper-raised {
+    background-color: #0a0a0a;
+  }
+  .dark .bg-paper-sunken {
+    background-color: #111111;
+  }
+  .dark .bg-pine {
+    background-color: #000000;
+  }
+  .dark .bg-pine-deep {
+    background-color: #000000;
+  }
+  .dark .bg-sea {
+    background-color: #000000;
+  }
+  .dark .border-line {
+    border-color: #262626;
+  }
+  .dark .shadow-\[var\(--shadow-border\)\] {
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 0.08), 0 1px 2px -1px rgb(255 255 255 / 0.06), 0 2px 4px 0 rgb(255 255 255 / 0.04);
+  }
+  .dark .shadow-\[var\(--shadow-border-hover\)\] {
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 0.12), 0 1px 2px -1px rgb(255 255 255 / 0.08), 0 2px 4px 0 rgb(255 255 255 / 0.06);
   }
 }
 
