@@ -1,10 +1,16 @@
 import { SiteShell } from "@/components/site-shell";
 import { useNav } from "@/lib/nav";
 import { AboutPage } from "@/pages/about";
+import { ContactPage } from "@/pages/contact";
 import { DirectoryPage } from "@/pages/directory";
 import { FeedbackPage } from "@/pages/feedback";
+import { GivePage } from "@/pages/give";
+import { GuidePage } from "@/pages/guide";
+import { ImpactPage } from "@/pages/impact";
+import { JoinPage } from "@/pages/join";
 import { HomePage } from "@/pages/home";
 import { PartnersPage } from "@/pages/partners";
+import { VolunteerPage } from "@/pages/volunteer";
 
 export default function App() {
   const path = useNav((s) => s.path);
@@ -17,6 +23,18 @@ export default function App() {
       <AboutPage />
     ) : path === "/feedback" ? (
       <FeedbackPage />
+    ) : path === "/give" ? (
+      <GivePage />
+    ) : path === "/guide" ? (
+      <GuidePage />
+    ) : path === "/volunteer" ? (
+      <VolunteerPage />
+    ) : path === "/impact" ? (
+      <ImpactPage />
+    ) : path === "/join" ? (
+      <JoinPage />
+    ) : path === "/contact" ? (
+      <ContactPage />
     ) : (
       <HomePage />
     );

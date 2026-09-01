@@ -1,5 +1,5 @@
 import { useEffect, type ReactNode } from "react";
-import { Building2, Heart, MessageSquare, Search, Shield, Zap } from "lucide-react";
+import { Building2, Compass, Heart, MessageSquare, Search, Shield, Zap } from "lucide-react";
 import { Link, useNav, type Path } from "@/lib/nav";
 import { useSavedStore, useUiStore } from "@/lib/stores";
 import { cn } from "@/lib/utils";
@@ -11,6 +11,9 @@ const NAV: Array<{ to: Path; label: string; icon: typeof Heart }> = [
   { to: "/directory", label: "Find help", icon: Search },
   { to: "/partners", label: "Partners", icon: Building2 },
   { to: "/about", label: "About", icon: Shield },
+  { to: "/guide", label: "Guide", icon: Compass },
+  { to: "/give", label: "Give", icon: Heart },
+  { to: "/volunteer", label: "Volunteer", icon: Zap },
 ];
 
 export function SiteShell({ children }: { children: ReactNode }) {
@@ -57,31 +60,36 @@ export function SiteShell({ children }: { children: ReactNode }) {
           </Link>
 
           <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
-            {NAV.map((item) => {
-              const active = path === item.to;
-              const Icon = item.icon;
-              return (
+                {NAV.map((item) => {
+                  const active = path === item.to;
+                  const Icon = item.icon;
+                  return (
+                    <Link
+                      key={item.to}
+                      to={item.to}
+                      className={cn(
+                        "flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-semibold",
+                        active ? "bg-sea text-paper-raised" : "text-paper-sunken hover:bg-pine-deep hover:text-paper-raised",
+                      )}
+                    >
+                      <Icon className="size-4" aria-hidden />
+                      {item.label}
+                    </Link>
+                  );
+                })}
                 <Link
-                  key={item.to}
-                  to={item.to}
+                  to="/feedback"
                   className={cn(
                     "flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-semibold",
-                    active ? "bg-sea text-paper-raised" : "text-paper-sunken hover:bg-pine-deep hover:text-paper-raised",
+                    path === "/feedback"
+                      ? "bg-sea text-paper-raised"
+                      : "text-paper-sunken hover:bg-pine-deep hover:text-paper-raised",
                   )}
                 >
-                  <Icon className="size-4" aria-hidden />
-                  {item.label}
+                  <MessageSquare className="size-4" aria-hidden />
+                  Feedback
                 </Link>
-              );
-            })}
-            <Link
-              to="/feedback"
-              className="flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-semibold text-paper-sunken hover:bg-pine-deep hover:text-paper-raised"
-            >
-              <MessageSquare className="size-4" aria-hidden />
-              Feedback
-            </Link>
-          </nav>
+              </nav>
 
           <Button variant="emergency" size="sm" onClick={openTriage} className="shrink-0">
             <Zap className="size-4" aria-hidden />
@@ -124,26 +132,25 @@ export function SiteShell({ children }: { children: ReactNode }) {
         aria-label="Mobile"
         className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-paper-raised pb-[env(safe-area-inset-bottom)] lg:hidden"
       >
-        <ul className="grid grid-cols-4">
+        <div className="chip-row gap-1 px-2 py-2">
           {NAV.map((item) => {
             const active = path === item.to;
             const Icon = item.icon;
             return (
-              <li key={item.to}>
-                <Link
-                  to={item.to}
-                  className={cn(
-                    "flex min-h-16 flex-col items-center justify-center gap-1 text-xs font-bold",
-                    active ? "text-sea" : "text-ink-soft",
-                  )}
-                >
-                  <Icon className="size-5" aria-hidden />
-                  {item.label}
-                </Link>
-              </li>
+              <Link
+                key={item.to}
+                to={item.to}
+                className={cn(
+                  "flex min-h-12 shrink-0 flex-col items-center justify-center gap-0.5 rounded-xl px-3 text-[10px] font-bold",
+                  active ? "bg-sea text-paper-raised" : "bg-paper-sunken text-ink-soft",
+                )}
+              >
+                <Icon className="size-5" aria-hidden />
+                <span className="leading-none">{item.label}</span>
+              </Link>
             );
           })}
-        </ul>
+        </div>
       </nav>
 
       <TriageSheet />

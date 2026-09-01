@@ -1,9 +1,32 @@
 import { create } from "zustand";
 import type { ReactNode } from "react";
 
-export type Path = "/" | "/directory" | "/partners" | "/about" | "/feedback";
+export type Path =
+  | "/"
+  | "/directory"
+  | "/partners"
+  | "/about"
+  | "/feedback"
+  | "/give"
+  | "/guide"
+  | "/volunteer"
+  | "/impact"
+  | "/join"
+  | "/contact";
 
-const PATHS: Path[] = ["/", "/directory", "/partners", "/about", "/feedback"];
+const PATHS: Path[] = [
+  "/",
+  "/directory",
+  "/partners",
+  "/about",
+  "/feedback",
+  "/give",
+  "/guide",
+  "/volunteer",
+  "/impact",
+  "/join",
+  "/contact",
+];
 
 function readPath(): Path {
   if (typeof window === "undefined") return "/";

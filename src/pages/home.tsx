@@ -53,6 +53,12 @@ export function HomePage() {
             <Compass className="size-5" aria-hidden />
             I need help now
           </Button>
+          <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
+            <Link to="/give">
+              <Heart className="size-5" aria-hidden />
+              Give
+            </Link>
+          </Button>
         </div>
       </section>
 

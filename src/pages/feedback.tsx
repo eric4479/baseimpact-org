@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 import { CheckCircle, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FieldLabel, Input, SelectField, Textarea } from "@/components/ui/input";
+import TurnstileWidget from "@/components/turnstile-widget";
 
 export function FeedbackPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -13,14 +14,47 @@ export function FeedbackPage() {
     message: "",
   });
 
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Base Impact feedback: ${form.type}`);
-    const body = encodeURIComponent(
-      `Name: ${form.name || "(not given)"}\nEmail: ${form.email || "(not given)"}\nI am: ${form.role}\nCategory: ${form.type}\n\n${form.message}`,
-    );
-    window.location.href = `mailto:hello@baseimpact.org?subject=${subject}&body=${body}`;
-    setSubmitted(true);
+    const token = (window as unknown as { turnstile?: { getResponse: () => string } }).turnstile
+      ?.getResponse?.() || "";
+
+    if (!token) {
+      alert("Please complete the verification step.");
+      return;
+    }
+
+    const payload = {
+      name: form.name,
+      email: form.email,
+      identity: form.role,
+      topic: form.type,
+      note: form.message,
+      cfToken: token,
+    };
+
+    try {
+      const resp = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}));
+        throw new Error((err as { error?: string }).error || `HTTP ${resp.status}`);
+      }
+
+      setSubmitted(true);
+    } catch {
+      // Fallback to mailto
+      const subject = encodeURIComponent(`Base Impact feedback: ${form.type}`);
+      const body = encodeURIComponent(
+        `Name: ${form.name || "(not given)"}\nEmail: ${form.email || "(not given)"}\nI am: ${form.role}\nCategory: ${form.type}\n\n${form.message}`,
+      );
+      window.location.href = `mailto:hello@baseimpact.org?subject=${subject}&body=${body}`;
+      setSubmitted(true);
+    }
   };
 
   return (
@@ -103,6 +137,7 @@ export function FeedbackPage() {
                 <option>Request a Digital/Job Class</option>
                 <option>Governance / Board Feedback</option>
                 <option>Website / Phone Layout</option>
+                <option>Share a Story</option>
               </SelectField>
             </div>
           </div>
@@ -116,9 +151,33 @@ export function FeedbackPage() {
               placeholder="What should we add or fix?"
             />
           </div>
+
+          {/* Honeypot – hidden from users, visible to bots */}
+          <input
+            type="text"
+            name="_hp"
+            autoComplete="off"
+            tabIndex={-1}
+            style={{
+              position: "absolute",
+              left: "-9999px",
+              width: "1px",
+              height: "1px",
+              opacity: 0,
+            }}
+            aria-hidden="true"
+          />
+
+          <TurnstileWidget fallbackHref="mailto:hello@baseimpact.org" />
+
+          <p className="text-xs text-ink-soft">
+            This form tries our server first. If that doesn&apos;t work, it opens your email app as a
+            fallback. We read every message — if this is urgent, call 211 or 911 instead.
+          </p>
+
           <Button type="submit" variant="pine" size="lg" className="w-full">
             <Send className="size-4" aria-hidden />
-            Open email to send
+            Send feedback
           </Button>
         </form>
       )}

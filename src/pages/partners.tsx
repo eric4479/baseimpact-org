@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FieldLabel, Input, SelectField, Textarea } from "@/components/ui/input";
+import TurnstileWidget from "@/components/turnstile-widget";
 
 export function PartnersPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -14,14 +15,47 @@ export function PartnersPage() {
     needs: "",
   });
 
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Partner request: ${form.orgName}`);
-    const body = encodeURIComponent(
-      `Organization: ${form.orgName}\nContact: ${form.contactPerson}\nEmail: ${form.email}\nPhone: ${form.phone}\nType: ${form.serviceType}\n\n${form.needs}`,
-    );
-    window.location.href = `mailto:hello@baseimpact.org?subject=${subject}&body=${body}`;
-    setSubmitted(true);
+    const token = (window as unknown as { turnstile?: { getResponse: () => string } }).turnstile
+      ?.getResponse?.() || "";
+
+    if (!token) {
+      alert("Please complete the verification step.");
+      return;
+    }
+
+    const payload = {
+      name: form.orgName,
+      email: form.email,
+      identity: "Nonprofit / Church Staff",
+      topic: "Partner Registration",
+      note: `Organization: ${form.orgName}\nContact: ${form.contactPerson}\nPhone: ${form.phone}\nType: ${form.serviceType}\n\n${form.needs}`,
+      cfToken: token,
+    };
+
+    try {
+      const resp = await fetch("/api/partners", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}));
+        throw new Error((err as { error?: string }).error || `HTTP ${resp.status}`);
+      }
+
+      setSubmitted(true);
+    } catch {
+      // Fallback to mailto
+      const subject = encodeURIComponent(`Partner request: ${form.orgName}`);
+      const body = encodeURIComponent(
+        `Organization: ${form.orgName}\nContact: ${form.contactPerson}\nEmail: ${form.email}\nPhone: ${form.phone}\nType: ${form.serviceType}\n\n${form.needs}`,
+      );
+      window.location.href = `mailto:hello@baseimpact.org?subject=${subject}&body=${body}`;
+      setSubmitted(true);
+    }
   };
 
   return (
@@ -157,8 +191,32 @@ export function PartnersPage() {
                 className="bg-pine-deep text-paper-raised placeholder:text-paper-sunken/80"
               />
             </div>
+
+            {/* Honeypot */}
+            <input
+              type="text"
+              name="_hp"
+              autoComplete="off"
+              tabIndex={-1}
+              style={{
+                position: "absolute",
+                left: "-9999px",
+                width: "1px",
+                height: "1px",
+                opacity: 0,
+              }}
+              aria-hidden="true"
+            />
+
+            <TurnstileWidget fallbackHref="mailto:hello@baseimpact.org" />
+
+            <p className="sm:col-span-2 text-xs text-paper-sunken">
+              This form tries our server first. If that doesn&apos;t work, it opens your email app as a
+              fallback.
+            </p>
+
             <Button type="submit" variant="primary" size="lg" className="sm:col-span-2">
-              Open email to register
+              Submit registration
             </Button>
           </form>
         )}
