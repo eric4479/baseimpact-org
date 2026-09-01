@@ -2,6 +2,30 @@ import { Link } from "@/lib/nav";
 import { Building2, Compass, Heart, Laptop, Leaf, Phone, Search } from "lucide-react";
 import { useUiStore } from "@/lib/stores";
 import { Button } from "@/components/ui/button";
+import { JsonLd } from "@/components/json-ld";
+import { PageMeta } from "@/components/page-meta";
+
+const ORG_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Base Impact Inc.",
+  url: "https://baseimpact.org",
+  description:
+    "Pre-filing nonprofit in Scottsmoor, FL building a neighborhood navigation desk for Brevard, Volusia, and Orange Counties.",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "3750 Magoon Ave",
+    addressLocality: "Scottsmoor",
+    addressRegion: "FL",
+    postalCode: "32775",
+    addressCountry: "US",
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+1-321-323-0999",
+    contactType: "customer service",
+  },
+};
 
 const PILLARS = [
   {
@@ -31,6 +55,13 @@ export function HomePage() {
 
   return (
     <div className="space-y-10">
+      <PageMeta
+        title="Find food, shelter, and a computer"
+        description="Base Impact is a neighborhood navigation desk built first for phones. Find help nearby in Brevard, Volusia, and Orange Counties."
+        path="/"
+      />
+      <JsonLd data={ORG_SCHEMA} />
+
       <section className="overflow-hidden rounded-3xl bg-pine px-5 py-8 text-paper-raised sm:px-10 sm:py-12">
         <p className="text-xs font-bold uppercase tracking-[0.16em] text-paper-sunken">
           Scottsmoor · Titusville · Brevard County
@@ -68,7 +99,9 @@ export function HomePage() {
           className="flex min-h-16 items-center justify-between rounded-2xl bg-paper-raised px-4 shadow-[var(--shadow-border)]"
         >
           <span>
-            <span className="block text-xs font-bold uppercase tracking-wide text-danger">Emergency</span>
+            <span className="block text-xs font-bold uppercase tracking-wide text-danger">
+              Emergency
+            </span>
             <span className="font-display text-xl font-semibold">Call 911</span>
           </span>
           <Phone className="size-5 text-danger" aria-hidden />
@@ -78,7 +111,9 @@ export function HomePage() {
           className="flex min-h-16 items-center justify-between rounded-2xl bg-paper-raised px-4 shadow-[var(--shadow-border)]"
         >
           <span>
-            <span className="block text-xs font-bold uppercase tracking-wide text-sea">24/7 local help</span>
+            <span className="block text-xs font-bold uppercase tracking-wide text-sea">
+              24/7 local help
+            </span>
             <span className="font-display text-xl font-semibold">Call 211</span>
           </span>
           <Phone className="size-5 text-sea" aria-hidden />

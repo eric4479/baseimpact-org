@@ -2,7 +2,15 @@ import { useState, type FormEvent } from "react";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FieldLabel, Input, SelectField, Textarea } from "@/components/ui/input";
-import TurnstileWidget from "@/components/turnstile-widget";
+import { PageMeta } from "@/components/page-meta";
+import { JsonLd } from "@/components/json-ld";
+
+const PARTNERS_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Base Impact Inc.",
+  url: "https://baseimpact.org",
+};
 
 export function PartnersPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -36,6 +44,12 @@ export function PartnersPage() {
 
   return (
     <div className="space-y-8">
+      <PageMeta
+        title="Partner with Base Impact"
+        description="Register your church, pantry, shelter, or small nonprofit in the Brevard referral network."
+        path="/partners"
+      />
+      <JsonLd data={PARTNERS_SCHEMA} />
       <header className="space-y-2">
         <p className="text-xs font-bold uppercase tracking-widest text-sea">Partner hub</p>
         <h1 className="font-display text-3xl font-semibold">Work with Base Impact</h1>
@@ -183,8 +197,6 @@ export function PartnersPage() {
               }}
               aria-hidden="true"
             />
-
-            <TurnstileWidget fallbackHref="mailto:hello@baseimpact.org" />
 
             <p className="sm:col-span-2 text-xs text-paper-sunken">
               This form opens your email app with a pre-filled message. If nothing opens, write hello@baseimpact.org directly.

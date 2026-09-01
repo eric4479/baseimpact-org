@@ -1,9 +1,24 @@
 import { Link } from "@/lib/nav";
 import { Button } from "@/components/ui/button";
+import { PageMeta } from "@/components/page-meta";
+import { JsonLd } from "@/components/json-ld";
+
+const IMPACT_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Base Impact Inc.",
+  url: "https://baseimpact.org",
+};
 
 export function ImpactPage() {
   return (
     <div className="space-y-10">
+      <PageMeta
+        title="Impact stories"
+        description="Real stories from Base Impact: travelers, veterans, new residents, and church partnerships."
+        path="/impact"
+      />
+      <JsonLd data={IMPACT_SCHEMA} />
       <section className="overflow-hidden rounded-3xl bg-pine px-5 py-8 text-paper-raised sm:px-10 sm:py-12">
         <h1 className="max-w-2xl font-display text-3xl font-semibold tracking-tight sm:text-5xl">
           Recent things that happened because people showed up.

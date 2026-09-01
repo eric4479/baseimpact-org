@@ -2,7 +2,15 @@ import { useState, type FormEvent } from "react";
 import { CheckCircle, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FieldLabel, Input, SelectField, Textarea } from "@/components/ui/input";
-import TurnstileWidget from "@/components/turnstile-widget";
+import { PageMeta } from "@/components/page-meta";
+import { JsonLd } from "@/components/json-ld";
+
+const FEEDBACK_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Base Impact Inc.",
+  url: "https://baseimpact.org",
+};
 
 export function FeedbackPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -36,6 +44,12 @@ export function FeedbackPage() {
 
   return (
     <div className="mx-auto max-w-xl space-y-6">
+      <PageMeta
+        title="Send feedback"
+        description="Tell Base Impact what's missing, share a story, or suggest a new resource."
+        path="/feedback"
+      />
+      <JsonLd data={FEEDBACK_SCHEMA} />
       <header className="space-y-2">
         <h1 className="font-display text-3xl font-semibold">Tell us what’s missing</h1>
         <p className="text-ink-soft">
@@ -144,8 +158,6 @@ export function FeedbackPage() {
             }}
             aria-hidden="true"
           />
-
-          <TurnstileWidget fallbackHref="mailto:hello@baseimpact.org" />
 
           <p className="text-xs text-ink-soft">
             This form opens your email app with a pre-filled message. If nothing opens, write hello@baseimpact.org directly.

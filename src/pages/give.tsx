@@ -1,5 +1,14 @@
 import { Link } from "@/lib/nav";
 import { Button } from "@/components/ui/button";
+import { PageMeta } from "@/components/page-meta";
+import { JsonLd } from "@/components/json-ld";
+
+const GIVE_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Base Impact Inc.",
+  url: "https://baseimpact.org",
+};
 
 const PARTNERS = [
   {
@@ -44,6 +53,12 @@ const HIGH_PRIORITY = [
 export function GivePage() {
   return (
     <div className="space-y-10">
+      <PageMeta
+        title="Ways to give"
+        description="Give directly to partners, donate goods, or give time. Pre-filing nonprofit — donations route to partners."
+        path="/give"
+      />
+      <JsonLd data={GIVE_SCHEMA} />
       <section className="overflow-hidden rounded-3xl bg-pine px-5 py-8 text-paper-raised sm:px-10 sm:py-12">
         <h1 className="max-w-2xl font-display text-3xl font-semibold tracking-tight sm:text-5xl">
           Help neighbors in North Brevard find food, shelter, and a way forward.

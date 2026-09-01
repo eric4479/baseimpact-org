@@ -12,7 +12,9 @@ export type Path =
   | "/volunteer"
   | "/impact"
   | "/join"
-  | "/contact";
+  | "/contact"
+  | "/donate"
+  | "/privacy";
 
 const PATHS: Path[] = [
   "/",
@@ -26,6 +28,8 @@ const PATHS: Path[] = [
   "/impact",
   "/join",
   "/contact",
+  "/donate",
+  "/privacy",
 ];
 
 function readPath(): Path {

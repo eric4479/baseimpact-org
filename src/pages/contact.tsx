@@ -1,9 +1,24 @@
 import { Link } from "@/lib/nav";
 import { Button } from "@/components/ui/button";
+import { PageMeta } from "@/components/page-meta";
+import { JsonLd } from "@/components/json-ld";
+
+const CONTACT_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Base Impact Inc.",
+  url: "https://baseimpact.org",
+};
 
 export function ContactPage() {
   return (
     <div className="space-y-10">
+      <PageMeta
+        title="Contact Base Impact"
+        description="Phone, email, mail, and in-person contact info for Base Impact in Scottsmoor, FL."
+        path="/contact"
+      />
+      <JsonLd data={CONTACT_SCHEMA} />
       <section className="overflow-hidden rounded-3xl bg-pine px-5 py-8 text-paper-raised sm:px-10 sm:py-12">
         <h1 className="max-w-2xl font-display text-3xl font-semibold tracking-tight sm:text-5xl">
           Reach Base Impact.

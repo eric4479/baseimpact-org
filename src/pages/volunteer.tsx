@@ -1,9 +1,24 @@
 import { Link } from "@/lib/nav";
 import { Button } from "@/components/ui/button";
+import { PageMeta } from "@/components/page-meta";
+import { JsonLd } from "@/components/json-ld";
+
+const VOLUNTEER_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Base Impact Inc.",
+  url: "https://baseimpact.org",
+};
 
 export function VolunteerPage() {
   return (
     <div className="space-y-10">
+      <PageMeta
+        title="Volunteer with Base Impact"
+        description="Give a few hours at our Scottsmoor station, care-package days, or community garden."
+        path="/volunteer"
+      />
+      <JsonLd data={VOLUNTEER_SCHEMA} />
       <section className="overflow-hidden rounded-3xl bg-pine px-5 py-8 text-paper-raised sm:px-10 sm:py-12">
         <h1 className="max-w-2xl font-display text-3xl font-semibold tracking-tight sm:text-5xl">
           Give a few hours. Change someone&apos;s week.

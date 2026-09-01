@@ -1,6 +1,39 @@
+import { JsonLd } from "@/components/json-ld";
+import { PageMeta } from "@/components/page-meta";
 import { Link } from "@/lib/nav";
 import type { Path } from "@/lib/nav";
 import { Button } from "@/components/ui/button";
+
+const ORG_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "How do I find food or shelter right now?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Use the directory or call 211 for immediate help. 911 is for emergencies.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How do I volunteer?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Visit the volunteer page or contact us directly. No nonprofit experience required.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can I donate goods or money?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. Cash donations are directed to partner organizations until our 501(c)(3) is approved. Goods can be coordinated through the give page.",
+      },
+    },
+  ],
+};
 
 const SITUATIONS: Array<{
   title: string;
@@ -60,7 +93,7 @@ const SITUATIONS: Array<{
   {
     title: "I don't see my situation here",
     links: [
-      { label: "Contact us", to: "/contact", detail: "we'll point you the right direction, even if it's outside North Brevard" },
+      { label: "Contact us", to: "/contact", detail: "we'll point you the right direction, even if it's outside Central Florida" },
       { label: "Call 211", to: "tel:211", detail: "24/7 local resource helpline" },
     ],
   },
@@ -77,6 +110,13 @@ const EXTERNAL_DIRECTORIES = [
 export function GuidePage() {
   return (
     <div className="space-y-10">
+      <PageMeta
+        title="Resource guide"
+        description="Pick your situation and we'll point you to food, shelter, and help across Central Florida."
+        path="/guide"
+      />
+      <JsonLd data={ORG_SCHEMA} />
+
       <section className="overflow-hidden rounded-3xl bg-pine px-5 py-8 text-paper-raised sm:px-10 sm:py-12">
         <h1 className="max-w-2xl font-display text-3xl font-semibold tracking-tight sm:text-5xl">
           Not sure where to start? Pick your situation.

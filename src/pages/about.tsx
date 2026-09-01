@@ -1,10 +1,25 @@
 import { Link } from "@/lib/nav";
 import { Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { JsonLd } from "@/components/json-ld";
+import { PageMeta } from "@/components/page-meta";
+
+const ABOUT_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Base Impact Inc.",
+  url: "https://baseimpact.org",
+};
 
 export function AboutPage() {
   return (
     <div className="space-y-8">
+      <PageMeta
+        title="About Base Impact"
+        description="Founder Eric Douglas's story, board duties, partner list, and pre-filing nonprofit status."
+        path="/about"
+      />
+      <JsonLd data={ABOUT_SCHEMA} />
       <header className="space-y-2">
         <p className="text-xs font-bold uppercase tracking-[0.16em] text-sea">Mission & governance</p>
         <h1 className="font-display text-3xl font-semibold">How Base Impact is built</h1>

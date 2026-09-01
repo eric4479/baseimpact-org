@@ -1,6 +1,15 @@
 import { Link } from "@/lib/nav";
 import type { Path } from "@/lib/nav";
 import { Button } from "@/components/ui/button";
+import { PageMeta } from "@/components/page-meta";
+import { JsonLd } from "@/components/json-ld";
+
+const JOIN_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Base Impact Inc.",
+  url: "https://baseimpact.org",
+};
 
 const ROUTES: Array<{ label: string; desc: string; to: Path; cta: string }> = [
   {
@@ -44,6 +53,12 @@ const ROUTES: Array<{ label: string; desc: string; to: Path; cta: string }> = [
 export function JoinPage() {
   return (
     <div className="space-y-10">
+      <PageMeta
+        title="Join Base Impact"
+        description="Volunteer, partner, give, or join the board. Pick what fits you."
+        path="/join"
+      />
+      <JsonLd data={JOIN_SCHEMA} />
       <section className="overflow-hidden rounded-3xl bg-pine px-5 py-8 text-paper-raised sm:px-10 sm:py-12">
         <h1 className="max-w-2xl font-display text-3xl font-semibold tracking-tight sm:text-5xl">
           Be part of Base Impact.

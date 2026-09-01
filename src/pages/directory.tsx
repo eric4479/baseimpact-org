@@ -11,7 +11,22 @@ import { useLocationStore, useSavedStore } from "@/lib/stores";
 import { cn } from "@/lib/utils";
 import { ResourceCard } from "@/components/resource-card";
 import { Button } from "@/components/ui/button";
+import { JsonLd } from "@/components/json-ld";
+import { PageMeta } from "@/components/page-meta";
 import { Input } from "@/components/ui/input";
+
+const DIRECTORY_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Base Impact Directory",
+  url: "https://baseimpact.org/directory",
+  description:
+    "Community resource directory for Brevard, Volusia, and Orange Counties — food, shelter, showers, and digital help.",
+  about: {
+    "@type": "Thing",
+    name: "Local community resources and social services in Central Florida",
+  },
+};
 
 export function DirectoryPage() {
   const town = useLocationStore((s) => s.town);
@@ -57,6 +72,13 @@ export function DirectoryPage() {
 
   return (
     <div className="space-y-4">
+      <PageMeta
+        title="Find help nearby"
+        description="Food, shelter, showers, and digital help across Brevard, Volusia, and Orange Counties. Sorted by who's open and distance."
+        path="/directory"
+      />
+      <JsonLd data={DIRECTORY_SCHEMA} />
+
       <header className="space-y-1">
         <h1 className="font-display text-3xl font-semibold">Find help nearby</h1>
         <p className="text-ink-soft">
@@ -135,6 +157,29 @@ export function DirectoryPage() {
             className="mt-2 w-full accent-sea"
             aria-label="Distance in miles"
           />
+        </div>
+
+        <div className="mt-4">
+          <p className="mb-2 text-sm font-semibold text-ink-soft">County</p>
+          <div className="chip-row">
+            {["All", "Brevard", "Volusia", "Orange"].map((c) => (
+              <button
+                key={c}
+                type="button"
+                onClick={() => {
+                  setQuery(c === "All" ? "" : c);
+                }}
+                className={cn(
+                  "min-h-11 shrink-0 rounded-full px-4 text-sm font-semibold",
+                  (c === "All" && !query) || query === c
+                    ? "bg-pine text-paper-raised"
+                    : "bg-paper-sunken text-ink",
+                )}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="mt-4">
