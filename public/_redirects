@@ -1,8 +1,2 @@
 /robots.txt    /robots.txt   200
 /sitemap.xml  /sitemap.xml  200
-
-# Let Pages Functions handle /api/*
-/api/*    /api/:splat   200
-
-# SPA catch-all
-/*    /index.html   200
