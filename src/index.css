@@ -139,10 +139,13 @@
     color: #ffffff;
   }
   .dark .text-ink-soft {
-    color: #a1a1aa;
+    color: #d4d4d8;
   }
   .dark .text-paper-sunken {
-    color: #737373;
+    color: #a3a3a3;
+  }
+  .dark .text-line {
+    color: #d4d4d8;
   }
   .dark .text-sea {
     color: #5eead4;
