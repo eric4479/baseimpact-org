@@ -20,42 +20,18 @@ export function PartnersPage() {
     const token = (window as unknown as { turnstile?: { getResponse: () => string } }).turnstile
       ?.getResponse?.() || "";
 
-    if (!token) {
+    const turnstileConfigured = !!(window as unknown as { __TURNSTILE_SITE_KEY?: string }).__TURNSTILE_SITE_KEY;
+    if (turnstileConfigured && !token) {
       alert("Please complete the verification step.");
       return;
     }
 
-    const payload = {
-      name: form.orgName,
-      email: form.email,
-      identity: "Nonprofit / Church Staff",
-      topic: "Partner Registration",
-      note: `Organization: ${form.orgName}\nContact: ${form.contactPerson}\nPhone: ${form.phone}\nType: ${form.serviceType}\n\n${form.needs}`,
-      cfToken: token,
-    };
-
-    try {
-      const resp = await fetch("/api/partners", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!resp.ok) {
-        const err = await resp.json().catch(() => ({}));
-        throw new Error((err as { error?: string }).error || `HTTP ${resp.status}`);
-      }
-
-      setSubmitted(true);
-    } catch {
-      // Fallback to mailto
-      const subject = encodeURIComponent(`Partner request: ${form.orgName}`);
-      const body = encodeURIComponent(
-        `Organization: ${form.orgName}\nContact: ${form.contactPerson}\nEmail: ${form.email}\nPhone: ${form.phone}\nType: ${form.serviceType}\n\n${form.needs}`,
-      );
-      window.location.href = `mailto:hello@baseimpact.org?subject=${subject}&body=${body}`;
-      setSubmitted(true);
-    }
+    const subject = encodeURIComponent(`Partner request: ${form.orgName}`);
+    const body = encodeURIComponent(
+      `Organization: ${form.orgName}\nContact: ${form.contactPerson}\nEmail: ${form.email}\nPhone: ${form.phone}\nType: ${form.serviceType}\n\n${form.needs}`,
+    );
+    window.location.href = `mailto:hello@baseimpact.org?subject=${subject}&body=${body}`;
+    setSubmitted(true);
   };
 
   return (
@@ -211,8 +187,7 @@ export function PartnersPage() {
             <TurnstileWidget fallbackHref="mailto:hello@baseimpact.org" />
 
             <p className="sm:col-span-2 text-xs text-paper-sunken">
-              This form tries our server first. If that doesn&apos;t work, it opens your email app as a
-              fallback.
+              This form opens your email app with a pre-filled message. If nothing opens, write hello@baseimpact.org directly.
             </p>
 
             <Button type="submit" variant="primary" size="lg" className="sm:col-span-2">

@@ -56,9 +56,17 @@ export default function TurnstileWidget({ fallbackHref }: { fallbackHref?: strin
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
   const [error, setError] = useState(false);
+  const [hasKey, setHasKey] = useState(false);
   const instanceId = useId();
 
   useEffect(() => {
+    const siteKey = (window as unknown as { __TURNSTILE_SITE_KEY?: string }).__TURNSTILE_SITE_KEY;
+    if (!siteKey) {
+      // No site key configured — silently render nothing
+      return;
+    }
+    setHasKey(true);
+
     let cancelled = false;
 
     async function mount() {
@@ -70,7 +78,7 @@ export default function TurnstileWidget({ fallbackHref }: { fallbackHref?: strin
         if (cancelled || !containerRef.current) return;
 
         widgetIdRef.current = ts.render(containerRef.current, {
-          sitekey: (window as unknown as { __TURNSTILE_SITE_KEY?: string }).__TURNSTILE_SITE_KEY || "",
+          sitekey: siteKey,
           theme: "auto",
           size: "normal",
           retry: "auto",
@@ -94,6 +102,9 @@ export default function TurnstileWidget({ fallbackHref }: { fallbackHref?: strin
       }
     };
   }, []);
+
+  // Don't render anything if no site key is configured
+  if (!hasKey) return null;
 
   return (
     <>

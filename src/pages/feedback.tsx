@@ -19,42 +19,19 @@ export function FeedbackPage() {
     const token = (window as unknown as { turnstile?: { getResponse: () => string } }).turnstile
       ?.getResponse?.() || "";
 
-    if (!token) {
+    // If Turnstile isn't configured (no site key), just open the mail client
+    const turnstileConfigured = !!(window as unknown as { __TURNSTILE_SITE_KEY?: string }).__TURNSTILE_SITE_KEY;
+    if (turnstileConfigured && !token) {
       alert("Please complete the verification step.");
       return;
     }
 
-    const payload = {
-      name: form.name,
-      email: form.email,
-      identity: form.role,
-      topic: form.type,
-      note: form.message,
-      cfToken: token,
-    };
-
-    try {
-      const resp = await fetch("/api/feedback", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!resp.ok) {
-        const err = await resp.json().catch(() => ({}));
-        throw new Error((err as { error?: string }).error || `HTTP ${resp.status}`);
-      }
-
-      setSubmitted(true);
-    } catch {
-      // Fallback to mailto
-      const subject = encodeURIComponent(`Base Impact feedback: ${form.type}`);
-      const body = encodeURIComponent(
-        `Name: ${form.name || "(not given)"}\nEmail: ${form.email || "(not given)"}\nI am: ${form.role}\nCategory: ${form.type}\n\n${form.message}`,
-      );
-      window.location.href = `mailto:hello@baseimpact.org?subject=${subject}&body=${body}`;
-      setSubmitted(true);
-    }
+    const subject = encodeURIComponent(`Base Impact feedback: ${form.type}`);
+    const body = encodeURIComponent(
+      `Name: ${form.name || "(not given)"}\nEmail: ${form.email || "(not given)"}\nI am: ${form.role}\nCategory: ${form.type}\n\n${form.message}`,
+    );
+    window.location.href = `mailto:hello@baseimpact.org?subject=${subject}&body=${body}`;
+    setSubmitted(true);
   };
 
   return (
@@ -171,8 +148,7 @@ export function FeedbackPage() {
           <TurnstileWidget fallbackHref="mailto:hello@baseimpact.org" />
 
           <p className="text-xs text-ink-soft">
-            This form tries our server first. If that doesn&apos;t work, it opens your email app as a
-            fallback. We read every message — if this is urgent, call 211 or 911 instead.
+            This form opens your email app with a pre-filled message. If nothing opens, write hello@baseimpact.org directly.
           </p>
 
           <Button type="submit" variant="pine" size="lg" className="w-full">
