@@ -97,7 +97,7 @@ export function PartnersPage() {
         {submitted ? (
           <div className="mt-6 rounded-2xl bg-pine-deep p-5">
             <Check className="size-8 text-paper-sunken" aria-hidden />
-            <h3 className="mt-2 font-display text-xl font-semibold">Email draft opened</h3>
+            <h3 className="mt-2 font-display text-xl font-semibold text-paper-raised">Email draft opened</h3>
             <p className="mt-1 text-paper-sunken">
               Send it when you’re ready. If nothing opened, write us at hello@baseimpact.org.
             </p>

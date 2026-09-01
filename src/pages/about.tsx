@@ -52,7 +52,7 @@ export function AboutPage() {
             },
           ].map((duty) => (
             <article key={duty.title} className="rounded-2xl bg-pine-deep p-4">
-              <h3 className="font-display text-lg font-semibold">{duty.title}</h3>
+              <h3 className="font-display text-lg font-semibold text-paper-raised">{duty.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-paper-sunken">{duty.body}</p>
             </article>
           ))}
