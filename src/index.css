@@ -107,57 +107,84 @@
 }
 
 @layer components {
+  html.dark {
+    --bg: #101820;
+    --surface: #182630;
+    --surface-strong: #223540;
+    --text: #f5f8fa;
+    --text-muted: #cbd5dc;
+    --border: #92a4b1;
+    --link: #74c7ff;
+    --link-hover: #b5e3ff;
+    --primary: #42b5f5;
+    --primary-text: #07151d;
+    --success: #86efac;
+    --warning: #fdcb6e;
+    --danger: #ffaaa1;
+    --focus: #ffd166;
+  }
+
   .dark .bg-paper {
-    background-color: #050505;
+    background-color: #101820;
   }
   .dark .bg-paper-raised {
-    background-color: #0a0a0a;
+    background-color: #182630;
   }
   .dark .bg-paper-sunken {
-    background-color: #111111;
+    background-color: #223540;
   }
   .dark .bg-pine {
-    background-color: #000000;
+    background-color: #101820;
   }
   .dark .bg-pine-deep {
-    background-color: #000000;
+    background-color: #0a1018;
   }
   .dark .bg-sea {
-    background-color: #000000;
+    background-color: #182630;
   }
   .dark .border-line {
-    border-color: #262626;
+    border-color: #92a4b1;
   }
   .dark .shadow-\[var\(--shadow-border\)\] {
-    box-shadow: 0 0 0 1px rgb(255 255 255 / 0.08), 0 1px 2px -1px rgb(255 255 255 / 0.06), 0 2px 4px 0 rgb(255 255 255 / 0.04);
+    box-shadow: 0 0 0 1px #ffffff14, 0 1px 2px -1px #ffffff0f, 0 2px 4px #ffffff0a;
   }
   .dark .shadow-\[var\(--shadow-border-hover\)\] {
-    box-shadow: 0 0 0 1px rgb(255 255 255 / 0.12), 0 1px 2px -1px rgb(255 255 255 / 0.08), 0 2px 4px 0 rgb(255 255 255 / 0.06);
+    box-shadow: 0 0 0 1px #ffffff1f, 0 1px 2px -1px #ffffff14, 0 2px 4px #ffffff0f;
   }
 
   .dark .text-ink {
-    color: #ffffff;
+    color: #f5f8fa;
   }
   .dark .text-ink-soft {
-    color: #d4d4d8;
+    color: #cbd5dc;
   }
   .dark .text-paper-sunken {
-    color: #a3a3a3;
+    color: #9fb3c2;
   }
   .dark .text-line {
-    color: #d4d4d8;
+    color: #cbd5dc;
   }
   .dark .text-sea {
-    color: #5eead4;
+    color: #74c7ff;
   }
   .dark .text-amber {
-    color: #fdba74;
+    color: #fdcb6e;
   }
   .dark .text-danger {
-    color: #fca5a5;
+    color: #ffaaa1;
   }
   .dark .text-ok {
     color: #86efac;
+  }
+
+  .dark a {
+    color: #74c7ff;
+  }
+  .dark a:hover {
+    color: #b5e3ff;
+  }
+  .dark ::placeholder {
+    color: #9fb3c2;
   }
 }
 
