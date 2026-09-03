@@ -50,29 +50,29 @@ export function SiteShell({ children }: { children: ReactNode }) {
   }, [isDark]);
 
   return (
-    <div className="flex min-h-dvh flex-col bg-paper text-ink dark:bg-black dark:text-white">
+    <div className="flex min-h-dvh flex-col bg-paper text-ink">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-paper-raised focus:px-3 focus:py-2 dark:focus:bg-neutral-900"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-paper-raised focus:px-3 focus:py-2"
       >
         Skip to content
       </a>
 
-      <div className="bg-paper-sunken px-4 py-2 text-center text-xs font-medium text-ink-soft pt-[max(0.5rem,env(safe-area-inset-top))] sm:text-sm dark:bg-neutral-900 dark:text-neutral-400">
+      <div className="bg-paper-sunken px-4 py-2 text-center text-xs font-medium text-ink-soft pt-[max(0.5rem,env(safe-area-inset-top))] sm:text-sm">
         Base Impact Inc. · Pre-filing nonprofit in Scottsmoor, FL · Preparing Sunbiz & 501(c)(3)
       </div>
 
-      <header className="sticky top-0 z-40 border-b border-line/80 bg-pine text-paper-raised dark:border-neutral-800 dark:bg-black">
+      <header className="sticky top-0 z-40 border-b border-line/80 bg-pine text-paper-raised">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4">
           <Link to="/" className="flex min-w-0 items-center gap-3">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-sea text-paper-raised dark:bg-sea dark:text-white">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-sea text-paper-raised">
               <Shield className="size-5" aria-hidden />
             </span>
             <span className="min-w-0">
               <span className="block font-display text-lg font-semibold leading-none tracking-tight">
                 Base Impact
               </span>
-              <span className="mt-1 block text-xs font-bold uppercase tracking-widest text-paper-sunken dark:text-neutral-400">
+              <span className="mt-1 block text-xs font-bold uppercase tracking-widest text-paper-sunken">
                 Brevard County, FL
               </span>
             </span>
@@ -89,8 +89,8 @@ export function SiteShell({ children }: { children: ReactNode }) {
                       className={cn(
                         "flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-semibold",
                         active
-                          ? "bg-sea text-paper-raised dark:bg-sea dark:text-white"
-                          : "text-paper-sunken hover:bg-pine-deep hover:text-paper-raised dark:text-neutral-300 dark:hover:bg-neutral-900 dark:hover:text-white",
+                          ? "bg-sea text-paper-raised"
+                          : "text-paper-sunken hover:bg-pine-deep hover:text-paper-raised",
                       )}
                     >
                       <Icon className="size-4" aria-hidden />
@@ -103,8 +103,8 @@ export function SiteShell({ children }: { children: ReactNode }) {
                   className={cn(
                     "flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-semibold",
                     path === "/feedback"
-                      ? "bg-sea text-paper-raised dark:bg-sea dark:text-white"
-                      : "text-paper-sunken hover:bg-pine-deep hover:text-paper-raised dark:text-neutral-300 dark:hover:bg-neutral-900 dark:hover:text-white",
+                      ? "bg-sea text-paper-raised"
+                      : "text-paper-sunken hover:bg-pine-deep hover:text-paper-raised",
                   )}
                 >
                   <MessageSquare className="size-4" aria-hidden />
@@ -113,7 +113,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
                 <button
                   type="button"
                   onClick={() => setIsDark((prev) => !prev)}
-                  className="flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-semibold text-paper-sunken hover:bg-pine-deep hover:text-paper-raised dark:text-neutral-300 dark:hover:bg-neutral-900 dark:hover:text-white"
+                  className="flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-semibold text-paper-sunken hover:bg-pine-deep hover:text-paper-raised"
                   aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
                 >
                   {isDark ? <Sun className="size-4" aria-hidden /> : <Moon className="size-4" aria-hidden />}
@@ -130,7 +130,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
             <button
               type="button"
               onClick={() => setIsDark((prev) => !prev)}
-              className="flex size-9 items-center justify-center rounded-lg text-paper-sunken hover:bg-pine-deep hover:text-paper-raised lg:hidden dark:text-neutral-300 dark:hover:bg-neutral-900 dark:hover:text-white"
+              className="flex size-9 items-center justify-center rounded-lg text-paper-sunken hover:bg-pine-deep hover:text-paper-raised lg:hidden"
               aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
             >
               {isDark ? <Sun className="size-5" aria-hidden /> : <Moon className="size-5" aria-hidden />}
@@ -143,17 +143,17 @@ export function SiteShell({ children }: { children: ReactNode }) {
         {children}
       </main>
 
-      <footer className="hidden border-t border-line bg-pine px-4 py-8 text-sm text-paper-sunken lg:block dark:border-neutral-800 dark:bg-black dark:text-neutral-400">
+      <footer className="hidden border-t border-line bg-pine px-4 py-8 text-sm text-paper-sunken lg:block">
         <div className="mx-auto flex max-w-6xl items-end justify-between gap-6">
           <div>
-            <p className="font-display text-lg font-semibold text-paper-raised dark:text-white">Base Impact Inc.</p>
+            <p className="font-display text-lg font-semibold text-paper-raised">Base Impact Inc.</p>
             <p className="mt-1">Scottsmoor, FL 32775 · Brevard County</p>
             <p className="mt-2">
-              <a href="tel:211" className="font-semibold text-paper-raised underline-offset-2 hover:underline dark:text-white">
+              <a href="tel:211" className="font-semibold text-paper-raised underline-offset-2 hover:underline">
                 Call 211
               </a>
               {" "}for 24/7 local help ·{" "}
-              <a href="tel:911" className="font-semibold text-paper-raised underline-offset-2 hover:underline dark:text-white">
+              <a href="tel:911" className="font-semibold text-paper-raised underline-offset-2 hover:underline">
                 911
               </a>
               {" "}in an emergency
@@ -161,10 +161,10 @@ export function SiteShell({ children }: { children: ReactNode }) {
           </div>
           <div className="text-right">
             <p>© {new Date().getFullYear()} Base Impact Inc.</p>
-            <Link to="/privacy" className="mt-1 inline-block text-paper-raised underline-offset-2 hover:underline dark:text-white">
+            <Link to="/privacy" className="mt-1 inline-block text-paper-raised underline-offset-2 hover:underline">
               Privacy policy
             </Link>
-            <Link to="/feedback" className="mt-1 inline-block text-paper-raised underline-offset-2 hover:underline dark:text-white">
+            <Link to="/feedback" className="mt-1 inline-block text-paper-raised underline-offset-2 hover:underline">
               Share feedback
             </Link>
           </div>
@@ -173,7 +173,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
 
       <nav
         aria-label="Mobile"
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-paper-raised pb-[env(safe-area-inset-bottom)] lg:hidden dark:border-neutral-800 dark:bg-neutral-900"
+        className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-paper-raised pb-[env(safe-area-inset-bottom)] lg:hidden"
       >
         <div className="chip-row gap-1 px-2 py-2">
           {NAV.map((item) => {
@@ -186,8 +186,8 @@ export function SiteShell({ children }: { children: ReactNode }) {
                 className={cn(
                   "flex min-h-12 shrink-0 flex-col items-center justify-center gap-0.5 rounded-xl px-3 text-[10px] font-bold",
                   active
-                    ? "bg-sea text-paper-raised dark:bg-sea dark:text-white"
-                    : "bg-paper-sunken text-ink-soft dark:bg-neutral-800 dark:text-neutral-300",
+                    ? "bg-sea text-paper-raised"
+                    : "bg-paper-sunken text-ink-soft",
                 )}
               >
                 <Icon className="size-5" aria-hidden />
