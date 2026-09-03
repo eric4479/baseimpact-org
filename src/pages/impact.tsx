@@ -119,15 +119,6 @@ export function ImpactPage() {
         <h2 className="font-display text-2xl font-semibold sm:text-3xl">From our church partnerships</h2>
 
         <div className="space-y-2">
-          <h3 className="font-display text-xl font-semibold">The Rock Church of Mims</h3>
-          <p className="text-ink-soft">
-            We serve on a regular weekly basis with their technology — Wi-Fi, copiers, backups, and
-            protections — as well as their safety and security teams. A church that can&apos;t rely on its
-            own systems can&apos;t focus on serving its community. We try to make sure they can.
-          </p>
-        </div>
-
-        <div className="space-y-2">
           <h3 className="font-display text-xl font-semibold">LifePointe Ministries</h3>
           <p className="text-ink-soft">
             We volunteered at a recent rummage sale and fundraising activities to help fund their

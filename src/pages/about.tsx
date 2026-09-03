@@ -89,7 +89,7 @@ export function AboutPage() {
         </p>
         <p className="mt-2 text-sm text-ink-soft">
           Current partners include St. Gabriel Episcopal Hope Center, North Brevard Food Pantry &
-          Outreach, Mims Community Garden & Produce Pantry, The Rock Church of Mims, and LifePointe
+          Outreach, Mims Community Garden & Produce Pantry, and LifePointe
           Ministries. This list is growing.
         </p>
       </section>
