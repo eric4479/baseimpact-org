@@ -4,26 +4,26 @@
   --font-sans: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
   --font-display: "Fraunces", Georgia, "Times New Roman", serif;
 
-  --color-ink: #111318;
-  --color-ink-soft: #2d3340;
-  --color-paper: #eef1f5;
-  --color-paper-raised: #f6f7fa;
-  --color-paper-sunken: #e4e7ec;
-  --color-pine: #0e1117;
-  --color-pine-deep: #0b0d12;
-  --color-sea: #2a6f8a;
-  --color-sea-bright: #4aa3c2;
-  --color-amber: #7a3b06;
-  --color-amber-soft: #f3e0c8;
-  --color-line: #c8cdd5;
-  --color-ok: #13633e;
-  --color-ok-soft: #cfe8d7;
-  --color-warn: #7a3b06;
-  --color-warn-soft: #f3e0c8;
-  --color-closed: #5c574e;
-  --color-closed-soft: #ece7dc;
-  --color-danger: #7f2424;
-  --color-danger-soft: #f5dad8;
+  --color-ink: #111827;
+  --color-ink-soft: #374151;
+  --color-paper: #f7f9fb;
+  --color-paper-raised: #ffffff;
+  --color-paper-sunken: #e5e7eb;
+  --color-pine: #0f172a;
+  --color-pine-deep: #020617;
+  --color-sea: #2563eb;
+  --color-sea-bright: #60a5fa;
+  --color-amber: #92400e;
+  --color-amber-soft: #fef3c7;
+  --color-line: #cbd5e1;
+  --color-ok: #065f46;
+  --color-ok-soft: #d1fae5;
+  --color-warn: #92400e;
+  --color-warn-soft: #fef3c7;
+  --color-closed: #4b5563;
+  --color-closed-soft: #e5e7eb;
+  --color-danger: #991b1b;
+  --color-danger-soft: #fee2e2;
 
   --color-black: #000000;
   --color-white: #ffffff;
@@ -36,13 +36,13 @@
   --radius-2xl: 1.75rem;
 
   --shadow-border:
-    0px 0px 0px 1px rgb(28 25 21 / 0.08),
-    0px 1px 2px -1px rgb(28 25 21 / 0.08),
-    0px 2px 4px 0px rgb(28 25 21 / 0.06);
+    0px 0px 0px 1px rgb(17 24 39 / 0.08),
+    0px 1px 2px -1px rgb(17 24 39 / 0.08),
+    0px 2px 4px 0px rgb(17 24 39 / 0.06);
   --shadow-border-hover:
-    0px 0px 0px 1px rgb(28 25 21 / 0.12),
-    0px 1px 2px -1px rgb(28 25 21 / 0.12),
-    0px 2px 4px 0px rgb(28 25 21 / 0.1);
+    0px 0px 0px 1px rgb(17 24 39 / 0.14),
+    0px 1px 2px -1px rgb(17 24 39 / 0.12),
+    0px 2px 4px 0px rgb(17 24 39 / 0.1);
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -56,8 +56,8 @@
   }
 
   html.dark {
-    background: #08090c;
-    color: #e8ecf2;
+    background: #000000;
+    color: #f8fafc;
   }
 
   body {
@@ -83,7 +83,7 @@
   html.dark h1,
   html.dark h2,
   html.dark h3 {
-    color: #f4f6fa;
+    color: #ffffff;
   }
 
   p {
@@ -109,67 +109,86 @@
 
 @layer components {
   .dark .bg-paper {
-    background-color: #0c0f14;
+    background-color: #0b1220;
   }
   .dark .bg-paper-raised {
-    background-color: #11141b;
+    background-color: #111827;
   }
   .dark .bg-paper-sunken {
-    background-color: #181c26;
+    background-color: #1f2937;
   }
   .dark .bg-pine {
-    background-color: #0b0d12;
+    background-color: #0f172a;
   }
   .dark .bg-pine-deep {
-    background-color: #08090c;
+    background-color: #020617;
   }
   .dark .bg-sea {
-    background-color: #11141b;
+    background-color: #111827;
+  }
+
+  .dark .bg-amber {
+    background-color: #78350f;
+  }
+  .dark .bg-amber-soft {
+    background-color: #451a03;
+  }
+  .dark .bg-danger {
+    background-color: #7f1d1d;
+  }
+  .dark .bg-danger-soft {
+    background-color: #450a0a;
+  }
+  .dark .bg-ok {
+    background-color: #064e3b;
+  }
+  .dark .bg-ok-soft {
+    background-color: #022c22;
   }
 
   .dark .border-line {
-    border-color: #4b5568;
+    border-color: #4b5563;
   }
   .dark .shadow-[var(--shadow-border)] {
-    box-shadow: 0 0 0 1px #ffffff12, 0 1px 2px -1px #ffffff0f, 0 2px 4px #ffffff0a;
+    box-shadow: 0 0 0 1px #ffffff14, 0 1px 2px -1px #ffffff0f, 0 2px 4px #ffffff0a;
   }
   .dark .shadow-[var(--shadow-border-hover)] {
     box-shadow: 0 0 0 1px #ffffff1f, 0 1px 2px -1px #ffffff14, 0 2px 4px #ffffff0f;
   }
 
   .dark .text-ink {
-    color: #f1f4f8;
+    color: #f8fafc;
   }
   .dark .text-ink-soft {
-    color: #c9d0da;
+    color: #e2e8f0;
   }
   .dark .text-paper-sunken {
-    color: #a3afbd;
+    color: #cbd5e1;
   }
   .dark .text-line {
-    color: #c9d0da;
+    color: #cbd5e1;
   }
   .dark .text-sea {
-    color: #8cd3f3;
+    color: #60a5fa;
   }
   .dark .text-amber {
-    color: #f8c97e;
+    color: #fbbf24;
   }
   .dark .text-danger {
     color: #fca5a5;
   }
   .dark .text-ok {
-    color: #86efac;
+    color: #34d399;
   }
 
   .dark a {
-    color: #8cd3f3;
+    color: #60a5fa;
   }
   .dark a:hover {
-    color: #c7efff;
+    color: #93c5fd;
   }
   .dark ::placeholder {
-    color: #7b8698;
+    color: #9ca3af;
   }
 }
 
