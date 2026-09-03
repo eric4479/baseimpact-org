@@ -48,8 +48,8 @@ export function HomePage() {
   return (
     <div className="space-y-10">
       <PageMeta
-        title="Find food, shelter, and a computer"
-        description="Base Impact is a neighborhood navigation desk built first for phones. Find help nearby in Brevard, Volusia, and Orange Counties."
+        title="Base Impact — neighborhood help in Brevard County"
+        description="Tech help, food, shelter, and community support in North Brevard. Built for phones."
         path="/"
       />
       <JsonLd data={ORG_SCHEMA} />
@@ -73,8 +73,8 @@ export function HomePage() {
             </Link>
           </Button>
           <Button variant="emergency" size="lg" className="w-full sm:w-auto" onClick={openTriage}>
-            <Compass className="size-5" aria-hidden />
-            I need help now
+          <Compass className="size-5" aria-hidden />
+          Need help?
           </Button>
           <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
             <Link to="/give">

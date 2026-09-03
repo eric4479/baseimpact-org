@@ -1,5 +1,5 @@
-import { useEffect, useState, type ReactNode } from "react";
-import { Building2, Compass, Heart, MessageSquare, Search, Shield, Zap, Sun, Moon } from "lucide-react";
+import { useEffect, type ReactNode } from "react";
+import { Building2, Compass, Heart, MessageSquare, Search, Shield, Zap } from "lucide-react";
 import { Link, useNav, type Path } from "@/lib/nav";
 import { useSavedStore, useUiStore } from "@/lib/stores";
 import { cn } from "@/lib/utils";
@@ -8,7 +8,7 @@ import { TriageSheet } from "@/components/triage-sheet";
 
 const NAV: Array<{ to: Path; label: string; icon: typeof Heart }> = [
   { to: "/", label: "Home", icon: Heart },
-  { to: "/directory", label: "Find help", icon: Search },
+  { to: "/directory", label: "Help", icon: Search },
   { to: "/partners", label: "Partners", icon: Building2 },
   { to: "/about", label: "About", icon: Shield },
   { to: "/guide", label: "Guide", icon: Compass },
@@ -22,15 +22,6 @@ export function SiteShell({ children }: { children: ReactNode }) {
   const openTriage = useUiStore((s) => s.openTriage);
   const hydrate = useSavedStore((s) => s.hydrate);
 
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof window !== "undefined") {
-      const stored = window.localStorage.getItem("baseimpact_theme");
-      if (stored === "dark" || stored === "light") return stored === "dark";
-      return true;
-    }
-    return true;
-  });
-
   useEffect(() => {
     hydrate();
     syncFromWindow();
@@ -38,16 +29,6 @@ export function SiteShell({ children }: { children: ReactNode }) {
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
   }, [hydrate, syncFromWindow]);
-
-  useEffect(() => {
-    const root = document.documentElement;
-    if (isDark) {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-    window.localStorage.setItem("baseimpact_theme", isDark ? "dark" : "light");
-  }, [isDark]);
 
   return (
     <div className="flex min-h-dvh flex-col bg-paper text-ink">
@@ -110,15 +91,6 @@ export function SiteShell({ children }: { children: ReactNode }) {
                   <MessageSquare className="size-4" aria-hidden />
                   Feedback
                 </Link>
-                <button
-                  type="button"
-                  onClick={() => setIsDark((prev) => !prev)}
-                  className="flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-semibold text-paper-sunken hover:bg-pine-deep hover:text-paper-raised"
-                  aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-                >
-                  {isDark ? <Sun className="size-4" aria-hidden /> : <Moon className="size-4" aria-hidden />}
-                  <span className="hidden xl:inline">{isDark ? "Light mode" : "Dark mode"}</span>
-                </button>
               </nav>
 
           <div className="flex items-center gap-2">
@@ -127,14 +99,6 @@ export function SiteShell({ children }: { children: ReactNode }) {
               <span className="hidden sm:inline">Need help now</span>
               <span className="sm:hidden">Help now</span>
             </Button>
-            <button
-              type="button"
-              onClick={() => setIsDark((prev) => !prev)}
-              className="flex size-9 items-center justify-center rounded-lg text-paper-sunken hover:bg-pine-deep hover:text-paper-raised lg:hidden"
-              aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-            >
-              {isDark ? <Sun className="size-5" aria-hidden /> : <Moon className="size-5" aria-hidden />}
-            </button>
           </div>
         </div>
       </header>
