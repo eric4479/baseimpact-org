@@ -111,10 +111,28 @@ export function AboutPage() {
           willing to show up, read the numbers before a vote, and treat other people&apos;s money like
           it&apos;s not theirs. If that&apos;s you, we&apos;d like to talk.
         </p>
-        <div className="mt-4">
+        <p className="mt-2 text-sm text-ink-soft">
+          The application asks for your legal name as on government ID, a physical residential
+          address (no P.O. Boxes), your contact phone, the board position you&apos;re interested in
+          (President/Chair, Secretary, or Treasurer), and a conflict-of-interest disclosure. All
+          responses go to the founding team only.
+        </p>
+        <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
           <Button asChild variant="primary">
-            <Link to="/feedback">Join the board conversation →</Link>
+            <a
+              href="https://forms.gle/wSrP8FHESS89LJUW7"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Apply for the Board of Directors →
+            </a>
           </Button>
+          <Link
+            to="/feedback"
+            className="text-sm text-sea hover:underline"
+          >
+            Or send general feedback →
+          </Link>
         </div>
       </section>
 

@@ -11,7 +11,7 @@ const JOIN_SCHEMA = {
   url: "https://baseimpact.org",
 };
 
-const ROUTES: Array<{ label: string; desc: string; to: Path; cta: string }> = [
+const ROUTES: Array<{ label: string; desc: string; to?: Path; cta: string; external?: boolean; href?: string }> = [
   {
     label: "I want to volunteer",
     desc: "See what volunteering looks like and sign up.",
@@ -35,6 +35,14 @@ const ROUTES: Array<{ label: string; desc: string; to: Path; cta: string }> = [
     desc: "Founding board members — people who care about this community and are willing to show up.",
     to: "/about",
     cta: "Learn about board service →",
+  },
+  {
+    label: "Apply for the board",
+    desc: "Fill out the Board of Directors application form to express interest and receive follow-up.",
+    to: "/about",
+    cta: "Open the application form →",
+    external: true,
+    href: "https://forms.gle/wSrP8FHESS89LJUW7",
   },
   {
     label: "I just want to stay informed",
@@ -73,11 +81,25 @@ export function JoinPage() {
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {ROUTES.map((r) => (
             <div key={r.label} className="rounded-2xl bg-paper-raised p-5 shadow-[var(--shadow-border)]">
-              <h2 className="font-display text-xl font-semibold">{r.label}</h2>
+            <h2 className="font-display text-xl font-semibold">{r.label}</h2>
               <p className="mt-2 text-sm text-ink-soft">{r.desc}</p>
-              <Link to={r.to} className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-sea hover:underline">
-                {r.cta}
-              </Link>
+              {r.external && r.href ? (
+                <a
+                  href={r.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-sea hover:underline"
+                >
+                  {r.cta}
+                </a>
+              ) : (
+                <Link
+                  to={r.to as Path}
+                  className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-sea hover:underline"
+                >
+                  {r.cta}
+                </Link>
+              )}
             </div>
           ))}
         </div>
