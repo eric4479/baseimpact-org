@@ -41,7 +41,15 @@ export type Resource = {
    * different domain than `website` - a program documented on a county site, for example.
    */
   serviceUrl?: string;
-  description: string;
+    /**
+     * The page this entry's address, hours, and phone were last confirmed from.
+     *
+     * Provenance, not a link for visitors to follow. Without it there is no way to tell a
+     * verified listing from one somebody typed in from memory, and no way to re-check an
+     * entry later without starting the research over.
+     */
+    sourceUrl?: string;
+    description: string;
   hoursText: string;
   /**
    * Opening ranges keyed by weekday (Sunday 0 … Saturday 6). A day maps to a LIST of
