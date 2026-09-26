@@ -26,6 +26,21 @@ const NEED_CATEGORIES = [
 ];
 
 function getCategoryForResource(res: Resource): string {
+  // `triageCategory` is set deliberately on every entry, so it is the reliable signal.
+  // Matching on tag strings alone sent anything without one of the exact tags below —
+  // legal aid, veterans' services, coordinated entry — to "Other Help".
+  switch (res.triageCategory) {
+    case "food":
+      return "food";
+    case "shelter":
+      return "shelter";
+    case "id_tech":
+      return "jobs";
+    case "travel":
+      return "bills";
+  }
+
+  // Fallback for entries that predate the field.
   if (res.tags.some(t => ["Groceries", "Food", "Hot Meals", "Food Pantry"].includes(t))) return "food";
   if (res.tags.some(t => ["Shelter", "Housing", "Beds"].includes(t))) return "shelter";
   if (res.tags.some(t => ["Rent Help", "Utilities", "Financial"].includes(t))) return "bills";
@@ -45,7 +60,7 @@ export function DirectoryPage() {
 
   // Filters
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedNeed, setSelectedNeed] = useState<string>("food");
+  const [selectedNeed, setSelectedNeed] = useState<string>("all");
   const [radius, setRadius] = useState(100); // Default 100 miles
 
   // Load GPS on mount if possible
@@ -158,7 +173,10 @@ export function DirectoryPage() {
       if (res.lat === 0 && res.lng === 0 && !res.address) continue;
 
       const distance = calculateDistanceMiles(currentLocation.lat, currentLocation.lng, res.lat, res.lng);
-      if (distance > radius) continue;
+      // Phone-based and mobile services have no meaningful distance — their coordinate
+      // is a nominal anchor so the sort does not break. Filtering them out by radius
+      // would hide the helplines and mobile units that serve the area regardless.
+      if (!res.mobileOnly && distance > radius) continue;
 
       const category = getCategoryForResource(res);
       if (category !== selectedNeed && selectedNeed !== "all") continue;
