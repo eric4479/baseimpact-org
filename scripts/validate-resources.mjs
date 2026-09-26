@@ -31,9 +31,10 @@ const server = await createServer({
   optimizeDeps: { noDiscovery: true, include: [] },
 });
 
-let mod;
+let mod, zips;
 try {
   mod = await server.ssrLoadModule("/src/lib/resources/index.ts");
+  zips = await server.ssrLoadModule("/src/lib/fl-zips.ts");
 } finally {
   // ssrLoadModule keeps the server alive; the process would hang without this.
   await server.close();
@@ -61,6 +62,16 @@ const isUrl = (s) => {
     return false;
   }
 };
+
+/**
+ * True for entries that are a phone line or an online service rather than a place.
+ *
+ * These carry a placeholder address ("Statewide, Statewide, FL") and a shared in-state
+ * coordinate purely so the sort has something to work with, so a geographic check on
+ * them would be meaningless.
+ */
+const isStatewideOrNational = (res) =>
+  /^(statewide|national|mobile)\b/i.test((res.address ?? "").trim()) || res.mobileOnly === true;
 
 const seenIds = new Map();
 const seenPlaces = new Map();
@@ -102,6 +113,32 @@ for (const res of ALL_RESOURCES) {
     // A real address at Null Island is a missing geocode, and it silently ruins the
     // distance sort - the entry lands near the Gulf of Guinea and sorts as farthest.
     fail(id, "lat/lng is 0,0 but the entry has an address (missing geocode)");
+  } else if (!isStatewideOrNational(res)) {
+    // Correcting an entry's address without correcting its coordinates leaves it
+    // pointing at the OLD place, which is worse than a missing geocode: the distance
+    // sort looks confident and is wrong, and "Directions" sends the visitor somewhere
+    // they were just told is not the right address.
+    const inFlorida = lat > 24.2 && lat < 31.2 && lng > -88.0 && lng < -79.6;
+    if (!inFlorida) {
+      fail(id, `lat/lng (${lat}, ${lng}) is outside Florida but the entry is county "${res.county}" - stale coordinates?`);
+    } else {
+      const zipMatch = String(res.address ?? "").match(/\b(3[2-4]\d{3})\b/);
+      const centroid = zipMatch ? zips.lookupZip(zipMatch[1]) : null;
+      if (centroid) {
+        const dLat = lat - centroid.lat;
+        const dLng = (lng - centroid.lng) * Math.cos((lat * Math.PI) / 180);
+        const milesAway = Math.hypot(dLat, dLng) * 69.0;
+        // 7 miles is calibrated against the real data, not guessed: the farthest any
+        // CORRECT entry sits from its own ZIP centroid is 5.9 mi (a large Winter Garden
+        // ZCTA), while the two entries that had drifted from a corrected address sat
+        // 7.6 mi and 20 mi away. The window between 5.9 and 7.6 is the whole signal, so
+        // if this fires on a listing whose coordinates are genuinely right, re-measure
+        // the spread before widening it - do not just raise the number.
+        if (milesAway > 7.0) {
+          fail(id, `coordinates are ${milesAway.toFixed(1)} mi from ZIP ${zipMatch[1]}'s centroid - the address was probably changed without re-geocoding`);
+        }
+      }
+    }
   }
 
   // --- links --------------------------------------------------------------
@@ -114,8 +151,14 @@ for (const res of ALL_RESOURCES) {
   if (res.website) {
     // A deep path in `website` means the homepage is still missing, which is what the
     // visitor needs to judge whether an organization is legitimate.
+    //
+    // A SINGLE path segment does not count: chapters and corps routinely live at
+    // parent.org/chapter/, and that path IS their homepage (Salvation Army runs every
+    // local corps this way). Warning on those trains people to ignore the warning.
     const path = (() => { try { return new URL(res.website).pathname; } catch { return "/"; } })();
-    if (path !== "/" && path !== "") {
+    const segments = path.split("/").filter(Boolean);
+    const looksLikeFile = /\.[a-z]{2,5}$/i.test(segments[segments.length - 1] ?? "");
+    if (segments.length > 1 || looksLikeFile) {
       warn(id, `website looks like a deep page, not a homepage: ${domainOf(res.website)}${path}`);
     }
   }
