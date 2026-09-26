@@ -2,34 +2,19 @@
 /robots.txt     /robots.txt     200
 /sitemap.xml    /sitemap.xml    200
 
-# Every app route is prerendered to its own flat .html file at build time, so these
-# rewrites point straight at the built file.
+# Deliberately NO per-route rules here.
 #
-# Note the flat files: emitting `directory/index.html` instead makes Cloudflare Pages
-# answer a request for `/directory` with a 308 to `/directory/`. That redirect used to
-# collide with the rewrite for the same path and send visitors to `/`, silently
-# discarding the path, so every deep link landed on the homepage.
+# Prerendering writes one flat file per route (`directory.html`, `terms.html`, ...)
+# and Cloudflare Pages already serves those for the extension-less URL
+# (`/directory` -> `directory.html`). Adding a `200` rewrite for the same path does
+# not help: Cloudflare normalises the rewritten `.html` target back to the
+# extension-less form, which matches the rule again. The result is an infinite
+# 308 loop where `/directory` redirects to `/directory`. `npm run build` now fails
+# if a rule for a prerendered route reappears in this file.
 #
-# Anything not listed here falls through to 404.html with a real 404 status, rather
-# than the old behaviour where every junk URL returned 200 with the homepage (a
-# 'soft 404' that pollutes search results).
-#
-# If you add a route, add it to src/lib/nav.tsx, src/lib/routes.ts, and here.
-# `npm run build` fails if those three disagree.
-
-/                /index.html     200
-/directory       /directory.html 200
-/partners        /partners.html  200
-/about           /about.html     200
-/feedback        /feedback.html  200
-/give            /give.html      200
-/guide           /guide.html     200
-/volunteer       /volunteer.html 200
-/impact          /impact.html    200
-/join            /join.html      200
-/contact         /contact.html   200
-/privacy         /privacy.html   200
-/terms           /terms.html     200
+# Anything not matching a prerendered route or a real asset falls through to
+# 404.html with a real 404 status, rather than the old behaviour where every junk
+# URL returned 200 with the homepage (a 'soft 404' that pollutes search results).
 
 # /donate was a thin duplicate of /give with no inbound links. A 301 consolidates the
 # two so search engines index one page instead of two competing ones.

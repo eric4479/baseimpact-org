@@ -46,9 +46,11 @@ const navPaths = [
 ].map((m) => m[1]);
 
 const redirectsSrc = readFileSync(join(root, "public", "_redirects"), "utf8");
-const redirectPaths = [...redirectsSrc.matchAll(/^(\/[a-z-]*)\s+\/[a-z-]+\.html\s+200/gm)].map(
-  (m) => m[1],
-);
+// Routes that `_redirects` rewrites with a 200. Any of these that is also a
+// prerendered route is a bug, not a redundancy - see the conflict check below.
+const redirectPaths = [
+  ...redirectsSrc.matchAll(/^(\/[a-z-]*)\s+\S+\s+200$/gm),
+].map((m) => m[1]);
 
 const metaPaths = ROUTE_META.map((r) => r.path);
 const sorted = (a) => [...a].sort();
@@ -59,9 +61,17 @@ if (sorted(navPaths).join() !== sorted(metaPaths).join()) {
     `ROUTE_META and nav.tsx PATHS differ.\n  only in nav.tsx: ${navPaths.filter((p) => !metaPaths.includes(p)).join(", ") || "—"}\n  only in ROUTE_META: ${metaPaths.filter((p) => !navPaths.includes(p)).join(", ") || "—"}`,
   );
 }
-if (sorted(redirectPaths).join() !== sorted(metaPaths).join()) {
+// Prerendered routes are served natively by Cloudflare Pages. Adding a 200 rewrite
+// for one makes Cloudflare normalise the rewritten `.html` target back to the
+// extension-less URL, which matches the rule again - an infinite 308 loop where
+// `/directory` redirects to `/directory`. This shipped once; the guard is here so it
+// cannot ship again.
+const loopingRewrites = redirectPaths.filter(
+  (p) => metaPaths.includes(p) && p !== "/robots.txt" && p !== "/sitemap.xml",
+);
+if (loopingRewrites.length) {
   problems.push(
-    `ROUTE_META and public/_redirects differ.\n  only in _redirects: ${redirectPaths.filter((p) => !metaPaths.includes(p)).join(", ") || "—"}\n  only in ROUTE_META: ${metaPaths.filter((p) => !redirectPaths.includes(p)).join(", ") || "—"}`,
+    `public/_redirects rewrites prerendered routes, which causes an infinite 308 loop: ${loopingRewrites.join(", ")}.\n  Prerendered routes are served natively - remove these rules.`,
   );
 }
 if (problems.length) {
