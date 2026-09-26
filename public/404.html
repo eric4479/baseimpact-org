@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0b1220" />
+    <title>Page not found — Base Impact</title>
+    <meta name="robots" content="noindex, follow" />
+    <meta name="description" content="That page does not exist. Find food, shelter, and local help in Brevard, Volusia, and Orange Counties." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        background: #0b1220;
+        color: #f8fafc;
+        font-family: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+        font-size: 1.0625rem;
+        line-height: 1.55;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+      }
+      main { width: 100%; max-width: 34rem; }
+      .logo {
+        display: inline-flex; align-items: center; gap: .75rem;
+        margin-bottom: 1.75rem; text-decoration: none; color: inherit;
+      }
+      .mark {
+        width: 2.5rem; height: 2.5rem; border-radius: .75rem; background: #2563eb;
+        display: grid; place-items: center; flex: none;
+      }
+      .mark svg { width: 1.25rem; height: 1.25rem; fill: none; stroke: #fff; stroke-width: 2; }
+      .brand { font-weight: 700; font-size: 1.125rem; line-height: 1; }
+      .brand small {
+        display: block; margin-top: .25rem; font-size: .6875rem; font-weight: 700;
+        letter-spacing: .1em; text-transform: uppercase; color: #cbd5e1;
+      }
+      h1 {
+        font-family: Fraunces, Georgia, "Times New Roman", serif;
+        font-size: clamp(1.75rem, 5vw, 2.5rem);
+        line-height: 1.15; letter-spacing: -.03em; margin: 0 0 .75rem;
+      }
+      p { color: #e2e8f0; margin: 0 0 1.5rem; }
+      .card {
+        background: #111827; border-radius: 1rem; padding: 1.25rem;
+        box-shadow: 0 0 0 1px #ffffff14, 0 1px 2px -1px #ffffff0f;
+        margin-bottom: 1rem;
+      }
+      .card h2 {
+        font-family: Fraunces, Georgia, serif; font-size: 1.25rem; margin: 0 0 .5rem;
+        letter-spacing: -.02em;
+      }
+      .card p { margin: 0 0 .875rem; font-size: .9375rem; }
+      .actions { display: flex; flex-wrap: wrap; gap: .625rem; }
+      a.btn {
+        display: inline-flex; align-items: center; gap: .5rem;
+        min-height: 2.75rem; padding: .5rem 1rem; border-radius: .75rem;
+        font-size: .9375rem; font-weight: 600; text-decoration: none;
+        background: #2563eb; color: #ffffff;
+      }
+      a.btn:hover { background: #1d4ed8; }
+      a.btn.ghost { background: #1f2937; color: #f8fafc; }
+      a.btn.ghost:hover { background: #374151; }
+      a.btn.alert { background: #b45309; color: #ffffff; }
+      a.inline { color: #60a5fa; }
+      :focus-visible { outline: 2px solid #60a5fa; outline-offset: 3px; border-radius: .25rem; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a class="logo" href="/">
+        <span class="mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
+        </span>
+        <span class="brand">Base Impact<small>Brevard County, FL</small></span>
+      </a>
+
+      <h1>We couldn&rsquo;t find that page.</h1>
+      <p>
+        The link may be old, or there may be a typo in the address. Nothing is broken on
+        your end &mdash; here is where to go next.
+      </p>
+
+      <div class="card">
+        <h2>Looking for help?</h2>
+        <p>
+          Search food pantries, shelters, showers, and other local help by zip code, sorted
+          by distance.
+        </p>
+        <div class="actions">
+          <a class="btn" href="/directory">Find help near you</a>
+          <a class="btn ghost" href="/">Go to the home page</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Need help right now?</h2>
+        <p>These lines are answered 24/7 and do not depend on this website.</p>
+        <div class="actions">
+          <a class="btn alert" href="tel:211">Call 211</a>
+          <a class="btn ghost" href="tel:988">Call or text 988</a>
+          <a class="btn ghost" href="tel:911">911 in an emergency</a>
+        </div>
+      </div>
+
+      <p style="font-size:.875rem;color:#cbd5e1">
+        Found a broken link on our site? <a class="inline" href="/feedback">Tell us</a> and
+        we&rsquo;ll fix it. We&rsquo;re a pre-filing nonprofit in Scottsmoor, FL.
+      </p>
+    </main>
+  </body>
+</html>

@@ -8,7 +8,6 @@ import { GivePage } from "@/pages/give";
 import { GuidePage } from "@/pages/guide";
 import { ImpactPage } from "@/pages/impact";
 import { JoinPage } from "@/pages/join";
-import { DonatePage } from "@/pages/donate";
 import { PrivacyPage } from "@/pages/privacy";
 import { TermsPage } from "@/pages/terms";
 import { HomePage } from "@/pages/home";
@@ -38,8 +37,6 @@ export default function App() {
       <JoinPage />
     ) : path === "/contact" ? (
       <ContactPage />
-    ) : path === "/donate" ? (
-      <DonatePage />
     ) : path === "/privacy" ? (
       <PrivacyPage />
     ) : path === "/terms" ? (

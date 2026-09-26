@@ -1,2 +1,27 @@
+# Static files first.
 /robots.txt    /robots.txt   200
-/sitemap.xml  /sitemap.xml  200
+/sitemap.xml   /sitemap.xml  200
+
+# The app is an SPA, so each real route is rewritten to the shell with a 200.
+# Anything not listed here falls through to 404.html with a real 404 status,
+# instead of the old behaviour where every junk URL returned 200 + the homepage
+# (a 'soft 404' that pollutes search results).
+#
+# If you add a route to src/lib/nav.tsx, add it here too.
+
+/               /index.html   200
+/directory      /index.html   200
+/partners       /index.html   200
+/about          /index.html   200
+/feedback       /index.html   200
+/give           /index.html   200
+/guide          /index.html   200
+/volunteer      /index.html   200
+/impact         /index.html   200
+/join           /index.html   200
+/contact        /index.html   200
+# /donate was a thin duplicate of /give with no inbound links. A 301 consolidates
+# the two so search engines index one page instead of two competing ones.
+/donate         /give         301
+/privacy        /index.html   200
+/terms          /index.html   200

@@ -1,21 +1,86 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+    <!--
+      Site is dark-mode only. Declaring it here lets the browser paint native UI
+      (scrollbars, form controls, canvas background) dark from the very first frame,
+      and the inline background below prevents a white flash before the stylesheet loads.
+    -->
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0b1220" />
+
+    <title>Base Impact — Food, Shelter &amp; Help in Brevard County, FL</title>
     <meta
       name="description"
-      content="Base Impact connects neighbors in Scottsmoor, Titusville, and Brevard County with food, shelter, showers, and digital help."
+      content="Find food pantries, shelters, showers, and local help near you in Brevard, Volusia, and Orange Counties. Search by zip code, sorted by distance."
     />
-    <meta name="theme-color" content="#1A3C32" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="canonical" href="https://baseimpact.org/" />
+
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="author" content="Base Impact Inc." />
+    <meta name="geo.region" content="US-FL" />
+    <meta name="geo.placename" content="Scottsmoor, Florida" />
+
+    <!-- Open Graph / social. These are also rewritten per-route at build time. -->
+    <meta property="og:site_name" content="Base Impact" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Base Impact — Food, Shelter &amp; Help in Brevard County, FL" />
+    <meta
+      property="og:description"
+      content="Find food pantries, shelters, showers, and local help near you in Brevard, Volusia, and Orange Counties. Search by zip code, sorted by distance."
+    />
+    <meta property="og:url" content="https://baseimpact.org/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Base Impact — Food, Shelter &amp; Help in Brevard County, FL" />
+    <meta
+      name="twitter:description"
+      content="Find food pantries, shelters, showers, and local help near you in Brevard, Volusia, and Orange Counties."
+    />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!--
+      Critical font, preloaded so the body text paints in the real typeface on first
+      paint. Everything else (bold weights, latin-ext subsets, the display serif)
+      loads lazily via unicode-range and never blocks rendering.
+    -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      href="/fonts/atkinson-400-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
-    <title>Base Impact</title>
+
+    <style>
+      /* Painted before any stylesheet arrives — no white flash on a dark-mode-only site. */
+      html { background: #0b1220; color: #f8fafc; }
+    </style>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Base Impact Inc.",
+        "url": "https://baseimpact.org",
+        "description": "Pre-filing nonprofit in Scottsmoor, FL building a neighborhood navigation desk for Brevard, Volusia, and Orange Counties.",
+        "areaServed": [
+          { "@type": "AdministrativeArea", "name": "Brevard County, Florida" },
+          { "@type": "AdministrativeArea", "name": "Volusia County, Florida" },
+          { "@type": "AdministrativeArea", "name": "Orange County, Florida" }
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "email": "hello@baseimpact.org",
+          "telephone": "+1-321-323-0999"
+        }
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

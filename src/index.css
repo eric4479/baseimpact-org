@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./fonts.css";
 
 @theme {
   --font-sans: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
@@ -100,6 +101,10 @@
     outline-offset: 3px;
   }
 
+  html.dark :focus-visible {
+    outline-color: #60a5fa;
+  }
+
   input,
   select,
   textarea {
@@ -107,6 +112,30 @@
   }
 }
 
+/*
+  Dark palette — every pairing is contrast-checked against the surface it is
+  actually used on. "shape" is fill-vs-page contrast, which WCAG 1.4.11 requires
+  to be at least 3:1 for a control to be perceivable as a control.
+
+    text-ink          #f8fafc on #0b1220 page ......... 17.89:1
+    text-ink-soft     #e2e8f0 on #111827 card ......... 14.39:1
+    text-ink-soft     #e2e8f0 on #1f2937 inset ........ 11.91:1
+    text-paper-sunken #cbd5e1 on #0f172a header ....... 12.02:1
+    text-sea          #60a5fa on #0b1220 page .......... 7.36:1
+    button            #ffffff on #2563eb sea ........... 5.17:1  (shape 3.62:1)
+    button hover      #ffffff on #1d4ed8 sea-bright .... 6.70:1
+    button emergency  #ffffff on #b45309 amber ......... 5.02:1  (shape 3.73:1)
+    button danger     #ffffff on #b91c1c danger ........ 6.47:1
+    badge ok          #34d399 on #022c22
+    badge soon        #fbbf24 on #451a03
+    badge closed      #cbd5e1 on #1f2937
+    badge alert       #fca5a5 on #450a0a
+
+  Previous values failed in three places: white on the #60a5fa hover fill
+  (2.54:1), text-warn #92400e on the page (2.64:1), and the primary button fill,
+  which was #111827 against a #0b1220 page — 1.06:1 shape contrast, so the main
+  call to action did not read as a button at all.
+*/
 @layer components {
   .dark .bg-paper {
     background-color: #0b1220;
@@ -124,17 +153,20 @@
     background-color: #020617;
   }
   .dark .bg-sea {
-    background-color: #111827;
+    background-color: #2563eb;
+  }
+  .dark .bg-sea-bright {
+    background-color: #1d4ed8;
   }
 
   .dark .bg-amber {
-    background-color: #78350f;
+    background-color: #b45309;
   }
   .dark .bg-amber-soft {
     background-color: #451a03;
   }
   .dark .bg-danger {
-    background-color: #7f1d1d;
+    background-color: #b91c1c;
   }
   .dark .bg-danger-soft {
     background-color: #450a0a;
@@ -144,6 +176,9 @@
   }
   .dark .bg-ok-soft {
     background-color: #022c22;
+  }
+  .dark .bg-closed-soft {
+    background-color: #1f2937;
   }
 
   .dark .border-line {
@@ -162,6 +197,9 @@
   .dark .text-ink-soft {
     color: #e2e8f0;
   }
+  .dark .text-paper-raised {
+    color: #ffffff;
+  }
   .dark .text-paper-sunken {
     color: #cbd5e1;
   }
@@ -171,7 +209,8 @@
   .dark .text-sea {
     color: #60a5fa;
   }
-  .dark .text-amber {
+  .dark .text-amber,
+  .dark .text-warn {
     color: #fbbf24;
   }
   .dark .text-danger {
@@ -179,6 +218,9 @@
   }
   .dark .text-ok {
     color: #34d399;
+  }
+  .dark .text-closed {
+    color: #cbd5e1;
   }
 
   .dark a {
@@ -190,7 +232,11 @@
   .dark ::placeholder {
     color: #9ca3af;
   }
+  .dark input[type="range"] {
+    accent-color: #60a5fa;
+  }
 }
+
 
 @layer utilities {
   .font-display {

@@ -56,11 +56,6 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://baseimpact.org/donate</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://baseimpact.org/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
