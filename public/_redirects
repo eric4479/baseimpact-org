@@ -1,27 +1,36 @@
 # Static files first.
-/robots.txt    /robots.txt   200
-/sitemap.xml   /sitemap.xml  200
+/robots.txt     /robots.txt     200
+/sitemap.xml    /sitemap.xml    200
 
-# The app is an SPA, so each real route is rewritten to the shell with a 200.
-# Anything not listed here falls through to 404.html with a real 404 status,
-# instead of the old behaviour where every junk URL returned 200 + the homepage
-# (a 'soft 404' that pollutes search results).
+# Every app route is prerendered to its own flat .html file at build time, so these
+# rewrites point straight at the built file.
 #
-# If you add a route to src/lib/nav.tsx, add it here too.
+# Note the flat files: emitting `directory/index.html` instead makes Cloudflare Pages
+# answer a request for `/directory` with a 308 to `/directory/`. That redirect used to
+# collide with the rewrite for the same path and send visitors to `/`, silently
+# discarding the path, so every deep link landed on the homepage.
+#
+# Anything not listed here falls through to 404.html with a real 404 status, rather
+# than the old behaviour where every junk URL returned 200 with the homepage (a
+# 'soft 404' that pollutes search results).
+#
+# If you add a route, add it to src/lib/nav.tsx, src/lib/routes.ts, and here.
+# `npm run build` fails if those three disagree.
 
-/               /index.html   200
-/directory      /index.html   200
-/partners       /index.html   200
-/about          /index.html   200
-/feedback       /index.html   200
-/give           /index.html   200
-/guide          /index.html   200
-/volunteer      /index.html   200
-/impact         /index.html   200
-/join           /index.html   200
-/contact        /index.html   200
-# /donate was a thin duplicate of /give with no inbound links. A 301 consolidates
-# the two so search engines index one page instead of two competing ones.
-/donate         /give         301
-/privacy        /index.html   200
-/terms          /index.html   200
+/                /index.html     200
+/directory       /directory.html 200
+/partners        /partners.html  200
+/about           /about.html     200
+/feedback        /feedback.html  200
+/give            /give.html      200
+/guide           /guide.html     200
+/volunteer       /volunteer.html 200
+/impact          /impact.html    200
+/join            /join.html      200
+/contact         /contact.html   200
+/privacy         /privacy.html   200
+/terms           /terms.html     200
+
+# /donate was a thin duplicate of /give with no inbound links. A 301 consolidates the
+# two so search engines index one page instead of two competing ones.
+/donate          /give           301

@@ -46,7 +46,7 @@ const navPaths = [
 ].map((m) => m[1]);
 
 const redirectsSrc = readFileSync(join(root, "public", "_redirects"), "utf8");
-const redirectPaths = [...redirectsSrc.matchAll(/^(\/[a-z-]*)\s+\/index\.html\s+200/gm)].map(
+const redirectPaths = [...redirectsSrc.matchAll(/^(\/[a-z-]*)\s+\/[a-z-]+\.html\s+200/gm)].map(
   (m) => m[1],
 );
 
@@ -127,10 +127,19 @@ for (const route of ROUTE_META) {
     `<div id="root">${markup}</div>`,
   );
 
+  // Emit `directory.html`, not `directory/index.html`.
+  //
+  // Cloudflare Pages normalises directory-style output: with `directory/index.html`
+  // on disk, a request for `/directory` (no trailing slash) is answered with a 308
+  // to `/directory/`. That redirect then collided with the `_redirects` rewrite for
+  // the same path and sent visitors to `/` — the path was silently discarded, so
+  // every deep link landed on the homepage. Flat `.html` files are served directly
+  // for the extension-less URL, so the request and the canonical tag agree and no
+  // redirect is needed.
   const outFile =
     route.path === "/"
       ? join(distDir, "index.html")
-      : join(distDir, route.path.slice(1), "index.html");
+      : join(distDir, `${route.path.slice(1)}.html`);
 
   mkdirSync(dirname(outFile), { recursive: true });
   writeFileSync(outFile, html, "utf8");
