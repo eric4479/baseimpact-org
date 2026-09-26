@@ -107,6 +107,36 @@ export const PRESET_TOWNS: Record<TownName, Coordinates> = {
 
 export const TOWN_NAMES = Object.keys(PRESET_TOWNS) as TownName[];
 
+/**
+ * Keys in PRESET_TOWNS that are filter buckets rather than places.
+ *
+ * All three share Scottsmoor's coordinates, so naming one would tell a visitor standing
+ * in Scottsmoor that they are in "Statewide". They exist so the directory can be scoped
+ * by reach, and must never be presented as a location.
+ */
+const NON_GEOGRAPHIC_TOWNS = new Set<TownName>(["Mobile", "National", "Statewide"]);
+
+/**
+ * The real town nearest a coordinate, or null when nothing is close enough.
+ *
+ * Returning null past `maxMiles` matters: a visitor in the panhandle is 250 miles from
+ * the nearest town in this list, and naming "Titusville" there would be a confident
+ * wrong answer about where they are standing.
+ */
+export function nearestTownName(coords: Coordinates, maxMiles = 30): string | null {
+  let best: TownName | null = null;
+  let bestDist = Infinity;
+  for (const name of TOWN_NAMES) {
+    if (NON_GEOGRAPHIC_TOWNS.has(name)) continue;
+    const d = calculateDistanceMiles(coords.lat, coords.lng, PRESET_TOWNS[name].lat, PRESET_TOWNS[name].lng);
+    if (d < bestDist) {
+      bestDist = d;
+      best = name;
+    }
+  }
+  return best !== null && bestDist <= maxMiles ? best : null;
+}
+
 export const CATEGORIES: Array<"All" | ResourceCategory> = [
   "All",
   "Food Banks",

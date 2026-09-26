@@ -65,3 +65,45 @@ export function knownZipCount(): number {
   if (!index) index = build();
   return index.size + Object.keys(NO_ZCTA).length;
 }
+
+/**
+ * The ZIP whose centroid is closest to a coordinate — used to report back which ZIP a
+ * GPS fix landed in.
+ *
+ * Nearest-centroid is an estimate, not a boundary lookup: ZCTAs are irregular, so near
+ * a border this can name the neighbouring ZIP. That is acceptable for the one thing it
+ * is used for — telling the visitor which ZIP their fix corresponds to, so the ZIP box
+ * is populated with something they can correct. It must NOT be treated as authoritative
+ * for anything, and the UI labels it as an estimate.
+ */
+export function nearestZip(coords: { lat: number; lng: number }): string | null {
+  if (!index) index = build();
+  if (index.size === 0) return null;
+
+  let best: string | null = null;
+  let bestDist = Infinity;
+  for (const [zip, [lat, lng]] of index) {
+    // Squared planar distance. Longitude degrees are shorter than latitude degrees at
+    // Florida's latitude, but since this only RANKS candidates and never reports a
+    // distance, the ranking is close enough and avoids 983 square roots.
+    const dLat = lat - coords.lat;
+    const dLng = lng - coords.lng;
+    const d = dLat * dLat + dLng * dLng;
+    if (d < bestDist) {
+      bestDist = d;
+      best = zip;
+    }
+  }
+
+  for (const [zip, [lat, lng]] of Object.entries(NO_ZCTA)) {
+    const dLat = lat - coords.lat;
+    const dLng = lng - coords.lng;
+    const d = dLat * dLat + dLng * dLng;
+    if (d < bestDist) {
+      bestDist = d;
+      best = zip;
+    }
+  }
+
+  return best;
+}

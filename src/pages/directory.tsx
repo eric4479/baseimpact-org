@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { AlertTriangle, Globe, MapPin, Navigation, Phone, Search, Users } from "lucide-react";
+import { AlertTriangle, Check, Globe, MapPin, Navigation, Phone, Search, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PageMeta } from "@/components/page-meta";
 import { JsonLd } from "@/components/json-ld";
-import { calculateDistanceMiles, PRESET_TOWNS, type Coordinates } from "@/lib/resources";
+import { calculateDistanceMiles, nearestTownName, PRESET_TOWNS, type Coordinates } from "@/lib/resources";
 import { ALL_RESOURCES, type Resource, type Availability, getNextAvailableInfo, telHref } from "@/lib/resources";
 
 const DIRECTORY_SCHEMA = {
@@ -99,6 +99,15 @@ export function DirectoryPage() {
   const [gpsError, setGpsError] = useState<string | null>(null);
   const [gpsBusy, setGpsBusy] = useState(false);
   const [zipBusy, setZipBusy] = useState(false);
+  /**
+   * Confirmation shown after a location is set successfully.
+   *
+   * Kept separate from gpsError so a success and a failure can never both be on screen,
+   * and so they can be styled differently - a grey line in the same colour as the helper
+   * text below it is indistinguishable from static copy, which is exactly why the button
+   * previously looked like it did nothing.
+   */
+  const [gpsNotice, setGpsNotice] = useState<string | null>(null);
   const [locationLabel, setLocationLabel] = useState("Titusville");
 
   // Current location for calculations (starts as Titusville default)
@@ -126,12 +135,59 @@ export function DirectoryPage() {
         return;
       }
       setGpsBusy(true);
-      if (!silent) setGpsError(null);
+      if (!silent) {
+        setGpsError(null);
+        setGpsNotice(null);
+      }
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           setGpsBusy(false);
           setGpsError(null);
-          applyLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }, "your location", "gps");
+          const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          void (async () => {
+            // Name the fix in terms the visitor can check against where they are standing,
+            // and put the ZIP in the box so the value they would search by is visible
+            // rather than hidden behind a button press.
+            //
+            // The ZIP table is a separate chunk. If it fails to load we lose the ZIP but
+            // must keep the fix, so the import sits inside its own guard.
+            let zip: string | null = null;
+            let zipPoint: Coordinates | null = null;
+            try {
+              // One dynamic import: the table is ~24 KB in its own chunk and must not
+              // be pulled into the main bundle for visitors who never use GPS or ZIP.
+              const { nearestZip, lookupZip } = await import("@/lib/fl-zips");
+              zip = nearestZip(coords);
+              if (zip) zipPoint = lookupZip(zip);
+            } catch {
+              /* ZIP table unavailable - the town name below still identifies the fix */
+            }
+
+            // Name the town from the ZIP we settled on, NOT from the raw fix.
+            //
+            // Deriving the two independently let the line read "Mims, FL · ZIP 32796",
+            // because Mims' town marker sits nearer the 32796 centroid than the 32754
+            // one. A line that contradicts itself reads as broken even when each half
+            // was individually defensible. Naming the town from the ZIP makes the pair
+            // consistent by construction, and the ZIP is what actually drives the search.
+            const town = nearestTownName(zipPoint ?? coords);
+            const where = [town ? `${town}, FL` : null, zip ? `ZIP ${zip}` : null]
+              .filter(Boolean)
+              .join(" · ");
+
+            applyLocation(coords, zip ?? town ?? "your location", "gps", zip ?? undefined);
+            if (zip) setZipCode(zip);
+
+            // No metre figure. The device reports its own precision, but that is not how
+            // far off the ZIP estimate can be - nearest-centroid is a boundary-blind
+            // approximation that can name a neighbouring ZIP, and quoting "22 m" next to
+            // it would claim an accuracy this cannot have.
+            setGpsNotice(
+              where
+                ? `Location set — near ${where}. Estimated from your device; edit the zip code if it looks wrong.`
+                : "Location set — using your device's current position.",
+            );
+          })();
         },
         (err) => {
           setGpsBusy(false);
@@ -206,6 +262,7 @@ export function DirectoryPage() {
 
     setZipBusy(true);
     setGpsError(null);
+    setGpsNotice(null);
     try {
       // The ZIP table is about 24 KB, so it lives in its own chunk and is fetched the
       // first time somebody actually searches by ZIP. Most visitors use their phone's
@@ -325,6 +382,16 @@ export function DirectoryPage() {
               {zipBusy ? "…" : "Search"}
             </Button>
           </div>
+
+          {gpsNotice && !gpsError && (
+            <p
+              role="status"
+              className="flex items-start gap-2 rounded-xl bg-tint-positive px-3 py-2 text-sm font-semibold text-positive"
+            >
+              <Check className="mt-0.5 size-4 shrink-0" aria-hidden />
+              <span>{gpsNotice}</span>
+            </p>
+          )}
 
           {gpsError && (
             <p className="text-sm text-caution">{gpsError}</p>
