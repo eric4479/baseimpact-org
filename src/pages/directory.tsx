@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { AlertTriangle, Check, Globe, MapPin, Navigation, Phone, Search, Users } from "lucide-react";
+import { AlertTriangle, Check, ExternalLink, Globe, Link2Off, MapPin, Navigation, Phone, Search, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PageMeta } from "@/components/page-meta";
 import { JsonLd } from "@/components/json-ld";
 import { calculateDistanceMiles, nearestTownName, PRESET_TOWNS, type Coordinates } from "@/lib/resources";
 import { ALL_RESOURCES, type Resource, type Availability, getNextAvailableInfo, telHref } from "@/lib/resources";
+import { domainOf, servicePageLabel } from "@/lib/resources";
 
 const DIRECTORY_SCHEMA = {
   "@context": "https://schema.org",
@@ -585,15 +586,42 @@ export function DirectoryPage() {
                           Directions
                         </a>
                       )}
-                      {res.website && (
+                      {res.website ? (
                         <a
                           href={res.website}
                           target="_blank"
                           rel="noopener noreferrer"
+                          title={res.website}
                           className="inline-flex items-center gap-2 rounded-xl bg-inset px-4 py-3 text-sm font-semibold text-body hover:bg-card transition-colors"
                         >
                           <Globe className="size-4" aria-hidden />
-                          Website
+                          {domainOf(res.website)}
+                        </a>
+                      ) : (
+                        /* Say plainly that we have no site rather than showing nothing.
+                           Silence looked like the listing was broken; this tells the
+                           visitor the absence is known, and gives them a way to fix it. */
+                        <a
+                          href={`/feedback?about=${encodeURIComponent(res.name)}`}
+                          className="inline-flex items-center gap-2 rounded-xl bg-inset px-4 py-3 text-sm font-semibold text-muted hover:text-body transition-colors"
+                        >
+                          <Link2Off className="size-4" aria-hidden />
+                          No website found — know it?
+                        </a>
+                      )}
+
+                      {/* The page for THIS service, listed separately from the main
+                          site. Skipped when it is the same address as `website`. */}
+                      {res.serviceUrl && res.serviceUrl !== res.website && (
+                        <a
+                          href={res.serviceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title={res.serviceUrl}
+                          className="inline-flex items-center gap-2 rounded-xl bg-inset px-4 py-3 text-sm font-semibold text-body hover:bg-card transition-colors"
+                        >
+                          <ExternalLink className="size-4" aria-hidden />
+                          {servicePageLabel(res.serviceUrl, res.website)}
                         </a>
                       )}
                       </div>
