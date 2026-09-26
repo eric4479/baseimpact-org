@@ -84,6 +84,15 @@ const NEED_CATEGORIES: Array<{
 ];
 
 /**
+ * True when an entry carries the given filter, whether it arrived as a service type
+ * (Food / Faith / Charity) or as a descriptive tag. The two lists are separate on the
+ * entry, so the check has to span both.
+ */
+function matchesFilter(res: Resource, filter: string): boolean {
+  return res.tags.includes(filter) || res.services.some((s) => s === filter);
+}
+
+/**
  * Every entry carries exactly one group, so this is a lookup and not a guess.
  *
  * It previously inferred a group from tags whenever `triageCategory` was missing, which
@@ -315,7 +324,10 @@ export function DirectoryPage() {
 
       const category = getCategoryForResource(res);
       if (category !== selectedNeed && selectedNeed !== "all") continue;
-      if (selectedTag && !res.tags.includes(selectedTag)) continue;
+      // One filter, two sources: the nature of the service (Food / Faith / Charity) and
+      // the descriptive tags. Both are tapped the same way and shown in the same chip,
+      // so a visitor does not have to know which kind of label they picked.
+      if (selectedTag && !matchesFilter(res, selectedTag)) continue;
 
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
@@ -581,6 +593,43 @@ export function DirectoryPage() {
                         pressed state rather than clickable-looking text, so the control is
                         reachable by keyboard and announced as a filter to a screen reader.
                       */}
+                      {/*
+                        What kind of service this is. Sits above the descriptive tags and
+                        reads as a stronger statement - "Faith" says something about the
+                        organization itself, not just what it hands out.
+                      */}
+                      {res.services.length > 0 && (
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+                          {res.services.map((svc) => {
+                            const active = selectedTag === svc;
+                            return (
+                              <button
+                                key={svc}
+                                type="button"
+                                aria-pressed={active}
+                                onClick={() => setSelectedTag(active ? null : svc)}
+                                className={`rounded-md px-2 py-1 text-xs font-bold transition-colors ${
+                                  active
+                                    ? "bg-fill text-on-fill"
+                                    : svc === "Food"
+                                      ? "bg-tint-positive text-positive hover:bg-card"
+                                      : svc === "Faith"
+                                        ? "bg-tint-caution text-caution hover:bg-card"
+                                        // Charity is carried by nearly every listing here,
+                                        // so it gets an outlined neutral rather than a third
+                                        // colour: a page of 60 green chips would drown out
+                                        // the two that actually narrow the list. The ring is
+                                        // what keeps it from reading as one of the grey tags.
+                                        : "bg-inset text-body ring-1 ring-line hover:bg-card"
+                                }`}
+                              >
+                                {svc}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+
                       <div className="mt-2 flex flex-wrap gap-1.5">
                         {res.tags.map((tag) => {
                           const active = selectedTag === tag;

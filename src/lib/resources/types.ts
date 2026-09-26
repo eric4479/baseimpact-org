@@ -24,6 +24,8 @@ export type ResourceCounty = "Brevard" | "Volusia" | "Orange" | "Statewide";
  */
 export type HelpGroup = "food" | "shelter" | "health" | "money" | "basics" | "crisis";
 
+export type HelpService = "Food" | "Faith" | "Charity";
+
 export type Resource = {
   id: string;
   name: string;
@@ -71,6 +73,18 @@ export type Resource = {
   capacityStatus: string;
   /** The browse group this entry appears under. Exactly one, and always set. */
   group: HelpGroup;
+  /**
+   * What kind of service this is - Food, Faith, Charity. May hold more than one.
+   *
+   * Deliberately not a subset of `group`: a church pantry is Food *and* Faith, and a
+   * faith-based thrift is Faith *and* Charity, so collapsing this to a single value
+   * would misdescribe most of the directory. Faith is recorded only where the
+   * organization is actually faith-based, because spiritual care is a real form of help
+   * and a listing that claims it without cause is worse than one that stays quiet.
+   *
+   * Empty for government programmes and helplines, which are neither.
+   */
+  services: HelpService[];
   county: ResourceCounty;
   /** ISO date the listing was last checked against the organization's own website. */
   lastVerified?: string;

@@ -56,6 +56,10 @@ const KNOWN_CATEGORIES = new Set(CATEGORIES.filter((c) => c !== "All"));
 // a value that drifts out of this set would leave a listing unreachable by any chip.
 const KNOWN_GROUPS = new Set(["food", "shelter", "health", "money", "basics", "crisis"]);
 
+// May hold more than one, and may legitimately be empty (a government programme is
+// neither Food, Faith nor Charity). Duplicates are always a mistake.
+const KNOWN_SERVICES = new Set(["Food", "Faith", "Charity"]);
+
 const isUrl = (s) => {
   try {
     const u = new URL(s);
@@ -104,6 +108,16 @@ for (const res of ALL_RESOURCES) {
   if (!KNOWN_CATEGORIES.has(res.category)) fail(id, `unknown category "${res.category}"`);
   if (!KNOWN_COUNTIES.has(res.county)) fail(id, `unknown county "${res.county}"`);
   if (!KNOWN_GROUPS.has(res.group)) fail(id, `unknown group "${res.group}"`);
+  if (!Array.isArray(res.services)) {
+    fail(id, "services is not an array");
+  } else {
+    for (const s of res.services) {
+      if (!KNOWN_SERVICES.has(s)) fail(id, `unknown service "${s}"`);
+    }
+    if (new Set(res.services).size !== res.services.length) {
+      fail(id, `duplicate service in [${res.services.join(", ")}]`);
+    }
+  }
 
   // --- coordinates --------------------------------------------------------
   const { lat, lng } = res;
