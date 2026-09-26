@@ -3,10 +3,10 @@ import type { Availability } from "@/lib/resources";
 import { cn } from "@/lib/utils";
 
 const styles: Record<Availability["status"], string> = {
-  OPEN: "bg-ok-soft text-ok",
-  SOON: "bg-amber-soft text-warn",
-  CLOSED: "bg-closed-soft text-closed",
-  UNKNOWN: "bg-closed-soft text-closed",
+  OPEN: "bg-tint-positive text-positive",
+  SOON: "bg-tint-caution text-caution",
+  CLOSED: "bg-tint-inactive text-inactive",
+  UNKNOWN: "bg-tint-inactive text-inactive",
 };
 
 export function StatusBadge({ avail, className }: { avail: Availability; className?: string }) {

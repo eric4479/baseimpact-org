@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AlertTriangle, Globe, MapPin, Navigation, Phone, Search, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,49 @@ const DIRECTORY_SCHEMA = {
   description:
     "Find food, shelter, showers, and help near you in Central Florida. Within 100 miles of Titusville.",
 };
+
+/**
+ * The location a visitor chose last time, remembered so they do not have to re-enter
+ * a zip code on every visit. Previously the choice was discarded on reload and the
+ * page silently fell back to Titusville.
+ */
+type SavedLocation = {
+  coords: Coordinates;
+  label: string;
+  source: "gps" | "zip" | "town";
+  zip?: string;
+};
+
+const LOCATION_KEY = "baseimpact_location";
+
+function readSavedLocation(): SavedLocation | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(LOCATION_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Partial<SavedLocation>;
+    const lat = parsed?.coords?.lat;
+    const lng = parsed?.coords?.lng;
+    if (typeof lat !== "number" || typeof lng !== "number") return null;
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+    return {
+      coords: { lat, lng },
+      label: typeof parsed.label === "string" && parsed.label ? parsed.label : "your area",
+      source: parsed.source === "gps" || parsed.source === "town" ? parsed.source : "zip",
+      zip: typeof parsed.zip === "string" ? parsed.zip : undefined,
+    };
+  } catch {
+    return null; // corrupt or unavailable storage
+  }
+}
+
+function writeSavedLocation(value: SavedLocation) {
+  try {
+    localStorage.setItem(LOCATION_KEY, JSON.stringify(value));
+  } catch {
+    /* private mode — the session still works, it just will not be remembered */
+  }
+}
 
 const NEED_CATEGORIES = [
   { key: "food", label: "Food", icon: "🍽️", desc: "Food banks, pantries, hot meals" },
@@ -54,6 +97,9 @@ export function DirectoryPage() {
   const [zipCode, setZipCode] = useState("");
   const [usingGps, setUsingGps] = useState(false);
   const [gpsError, setGpsError] = useState<string | null>(null);
+  const [gpsBusy, setGpsBusy] = useState(false);
+  const [zipBusy, setZipBusy] = useState(false);
+  const [locationLabel, setLocationLabel] = useState("Titusville");
 
   // Current location for calculations (starts as Titusville default)
   const [currentLocation, setCurrentLocation] = useState<Coordinates>(PRESET_TOWNS.Titusville);
@@ -63,104 +109,124 @@ export function DirectoryPage() {
   const [selectedNeed, setSelectedNeed] = useState<string>("all");
   const [radius, setRadius] = useState(100); // Default 100 miles
 
-  // Load GPS on mount if possible
-  useEffect(() => {
-    if (navigator.geolocation) {
+  const applyLocation = useCallback(
+    (coords: Coordinates, label: string, source: SavedLocation["source"], zip?: string) => {
+      setCurrentLocation(coords);
+      setLocationLabel(label);
+      setUsingGps(source === "gps");
+      writeSavedLocation({ coords, label, source, zip });
+    },
+    [],
+  );
+
+  const requestPosition = useCallback(
+    (silent = false) => {
+      if (!navigator.geolocation) {
+        if (!silent) setGpsError("This browser cannot share a location. Enter a zip code instead.");
+        return;
+      }
+      setGpsBusy(true);
+      if (!silent) setGpsError(null);
       navigator.geolocation.getCurrentPosition(
         (pos) => {
-          const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-          setCurrentLocation(coords);
-          setUsingGps(true);
+          setGpsBusy(false);
           setGpsError(null);
+          applyLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }, "your location", "gps");
         },
-        () => {
-          // GPS blocked - keep default Titusville
-          setGpsError(null);
+        (err) => {
+          setGpsBusy(false);
+          // A silent attempt was not something the visitor asked for, so do not
+          // interrupt them with an error they did not cause.
+          if (silent) return;
+          setGpsError(
+            err.code === err.PERMISSION_DENIED
+              ? "Location is blocked for this site. Enter a zip code instead, or allow location in your browser's site settings."
+              : err.code === err.POSITION_UNAVAILABLE
+                ? "Your device could not work out a location just now. Try again, or enter a zip code."
+                : "Finding your location took too long. Try again, or enter a zip code.",
+          );
         },
-        { timeout: 10000, enableHighAccuracy: false }
+        {
+          // Network and Wi-Fi positioning rather than the GPS chip. That is the right
+          // trade for this job: it answers in a second or two instead of waiting on
+          // satellites, it works indoors where a lot of this audience is, and it uses
+          // less battery. Its accuracy is roughly a city block, which is far finer
+          // than we need to rank services that are miles apart.
+          enableHighAccuracy: false,
+          timeout: 12000,
+          // Reuse a recent fix rather than re-acquiring on every page view.
+          maximumAge: 5 * 60 * 1000,
+        },
       );
-    }
-  }, []);
+    },
+    [applyLocation],
+  );
 
-  const useMyLocation = () => {
-    if (!navigator.geolocation) {
-      setGpsError("Location not available. Use zip code instead.");
+  // Restore the location the visitor chose last time. Only fall back to GPS when the
+  // browser has ALREADY granted permission for this site.
+  //
+  // Prompting for location on first paint is how a site gets permanently blocked — a
+  // denial is remembered, so the visitor is never asked again and the feature is gone
+  // for them. Anyone who has not decided yet sees a "Use my location" button instead
+  // and can opt in deliberately.
+  useEffect(() => {
+    const saved = readSavedLocation();
+    if (saved) {
+      setCurrentLocation(saved.coords);
+      setLocationLabel(saved.label);
+      setUsingGps(saved.source === "gps");
+      if (saved.zip) setZipCode(saved.zip);
       return;
     }
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-        setCurrentLocation(coords);
-        setUsingGps(true);
-        setGpsError(null);
-      },
-      () => {
-        setGpsError("Could not get location. Try entering your zip code.");
-        setUsingGps(false);
-      },
-      { timeout: 10000 }
-    );
-  };
 
-  const handleZipCodeSearch = () => {
-    if (!zipCode.trim()) return;
-    // Simple zip to coords approximation for Florida
-    const zip = zipCode.trim();
-    // Approximate Florida zip codes (very rough)
-    const floridaZips: Record<string, Coordinates> = {
-      "32775": { lat: 28.7617, lng: -80.8625 }, // Scottsmoor
-      "32754": { lat: 28.6653, lng: -80.8481 }, // Mims
-      "32780": { lat: 28.6133, lng: -80.8091 }, // Titusville
-      "32796": { lat: 28.5724, lng: -80.8038 }, // Titusville area
-      "32922": { lat: 28.3582, lng: -80.7302 }, // Cocoa
-      "32901": { lat: 28.0784, lng: -80.6026 }, // Melbourne
-      "32940": { lat: 28.0881, lng: -80.6156 }, // Melbourne area
-      "32750": { lat: 28.45, lng: -80.55 }, // Cocoa area
-      "32776": { lat: 28.8, lng: -80.7 }, // Palm Bay area
-      "32787": { lat: 28.9, lng: -80.85 }, // Port St. John
-      "32101": { lat: 29.2108, lng: -81.0228 }, // Daytona Beach
-      "32114": { lat: 29.2108, lng: -81.0228 }, // Daytona Beach
-      "32720": { lat: 29.0343, lng: -81.3035 }, // DeLand
-      "32724": { lat: 29.0343, lng: -81.3035 }, // DeLand area
-      "32774": { lat: 29.1, lng: -81.1 }, // Deltona
-      "32162": { lat: 29.0, lng: -80.95 }, // Edgewater
-      "32169": { lat: 29.15, lng: -80.9 }, // New Smyrna Beach
-      "32771": { lat: 28.9, lng: -80.85 }, // Oak Hill
-      "32719": { lat: 28.55, lng: -80.85 }, // Orlando area
-      "32801": { lat: 28.5383, lng: -81.3792 }, // Orlando
-      "32805": { lat: 28.5273, lng: -81.3978 }, // Orlando
-      "32809": { lat: 28.45, lng: -81.45 }, // Orlando area
-      "32811": { lat: 28.5234, lng: -81.4478 }, // Orlando
-      "32817": { lat: 28.5543, lng: -81.3456 }, // Orlando
-      "32825": { lat: 28.65, lng: -81.5 }, // Orlando area
-      "32835": { lat: 28.7, lng: -81.2 }, // Orlando area
-      "32746": { lat: 28.5, lng: -81.1 }, // Christmas area
-      "32749": { lat: 28.6, lng: -81.2 }, // Cocoa area
-      "32786": { lat: 28.4, lng: -80.8 }, // Grant-Valkaria
+    let cancelled = false;
+    void (async () => {
+      try {
+        const perms = (navigator as Navigator & { permissions?: Permissions }).permissions;
+        if (!perms?.query) return;
+        const status = await perms.query({ name: "geolocation" as PermissionName });
+        if (cancelled || status.state !== "granted") return;
+        requestPosition(true);
+      } catch {
+        /* Permissions API unavailable — leave the choice to the button */
+      }
+    })();
+
+    return () => {
+      cancelled = true;
     };
+  }, [requestPosition]);
 
-    // Try exact match first
-    if (floridaZips[zip]) {
-      setCurrentLocation(floridaZips[zip]);
-      setUsingGps(false);
+  const handleZipCodeSearch = async () => {
+    const zip = zipCode.trim();
+    if (!/^\d{5}$/.test(zip)) {
+      setGpsError("Enter a five-digit zip code, for example 32780.");
       return;
     }
 
-    // Fallback: approximate by first 3 digits for Florida (321-328 range)
-    const prefix = zip.substring(0, 3);
-    if (["327", "321", "328"].includes(prefix)) {
-      // Rough approximation
-      const roughCoords: Record<string, Coordinates> = {
-        "327": { lat: 28.5, lng: -80.8 },
-        "321": { lat: 29.2, lng: -81.1 },
-        "328": { lat: 28.5, lng: -81.4 },
-      };
-      setCurrentLocation(roughCoords[prefix]);
-      setUsingGps(false);
-      return;
+    setZipBusy(true);
+    setGpsError(null);
+    try {
+      // The ZIP table is about 24 KB, so it lives in its own chunk and is fetched the
+      // first time somebody actually searches by ZIP. Most visitors use their phone's
+      // location or a preset town and never download it at all.
+      const { lookupZip } = await import("@/lib/fl-zips");
+      const hit = lookupZip(zip);
+      if (!hit) {
+        // Say so plainly rather than guessing. The old code answered every unmatched
+        // 327xx/321xx/328xx ZIP with one statewide point, which produced distances
+        // that were wrong by up to 48 miles while looking perfectly confident.
+        setGpsError(
+          `We do not have a location for ${zip}. Check the digits, try a nearby zip code, or use your phone's location.`,
+        );
+        return;
+      }
+      applyLocation(hit, zip, "zip", zip);
+    } catch {
+      setGpsError("Could not load the zip code list. Check your connection, or use your phone's location.");
+    } finally {
+      setZipBusy(false);
     }
-
-    setGpsError("Zip code not recognized. Try your town name or GPS instead.");
   };
 
   // Filter resources based on needs, search, and location
@@ -213,15 +279,17 @@ export function DirectoryPage() {
       {/* Header */}
       <div className="text-center">
         <h1 className="font-display text-3xl font-semibold">Find Help Near You</h1>
-        <p className="mt-2 text-ink-soft">
+        <p className="mt-2 text-muted">
           Food, shelter, showers, and other help within {radius} miles.{" "}
-          {usingGps ? "We found your location." : zipCode ? `Showing results near ${zipCode}.` : "Use your phone's location or enter a zip code."}
+          {usingGps
+            ? "Sorted by your phone's location."
+            : `Sorted by distance from ${locationLabel}.`}
         </p>
       </div>
 
       {/* Location Input */}
-      <div className="rounded-2xl bg-paper-raised p-4 shadow-[var(--shadow-border)] sm:p-5">
-        <p className="text-sm font-semibold text-ink-soft mb-3">Where are you?</p>
+      <div className="rounded-2xl bg-card p-4 shadow-[var(--shadow-border)] sm:p-5">
+        <p className="text-sm font-semibold text-muted mb-3">Where are you?</p>
 
         <div className="flex flex-col gap-3">
           {/* GPS Button */}
@@ -229,10 +297,11 @@ export function DirectoryPage() {
             variant="primary"
             size="lg"
             className="w-full"
-            onClick={useMyLocation}
+            onClick={() => requestPosition(false)}
+            disabled={gpsBusy}
           >
             <Navigation className="size-5" aria-hidden />
-            Use My Location (GPS)
+            {gpsBusy ? "Finding you…" : "Use My Location"}
           </Button>
 
           {/* Zip Code Input */}
@@ -251,27 +320,27 @@ export function DirectoryPage() {
               variant="outline"
               size="lg"
               onClick={handleZipCodeSearch}
-              disabled={!zipCode.trim()}
+              disabled={!zipCode.trim() || zipBusy}
             >
-              Search
+              {zipBusy ? "…" : "Search"}
             </Button>
           </div>
 
           {gpsError && (
-            <p className="text-sm text-amber">{gpsError}</p>
+            <p className="text-sm text-caution">{gpsError}</p>
           )}
 
-          <p className="text-xs text-ink-soft">
+          <p className="text-xs text-muted">
             Your location is only used to find nearby resources. We don't store it.
           </p>
         </div>
       </div>
 
       {/* Radius Slider */}
-      <div className="rounded-2xl bg-paper-raised p-4 shadow-[var(--shadow-border)] sm:p-5">
+      <div className="rounded-2xl bg-card p-4 shadow-[var(--shadow-border)] sm:p-5">
         <div className="flex items-center justify-between mb-2">
-          <p className="text-sm font-semibold text-ink-soft">Search radius</p>
-          <span className="text-sm font-semibold text-ink">{radius} miles</span>
+          <p className="text-sm font-semibold text-muted">Search radius</p>
+          <span className="text-sm font-semibold text-body">{radius} miles</span>
         </div>
         <input
           type="range"
@@ -283,15 +352,15 @@ export function DirectoryPage() {
           className="w-full accent-sea"
           aria-label="Search radius in miles"
         />
-        <div className="flex justify-between text-xs text-ink-soft mt-1">
+        <div className="flex justify-between text-xs text-muted mt-1">
           <span>10 miles</span>
           <span>100 miles</span>
         </div>
       </div>
 
       {/* Need Category Selection */}
-      <div className="rounded-2xl bg-paper-raised p-4 shadow-[var(--shadow-border)] sm:p-5">
-        <p className="text-sm font-semibold text-ink-soft mb-3">What do you need?</p>
+      <div className="rounded-2xl bg-card p-4 shadow-[var(--shadow-border)] sm:p-5">
+        <p className="text-sm font-semibold text-muted mb-3">What do you need?</p>
         <div className="flex flex-wrap gap-2">
           {NEED_CATEGORIES.map((cat) => (
             <button
@@ -301,8 +370,8 @@ export function DirectoryPage() {
               className={`
                 flex flex-col items-center gap-1 rounded-xl px-4 py-3 text-center transition-all
                 ${selectedNeed === cat.key
-                  ? "bg-sea text-paper-raised shadow-[var(--shadow-border)]"
-                  : "bg-paper-sunken text-ink hover:bg-paper-raised"
+                  ? "bg-fill text-on-fill shadow-[var(--shadow-border)]"
+                  : "bg-inset text-body hover:bg-card"
                 }
               `}
             >
@@ -316,8 +385,8 @@ export function DirectoryPage() {
             className={`
               flex flex-col items-center gap-1 rounded-xl px-4 py-3 text-center transition-all
               ${selectedNeed === "all"
-                ? "bg-sea text-paper-raised shadow-[var(--shadow-border)]"
-                : "bg-paper-sunken text-ink hover:bg-paper-raised"
+                ? "bg-fill text-on-fill shadow-[var(--shadow-border)]"
+                : "bg-inset text-body hover:bg-card"
               }
             `}
           >
@@ -328,15 +397,15 @@ export function DirectoryPage() {
       </div>
 
       {/* Search Box */}
-      <div className="rounded-2xl bg-paper-raised p-4 shadow-[var(--shadow-border)] sm:p-5">
+      <div className="rounded-2xl bg-card p-4 shadow-[var(--shadow-border)] sm:p-5">
         <div className="relative">
-          <Search className="absolute left-3.5 top-1/2 size-5 -translate-y-1/2 text-ink-soft" aria-hidden />
+          <Search className="absolute left-3.5 top-1/2 size-5 -translate-y-1/2 text-muted" aria-hidden />
           <input
             type="search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search for food, shelter, help..."
-            className="w-full pl-11 pr-4 py-3 rounded-xl bg-paper-sunken text-ink placeholder:text-ink-soft/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sea"
+            className="w-full pl-11 pr-4 py-3 rounded-xl bg-inset text-body placeholder:text-muted/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             aria-label="Search resources"
           />
         </div>
@@ -345,14 +414,14 @@ export function DirectoryPage() {
       {/* Results */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <p className="text-sm text-ink-soft">
-            <strong className="text-ink">{totalResources}</strong> resources found
+          <p className="text-sm text-muted">
+            <strong className="text-body">{totalResources}</strong> resources found
           </p>
           {selectedNeed !== "all" && (
             <button
               type="button"
               onClick={() => setSelectedNeed("all")}
-              className="text-sm text-sea hover:underline"
+              className="text-sm text-accent hover:underline"
             >
               Show all needs
             </button>
@@ -360,10 +429,10 @@ export function DirectoryPage() {
         </div>
 
         {totalResources === 0 ? (
-          <div className="rounded-2xl bg-paper-raised px-5 py-10 text-center shadow-[var(--shadow-border)]">
-            <AlertTriangle className="mx-auto size-8 text-amber" aria-hidden />
+          <div className="rounded-2xl bg-card px-5 py-10 text-center shadow-[var(--shadow-border)]">
+            <AlertTriangle className="mx-auto size-8 text-caution" aria-hidden />
             <h2 className="mt-3 font-display text-xl font-semibold">No results found</h2>
-            <p className="mx-auto mt-2 max-w-md text-ink-soft">
+            <p className="mx-auto mt-2 max-w-md text-muted">
               Try a larger search radius or a different type of help.
             </p>
             <Button
@@ -385,36 +454,36 @@ export function DirectoryPage() {
               return (
                 <div
                   key={res.id}
-                  className="rounded-2xl bg-paper-raised p-4 shadow-[var(--shadow-border)] sm:p-5"
+                  className="rounded-2xl bg-card p-4 shadow-[var(--shadow-border)] sm:p-5"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <h3 className="font-display text-lg font-semibold text-ink">{res.name}</h3>
+                        <h3 className="font-display text-lg font-semibold text-body">{res.name}</h3>
                         {categoryInfo && (
-                          <span className="rounded-full bg-paper-sunken px-2 py-0.5 text-xs font-semibold text-ink-soft">
+                          <span className="rounded-full bg-inset px-2 py-0.5 text-xs font-semibold text-muted">
                             {categoryInfo.icon} {categoryInfo.label}
                           </span>
                         )}
                       </div>
-                      <p className="mt-1 text-sm text-ink-soft">{res.description}</p>
+                      <p className="mt-1 text-sm text-muted">{res.description}</p>
 
                       <div className="mt-2 flex flex-wrap gap-1.5">
                         {res.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="rounded-md bg-paper-sunken px-2 py-1 text-xs font-semibold text-ink-soft"
+                            className="rounded-md bg-inset px-2 py-1 text-xs font-semibold text-muted"
                           >
                             {tag}
                           </span>
                         ))}
                       </div>
 
-                      <p className="mt-2 text-sm font-semibold text-ink">
+                      <p className="mt-2 text-sm font-semibold text-body">
                         {res.hoursText}
                       </p>
 
-                      <div className="mt-2 flex items-start gap-2 text-sm text-ink-soft">
+                      <div className="mt-2 flex items-start gap-2 text-sm text-muted">
                       {res.mobileOnly ? (
                         <>
                           <Users className="mt-0.5 size-4 shrink-0" aria-hidden />
@@ -432,7 +501,7 @@ export function DirectoryPage() {
                       {res.phone && (
                         <a
                           href={`tel:${res.phone.replace(/[^\d+]/g, "")}`}
-                          className="inline-flex items-center gap-2 rounded-xl bg-sea px-4 py-3 text-sm font-semibold text-paper-raised hover:bg-sea-bright transition-colors"
+                          className="inline-flex items-center gap-2 rounded-xl bg-fill px-4 py-3 text-sm font-semibold text-on-fill hover:bg-fill-hover transition-colors"
                         >
                           <Phone className="size-4" aria-hidden />
                           Call {res.phone}
@@ -443,7 +512,7 @@ export function DirectoryPage() {
                           href={`https://maps.google.com/?q=${encodeURIComponent(res.address)}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 rounded-xl bg-paper-sunken px-4 py-3 text-sm font-semibold text-ink hover:bg-paper-raised transition-colors"
+                          className="inline-flex items-center gap-2 rounded-xl bg-inset px-4 py-3 text-sm font-semibold text-body hover:bg-card transition-colors"
                         >
                           <Navigation className="size-4" aria-hidden />
                           Directions
@@ -454,7 +523,7 @@ export function DirectoryPage() {
                           href={res.website}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 rounded-xl bg-paper-sunken px-4 py-3 text-sm font-semibold text-ink hover:bg-paper-raised transition-colors"
+                          className="inline-flex items-center gap-2 rounded-xl bg-inset px-4 py-3 text-sm font-semibold text-body hover:bg-card transition-colors"
                         >
                           <Globe className="size-4" aria-hidden />
                           Website
@@ -463,13 +532,13 @@ export function DirectoryPage() {
                       </div>
 
                       {!res.mobileOnly && (
-                      <p className="mt-3 rounded-lg bg-paper-sunken px-3 py-2 text-xs text-ink-soft">
+                      <p className="mt-3 rounded-lg bg-inset px-3 py-2 text-xs text-muted">
                         Hours and availability change without notice. Call before you travel.
                       </p>
                       )}
 
                       {!res.mobileOnly && res.distance < 999 && (
-                        <p className="mt-2 text-xs text-ink-soft">
+                        <p className="mt-2 text-xs text-muted">
                           {res.distance.toFixed(1)} miles away
                         </p>
                       )}
@@ -481,12 +550,12 @@ export function DirectoryPage() {
                         className={`
                           rounded-full px-3 py-1 text-xs font-bold
                           ${res.availability.status === "OPEN"
-                            ? "bg-ok-soft text-ok"
+                            ? "bg-tint-positive text-positive"
                             : res.availability.status === "SOON"
-                            ? "bg-amber-soft text-amber"
+                            ? "bg-tint-caution text-caution"
                             : res.availability.status === "CLOSED"
-                            ? "bg-closed-soft text-closed"
-                            : "bg-paper-sunken text-ink-soft"
+                            ? "bg-tint-inactive text-inactive"
+                            : "bg-inset text-muted"
                           }
                         `}
                       >
@@ -502,12 +571,12 @@ export function DirectoryPage() {
       </div>
 
       {/* Footer note */}
-      <div className="text-center text-xs text-ink-soft pt-4 border-t border-line/40">
+      <div className="text-center text-xs text-muted pt-4 border-t border-line/40">
         <p>
           Base Impact Inc. is a pre-filing nonprofit in Scottsmoor, FL.{" "}
           We're building a directory to help neighbors find resources.{" "}
           If something looks wrong,{" "}
-          <a href="/feedback" className="text-sea hover:underline">
+          <a href="/feedback" className="text-accent hover:underline">
             let us know
           </a>
           .

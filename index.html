@@ -10,7 +10,9 @@
       and the inline background below prevents a white flash before the stylesheet loads.
     -->
     <meta name="color-scheme" content="dark" />
-    <meta name="theme-color" content="#0b1220" />
+    <!-- Matches --color-page. On an OLED phone the browser chrome around the page is
+         drawn in this colour, so a navy here would leave a lit band above a black page. -->
+    <meta name="theme-color" content="#000000" />
 
     <title>Base Impact — Food, Shelter &amp; Help in Brevard County, FL</title>
     <meta
@@ -57,8 +59,10 @@
     />
 
     <style>
-      /* Painted before any stylesheet arrives — no white flash on a dark-mode-only site. */
-      html { background: #0b1220; color: #f8fafc; }
+      /* Painted before any stylesheet arrives — no white flash on a dark-mode-only site.
+               This rule is unlayered, so it outranks the stylesheet; keep it in step with
+               --color-page in the dark palette or it will silently win with a stale colour. */
+            html { background: #000000; color: #f8fafc; }
     </style>
 
     <script type="application/ld+json">

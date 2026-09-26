@@ -67,11 +67,11 @@ export function JoinPage() {
         path="/join"
       />
       <JsonLd data={JOIN_SCHEMA} />
-      <section className="overflow-hidden rounded-3xl bg-pine px-5 py-8 text-paper-raised sm:px-10 sm:py-12">
+      <section className="overflow-hidden rounded-3xl bg-band px-5 py-8 text-on-fill sm:px-10 sm:py-12">
         <h1 className="max-w-2xl font-display text-3xl font-semibold tracking-tight sm:text-5xl">
           Be part of Base Impact.
         </h1>
-        <p className="mt-4 max-w-xl text-base leading-relaxed text-paper-sunken sm:text-lg">
+        <p className="mt-4 max-w-xl text-base leading-relaxed text-faint sm:text-lg">
           We&apos;re a small, growing nonprofit in North Brevard. There&apos;s room for more hands,
           more partners, and more board members. Pick what fits you.
         </p>
@@ -80,22 +80,22 @@ export function JoinPage() {
       <section>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {ROUTES.map((r) => (
-            <div key={r.label} className="rounded-2xl bg-paper-raised p-5 shadow-[var(--shadow-border)]">
+            <div key={r.label} className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)]">
             <h2 className="font-display text-xl font-semibold">{r.label}</h2>
-              <p className="mt-2 text-sm text-ink-soft">{r.desc}</p>
+              <p className="mt-2 text-sm text-muted">{r.desc}</p>
               {r.external && r.href ? (
                 <a
                   href={r.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-sea hover:underline"
+                  className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-accent hover:underline"
                 >
                   {r.cta}
                 </a>
               ) : (
                 <Link
                   to={r.to as Path}
-                  className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-sea hover:underline"
+                  className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-accent hover:underline"
                 >
                   {r.cta}
                 </Link>
@@ -105,9 +105,9 @@ export function JoinPage() {
         </div>
       </section>
 
-      <section className="rounded-3xl bg-paper-sunken px-5 py-8 sm:p-8 space-y-3">
+      <section className="rounded-3xl bg-inset px-5 py-8 sm:p-8 space-y-3">
         <h2 className="font-display text-2xl font-semibold sm:text-3xl">Prefer to talk first?</h2>
-        <p className="text-ink-soft">
+        <p className="text-muted">
           Call or email us — we&apos;re happy to answer questions before you commit.
         </p>
         <div className="flex flex-wrap gap-3">

@@ -1,30 +1,78 @@
 @import "tailwindcss";
 @import "./fonts.css";
 
+/*
+  COLOUR SYSTEM
+  =============
+
+  Every colour is a token and every token has exactly one role.
+
+  An earlier version named colours after how they looked (paper, ink, sea) and then
+  reused each name for two different jobs: `bg-sea` was a button fill that needs a dark
+  blue under white text, while `text-sea` was a link that needs a light blue on black.
+  One variable cannot be both, so the dark theme was bolted on afterwards as
+  `.dark .text-sea { ... }` rules in @layer components.
+
+  Those rules never did anything. Tailwind emits `@layer theme, base, components,
+  utilities`, and a later layer always wins, so `.text-sea` in utilities beat
+  `.dark .text-sea` in components. The dark palette was dead code, and headings that
+  inherit rather than set a colour picked up the near-black `--color-ink` and rendered
+  dark-on-dark.
+
+  So: one rule per utility, and the VARIABLE changes under .dark. Nothing is
+  overridden — `.bg-card` simply resolves to a different value.
+
+  Roles:
+    surfaces  page, card, inset, band, band-deep
+    text      body, muted, faint, on-fill
+    accents   accent, accent-hover, positive, caution, critical, inactive  (text)
+    fills     fill, fill-hover, fill-caution, fill-critical, fill-positive (backgrounds)
+    tints     tint-positive, tint-caution, tint-critical, tint-inactive    (badge backgrounds)
+
+  `fill*` always carries `on-fill` text. `tint*` carries the matching accent as text.
+  `--color-line` is a border colour only, never text.
+*/
+
 @theme {
   --font-sans: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
   --font-display: "Fraunces", Georgia, "Times New Roman", serif;
 
-  --color-ink: #111827;
-  --color-ink-soft: #374151;
-  --color-paper: #f7f9fb;
-  --color-paper-raised: #ffffff;
-  --color-paper-sunken: #e5e7eb;
-  --color-pine: #0f172a;
-  --color-pine-deep: #020617;
-  --color-sea: #2563eb;
-  --color-sea-bright: #60a5fa;
-  --color-amber: #92400e;
-  --color-amber-soft: #fef3c7;
+  /* surfaces */
+  --color-page: #f7f9fb;
+  --color-card: #ffffff;
+  --color-inset: #e5e7eb;
+  --color-band: #0f172a;
+  --color-band-deep: #020617;
+
+  /* text */
+  --color-body: #111827;
+  --color-muted: #374151;
+  --color-faint: #4b5563;
+  --color-on-fill: #ffffff;
+
+  /* border */
   --color-line: #cbd5e1;
-  --color-ok: #065f46;
-  --color-ok-soft: #d1fae5;
-  --color-warn: #92400e;
-  --color-warn-soft: #fef3c7;
-  --color-closed: #4b5563;
-  --color-closed-soft: #e5e7eb;
-  --color-danger: #991b1b;
-  --color-danger-soft: #fee2e2;
+
+  /* accents, drawn as text on a surface */
+  --color-accent: #1d4ed8;
+  --color-accent-hover: #1e40af;
+  --color-positive: #065f46;
+  --color-caution: #92400e;
+  --color-critical: #991b1b;
+  --color-inactive: #4b5563;
+
+  /* fills, drawn as a background carrying --color-on-fill text */
+  --color-fill: #2563eb;
+  --color-fill-hover: #1d4ed8;
+  --color-fill-caution: #92400e;
+  --color-fill-critical: #991b1b;
+  --color-fill-positive: #065f46;
+
+  /* soft badge backgrounds */
+  --color-tint-positive: #d1fae5;
+  --color-tint-caution: #fef3c7;
+  --color-tint-critical: #fee2e2;
+  --color-tint-inactive: #e5e7eb;
 
   --color-black: #000000;
   --color-white: #ffffff;
@@ -48,17 +96,96 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+  DARK THEME
+
+  Deliberately outside every @layer. Unlayered CSS always outranks layered CSS, so
+  these values are guaranteed to win against the `@layer theme` defaults that Tailwind
+  emits — with no specificity games and no per-class overrides.
+
+  Contrast for each pairing, computed from the values below:
+    body     #f8fafc on #000000 page ...... 20.07:1
+    body     #f8fafc on #111827 card ...... 16.96:1
+    muted    #e2e8f0 on #111827 card ...... 14.39:1
+    muted    #e2e8f0 on #1f2937 inset ..... 11.91:1
+    faint    #cbd5e1 on #000000 page ...... 14.14:1
+    accent   #60a5fa on #000000 page ......  8.26:1
+    accent   #60a5fa on #1f2937 inset .....  5.77:1  <- lowest text/surface pair
+    caution  #fbbf24 on #111827 card ...... 10.63:1
+    on-fill  #ffffff on #2563eb fill ......  5.17:1
+    on-fill  #ffffff on #1d4ed8 fill-hover   6.70:1
+    on-fill  #ffffff on #b45309 caution ...  5.02:1
+    on-fill  #ffffff on #b91c1c critical ..  6.47:1
+    positive #34d399 on #022c22 tint ......  7.88:1
+    caution  #fbbf24 on #451a03 tint ......  8.97:1
+    critical #fca5a5 on #450a0a tint ......  8.51:1
+    inactive #cbd5e1 on #1f2937 tint ......  9.89:1
+
+  Nothing falls below 4.5:1. Re-check these numbers if any value here changes —
+  cdp_contrast.py measures every text element on every route against the background it
+  is actually painted on.
+
+  Earlier values failed in three places: white on the #60a5fa hover fill (2.54:1),
+  text-warn #92400e on the page (2.64:1), and the primary button fill, which was
+  #111827 against a #0b1220 page — 1.06:1 shape contrast, so the main call to action
+  did not read as a button at all.
+
+  POWER: the page is pure #000000, not a near-black navy. On an OLED phone a black
+  pixel is switched off rather than dimmed, so the page background is where almost all
+  of the saving comes from — and it is the largest area on screen. Surfaces above it
+  separate by lightness rather than hue so the layering survives at low brightness.
+*/
+.dark {
+  --color-page: #000000;
+  --color-card: #111827;
+  --color-inset: #1f2937;
+  --color-band: #0b1220;
+  --color-band-deep: #020617;
+
+  --color-body: #f8fafc;
+  --color-muted: #e2e8f0;
+  --color-faint: #cbd5e1;
+  --color-on-fill: #ffffff;
+
+  --color-line: #4b5563;
+
+  --color-accent: #60a5fa;
+  --color-accent-hover: #93c5fd;
+  --color-positive: #34d399;
+  --color-caution: #fbbf24;
+  --color-critical: #fca5a5;
+  --color-inactive: #cbd5e1;
+
+  --color-fill: #2563eb;
+  --color-fill-hover: #1d4ed8;
+  --color-fill-caution: #b45309;
+  --color-fill-critical: #b91c1c;
+  --color-fill-positive: #064e3b;
+
+  --color-tint-positive: #022c22;
+  --color-tint-caution: #451a03;
+  --color-tint-critical: #450a0a;
+  --color-tint-inactive: #1f2937;
+
+  /* A card sitting on pure black needs a hairline to read as a card. A drop shadow
+     would be invisible there, so the shadow does double duty as the edge. */
+  --shadow-border: 0 0 0 1px #ffffff14, 0 1px 2px -1px #ffffff0f, 0 2px 4px #ffffff0a;
+  --shadow-border-hover: 0 0 0 1px #ffffff1f, 0 1px 2px -1px #ffffff14, 0 2px 4px #ffffff0f;
+}
+
 @layer base {
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: var(--color-paper);
-    color: var(--color-ink);
+    background: var(--color-page);
+    color: var(--color-body);
+    /* Lets the browser paint scrollbars, form controls and the canvas in the dark
+       palette too, rather than only the elements we style by hand. */
+    color-scheme: dark;
   }
 
-  html.dark {
-    background: #000000;
-    color: #f8fafc;
+  html:not(.dark) {
+    color-scheme: light;
   }
 
   body {
@@ -81,14 +208,29 @@
     color: inherit;
   }
 
-  html.dark h1,
-  html.dark h2,
-  html.dark h3 {
-    color: #ffffff;
-  }
-
   p {
     text-wrap: pretty;
+  }
+
+  /*
+    Base styles only. Utilities live in a later layer and therefore win, so a link
+    inside a coloured button keeps its `text-on-fill` rather than being repainted
+    accent-blue on top of a blue fill.
+  */
+  a {
+    color: var(--color-accent);
+  }
+
+  a:hover {
+    color: var(--color-accent-hover);
+  }
+
+  ::placeholder {
+    color: var(--color-faint);
+  }
+
+  input[type="range"] {
+    accent-color: var(--color-accent);
   }
 
   button:not(:disabled),
@@ -97,12 +239,8 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-sea);
+    outline: 2px solid var(--color-accent);
     outline-offset: 3px;
-  }
-
-  html.dark :focus-visible {
-    outline-color: #60a5fa;
   }
 
   input,
@@ -111,132 +249,6 @@
     font: inherit;
   }
 }
-
-/*
-  Dark palette — every pairing is contrast-checked against the surface it is
-  actually used on. "shape" is fill-vs-page contrast, which WCAG 1.4.11 requires
-  to be at least 3:1 for a control to be perceivable as a control.
-
-    text-ink          #f8fafc on #0b1220 page ......... 17.89:1
-    text-ink-soft     #e2e8f0 on #111827 card ......... 14.39:1
-    text-ink-soft     #e2e8f0 on #1f2937 inset ........ 11.91:1
-    text-paper-sunken #cbd5e1 on #0f172a header ....... 12.02:1
-    text-sea          #60a5fa on #0b1220 page .......... 7.36:1
-    button            #ffffff on #2563eb sea ........... 5.17:1  (shape 3.62:1)
-    button hover      #ffffff on #1d4ed8 sea-bright .... 6.70:1
-    button emergency  #ffffff on #b45309 amber ......... 5.02:1  (shape 3.73:1)
-    button danger     #ffffff on #b91c1c danger ........ 6.47:1
-    badge ok          #34d399 on #022c22
-    badge soon        #fbbf24 on #451a03
-    badge closed      #cbd5e1 on #1f2937
-    badge alert       #fca5a5 on #450a0a
-
-  Previous values failed in three places: white on the #60a5fa hover fill
-  (2.54:1), text-warn #92400e on the page (2.64:1), and the primary button fill,
-  which was #111827 against a #0b1220 page — 1.06:1 shape contrast, so the main
-  call to action did not read as a button at all.
-*/
-@layer components {
-  .dark .bg-paper {
-    background-color: #0b1220;
-  }
-  .dark .bg-paper-raised {
-    background-color: #111827;
-  }
-  .dark .bg-paper-sunken {
-    background-color: #1f2937;
-  }
-  .dark .bg-pine {
-    background-color: #0f172a;
-  }
-  .dark .bg-pine-deep {
-    background-color: #020617;
-  }
-  .dark .bg-sea {
-    background-color: #2563eb;
-  }
-  .dark .bg-sea-bright {
-    background-color: #1d4ed8;
-  }
-
-  .dark .bg-amber {
-    background-color: #b45309;
-  }
-  .dark .bg-amber-soft {
-    background-color: #451a03;
-  }
-  .dark .bg-danger {
-    background-color: #b91c1c;
-  }
-  .dark .bg-danger-soft {
-    background-color: #450a0a;
-  }
-  .dark .bg-ok {
-    background-color: #064e3b;
-  }
-  .dark .bg-ok-soft {
-    background-color: #022c22;
-  }
-  .dark .bg-closed-soft {
-    background-color: #1f2937;
-  }
-
-  .dark .border-line {
-    border-color: #4b5563;
-  }
-  .dark .shadow-[var(--shadow-border)] {
-    box-shadow: 0 0 0 1px #ffffff14, 0 1px 2px -1px #ffffff0f, 0 2px 4px #ffffff0a;
-  }
-  .dark .shadow-[var(--shadow-border-hover)] {
-    box-shadow: 0 0 0 1px #ffffff1f, 0 1px 2px -1px #ffffff14, 0 2px 4px #ffffff0f;
-  }
-
-  .dark .text-ink {
-    color: #f8fafc;
-  }
-  .dark .text-ink-soft {
-    color: #e2e8f0;
-  }
-  .dark .text-paper-raised {
-    color: #ffffff;
-  }
-  .dark .text-paper-sunken {
-    color: #cbd5e1;
-  }
-  .dark .text-line {
-    color: #cbd5e1;
-  }
-  .dark .text-sea {
-    color: #60a5fa;
-  }
-  .dark .text-amber,
-  .dark .text-warn {
-    color: #fbbf24;
-  }
-  .dark .text-danger {
-    color: #fca5a5;
-  }
-  .dark .text-ok {
-    color: #34d399;
-  }
-  .dark .text-closed {
-    color: #cbd5e1;
-  }
-
-  .dark a {
-    color: #60a5fa;
-  }
-  .dark a:hover {
-    color: #93c5fd;
-  }
-  .dark ::placeholder {
-    color: #9ca3af;
-  }
-  .dark input[type="range"] {
-    accent-color: #60a5fa;
-  }
-}
-
 
 @layer utilities {
   .font-display {

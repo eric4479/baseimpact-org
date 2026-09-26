@@ -4,75 +4,232 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="dark" />
-    <meta name="theme-color" content="#0b1220" />
+    <meta name="theme-color" content="#000000" />
     <title>Page not found — Base Impact</title>
+    <!-- A 404 must never be indexed, but the links on it are worth following. -->
     <meta name="robots" content="noindex, follow" />
-    <meta name="description" content="That page does not exist. Find food, shelter, and local help in Brevard, Volusia, and Orange Counties." />
+    <meta
+      name="description"
+      content="That page isn't here. Find food, shelter, showers, and other local help in Brevard, Volusia, and Orange Counties."
+    />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <style>
+      /* Colours are the site's dark palette, copied from src/index.css so this page
+         matches the app exactly. Cloudflare Pages serves this file on its own, so it
+         cannot import the stylesheet. The page is pure black rather than near-black so
+         OLED pixels are switched off entirely. Every pairing below is contrast-checked:
+           #f8fafc on #000000 ... 20.07:1     #e2e8f0 on #111827 ... 14.39:1
+           #cbd5e1 on #000000 ... 14.14:1     #60a5fa on #000000 ...  8.26:1
+           #ffffff on #2563eb ...  5.17:1     #ffffff on #b45309 ...  5.02:1 */
       :root { color-scheme: dark; }
       * { box-sizing: border-box; }
+
       body {
         margin: 0;
         min-height: 100dvh;
-        background: #0b1220;
+        background: #000000;
         color: #f8fafc;
         font-family: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
         font-size: 1.0625rem;
         line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 1.5rem;
+        padding: 2rem 1.25rem 3rem;
       }
-      main { width: 100%; max-width: 34rem; }
+
+      /* Decoration only: two soft glows and a dot texture that fades out well before
+         it reaches the text. Both layers sit behind the content and ignore pointer
+         events, so they can never swallow a tap. */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background:
+          radial-gradient(58rem 38rem at 50% -12%, #2563eb2e, transparent 68%),
+          radial-gradient(38rem 26rem at 105% 108%, #60a5fa17, transparent 70%);
+      }
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.5;
+        background-image: radial-gradient(#ffffff1f 1px, transparent 1px);
+        background-size: 24px 24px;
+        -webkit-mask-image: radial-gradient(52rem 34rem at 50% 0%, #000 0%, transparent 72%);
+        mask-image: radial-gradient(52rem 34rem at 50% 0%, #000 0%, transparent 72%);
+      }
+
+      main { position: relative; width: 100%; max-width: 37rem; }
+
+      /* ---------- signpost illustration ---------- */
+      .sign {
+        display: block;
+        width: min(15rem, 62vw);
+        height: auto;
+        margin: 0 auto 1.5rem;
+        /* Pivot near the base, so the post sways from where it meets the ground. */
+        transform-origin: 50% 93%;
+        animation: sway 7s ease-in-out infinite;
+      }
+      @keyframes sway {
+        0%, 100% { transform: rotate(-1.2deg); }
+        50%      { transform: rotate(1.2deg); }
+      }
+      /* Anyone who has asked their system to reduce motion gets a still signpost. */
+      @media (prefers-reduced-motion: reduce) {
+        .sign { animation: none; }
+      }
+
+      /* ---------- masthead ---------- */
       .logo {
-        display: inline-flex; align-items: center; gap: .75rem;
-        margin-bottom: 1.75rem; text-decoration: none; color: inherit;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+        text-decoration: none;
+        color: inherit;
       }
       .mark {
-        width: 2.5rem; height: 2.5rem; border-radius: .75rem; background: #2563eb;
+        width: 2.5rem; height: 2.5rem;
+        border-radius: 0.75rem;
+        background: #2563eb;
         display: grid; place-items: center; flex: none;
       }
       .mark svg { width: 1.25rem; height: 1.25rem; fill: none; stroke: #fff; stroke-width: 2; }
       .brand { font-weight: 700; font-size: 1.125rem; line-height: 1; }
       .brand small {
-        display: block; margin-top: .25rem; font-size: .6875rem; font-weight: 700;
-        letter-spacing: .1em; text-transform: uppercase; color: #cbd5e1;
+        display: block; margin-top: 0.25rem;
+        font-size: 0.6875rem; font-weight: 700;
+        letter-spacing: 0.1em; text-transform: uppercase; color: #cbd5e1;
       }
+
       h1 {
         font-family: Fraunces, Georgia, "Times New Roman", serif;
-        font-size: clamp(1.75rem, 5vw, 2.5rem);
-        line-height: 1.15; letter-spacing: -.03em; margin: 0 0 .75rem;
+        font-size: clamp(1.875rem, 5.5vw, 2.75rem);
+        line-height: 1.12;
+        letter-spacing: -0.03em;
+        color: #ffffff;
+        margin: 0 0 0.75rem;
+        text-wrap: balance;
       }
-      p { color: #e2e8f0; margin: 0 0 1.5rem; }
+      .lede { color: #e2e8f0; margin: 0 0 1.25rem; text-wrap: pretty; }
+
+      /* The address that was requested, filled in by the script at the end of the
+         page. Hidden until it has real text, so an empty line never shows. */
+      .missing {
+        display: none;
+        margin: 0 0 1.75rem;
+        padding: 0.625rem 0.875rem;
+        background: #1f2937;
+        border-radius: 0.625rem;
+        font-size: 0.875rem;
+        color: #cbd5e1;
+        overflow-wrap: anywhere;
+      }
+      .missing[data-found] { display: block; }
+      .missing code {
+        font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+        color: #f8fafc;
+      }
+
+      /* ---------- cards ---------- */
       .card {
-        background: #111827; border-radius: 1rem; padding: 1.25rem;
-        box-shadow: 0 0 0 1px #ffffff14, 0 1px 2px -1px #ffffff0f;
+        background: #111827;
+        border-radius: 1rem;
+        padding: 1.25rem;
+        box-shadow: 0 0 0 1px #ffffff14, 0 1px 2px -1px #ffffff0f, 0 2px 4px #ffffff0a;
         margin-bottom: 1rem;
       }
       .card h2 {
-        font-family: Fraunces, Georgia, serif; font-size: 1.25rem; margin: 0 0 .5rem;
-        letter-spacing: -.02em;
+        font-family: Fraunces, Georgia, serif;
+        font-size: 1.25rem;
+        letter-spacing: -0.02em;
+        color: #ffffff;
+        margin: 0 0 0.5rem;
       }
-      .card p { margin: 0 0 .875rem; font-size: .9375rem; }
-      .actions { display: flex; flex-wrap: wrap; gap: .625rem; }
+      .card p { margin: 0 0 0.875rem; font-size: 0.9375rem; color: #e2e8f0; text-wrap: pretty; }
+
+      .actions { display: flex; flex-wrap: wrap; gap: 0.625rem; }
+      /* 2.75rem keeps every target at the 44px minimum a thumb needs. */
       a.btn {
-        display: inline-flex; align-items: center; gap: .5rem;
-        min-height: 2.75rem; padding: .5rem 1rem; border-radius: .75rem;
-        font-size: .9375rem; font-weight: 600; text-decoration: none;
+        display: inline-flex; align-items: center; gap: 0.5rem;
+        min-height: 2.75rem; padding: 0.5rem 1rem;
+        border-radius: 0.75rem;
+        font-size: 0.9375rem; font-weight: 600;
+        text-decoration: none;
         background: #2563eb; color: #ffffff;
       }
       a.btn:hover { background: #1d4ed8; }
       a.btn.ghost { background: #1f2937; color: #f8fafc; }
       a.btn.ghost:hover { background: #374151; }
       a.btn.alert { background: #b45309; color: #ffffff; }
-      a.inline { color: #60a5fa; }
-      :focus-visible { outline: 2px solid #60a5fa; outline-offset: 3px; border-radius: .25rem; }
+      a.btn.alert:hover { background: #92400e; }
+
+      /* ---------- other pages ---------- */
+      ul.links { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.125rem; }
+      ul.links a {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 0.75rem;
+        min-height: 2.75rem;
+        padding: 0.5rem 0.25rem;
+        color: #60a5fa;
+        text-decoration: none;
+        border-bottom: 1px solid #ffffff0f;
+      }
+      ul.links li:last-child a { border-bottom: 0; }
+      ul.links a:hover { color: #93c5fd; }
+      ul.links .arrow { flex: none; }
+
+      :focus-visible { outline: 2px solid #60a5fa; outline-offset: 3px; border-radius: 0.25rem; }
+
+      footer {
+        margin-top: 1.5rem;
+        font-size: 0.875rem;
+        color: #cbd5e1;
+        text-wrap: pretty;
+      }
+      footer a { color: #60a5fa; }
     </style>
   </head>
   <body>
     <main>
+      <!-- Decoration only. It carries nothing the text does not already say, so it is
+           hidden from assistive technology. A plain signpost: no figures of people, no
+           symbols belonging to any religion or culture. -->
+      <svg class="sign" viewBox="0 0 220 190" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="postGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#475569" />
+            <stop offset="1" stop-color="#1f2937" />
+          </linearGradient>
+        </defs>
+
+        <!-- ground shadow -->
+        <ellipse cx="110" cy="176" rx="58" ry="8" fill="#2563eb" opacity="0.16" />
+
+        <!-- post -->
+        <rect x="103" y="42" width="14" height="134" rx="7" fill="url(#postGrad)" />
+
+        <!-- upper arm, pointing right -->
+        <path d="M110 50 h64 l16 15 -16 15 h-64 z" fill="#2563eb" />
+        <path d="M124 60 h44" stroke="#ffffff" stroke-opacity="0.55" stroke-width="3" stroke-linecap="round" />
+        <path d="M124 70 h30" stroke="#ffffff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round" />
+
+        <!-- middle arm, pointing left -->
+        <path d="M110 94 h-64 l-16 15 16 15 h64 z" fill="#1f2937" />
+        <path d="M96 104 h-44" stroke="#60a5fa" stroke-opacity="0.8" stroke-width="3" stroke-linecap="round" />
+        <path d="M96 114 h-28" stroke="#60a5fa" stroke-opacity="0.45" stroke-width="3" stroke-linecap="round" />
+
+        <!-- lower arm, pointing right -->
+        <path d="M110 138 h64 l16 15 -16 15 h-64 z" fill="#b45309" />
+        <path d="M124 148 h44" stroke="#ffffff" stroke-opacity="0.55" stroke-width="3" stroke-linecap="round" />
+        <path d="M124 158 h30" stroke="#ffffff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round" />
+      </svg>
+
       <a class="logo" href="/">
         <span class="mark" aria-hidden="true">
           <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
@@ -82,38 +239,77 @@
         <span class="brand">Base Impact<small>Brevard County, FL</small></span>
       </a>
 
-      <h1>We couldn&rsquo;t find that page.</h1>
-      <p>
-        The link may be old, or there may be a typo in the address. Nothing is broken on
-        your end &mdash; here is where to go next.
+      <h1>This page isn&rsquo;t here.</h1>
+      <p class="lede">
+        The link may be out of date, or the address may have a small typo in it. Either
+        way, nothing is wrong on your end. Here is where to go next.
+      </p>
+
+      <p class="missing" id="missing">
+        You asked for <code id="missingPath"></code>
       </p>
 
       <div class="card">
-        <h2>Looking for help?</h2>
+        <h2>Looking for help nearby?</h2>
         <p>
-          Search food pantries, shelters, showers, and other local help by zip code, sorted
-          by distance.
+          Search food pantries, shelters, showers, and other local services by zip code,
+          sorted by how far away they are.
         </p>
         <div class="actions">
           <a class="btn" href="/directory">Find help near you</a>
-          <a class="btn ghost" href="/">Go to the home page</a>
+          <a class="btn ghost" href="/guide">Read the resource guide</a>
         </div>
       </div>
 
       <div class="card">
-        <h2>Need help right now?</h2>
-        <p>These lines are answered 24/7 and do not depend on this website.</p>
+        <h2>Need to talk to a person now?</h2>
+        <p>These lines are answered around the clock, and they work whether or not this website does.</p>
         <div class="actions">
-          <a class="btn alert" href="tel:211">Call 211</a>
+          <a class="btn alert" href="tel:211">Call 2-1-1</a>
           <a class="btn ghost" href="tel:988">Call or text 988</a>
           <a class="btn ghost" href="tel:911">911 in an emergency</a>
         </div>
       </div>
 
-      <p style="font-size:.875rem;color:#cbd5e1">
-        Found a broken link on our site? <a class="inline" href="/feedback">Tell us</a> and
-        we&rsquo;ll fix it. We&rsquo;re a pre-filing nonprofit in Scottsmoor, FL.
-      </p>
+      <div class="card">
+        <h2>Other pages</h2>
+        <ul class="links">
+          <li><a href="/">Home <span class="arrow" aria-hidden="true">&rarr;</span></a></li>
+          <li><a href="/volunteer">Volunteer <span class="arrow" aria-hidden="true">&rarr;</span></a></li>
+          <li><a href="/give">Ways to give <span class="arrow" aria-hidden="true">&rarr;</span></a></li>
+          <li><a href="/about">About us <span class="arrow" aria-hidden="true">&rarr;</span></a></li>
+          <li><a href="/contact">Contact <span class="arrow" aria-hidden="true">&rarr;</span></a></li>
+        </ul>
+      </div>
+
+      <footer>
+        If you followed a link on our own site and it led here, please
+        <a href="/feedback">tell us</a> so we can fix it. Base Impact is a pre-filing
+        nonprofit based in Scottsmoor, Florida.
+      </footer>
     </main>
+
+    <script>
+      // Show which address was requested.
+      //
+      // textContent only, never innerHTML. The path comes straight from the address
+      // bar, so anyone could put markup in it and have it run on our domain if it were
+      // inserted as HTML. Assigning textContent cannot execute anything.
+      (function () {
+        var path;
+        try {
+          path = decodeURIComponent(window.location.pathname);
+        } catch (e) {
+          path = window.location.pathname; // malformed escape sequence
+        }
+        if (!path || path === "/" || path.length > 120) return;
+
+        var slot = document.getElementById("missingPath");
+        var wrap = document.getElementById("missing");
+        if (!slot || !wrap) return;
+        slot.textContent = path;
+        wrap.setAttribute("data-found", "");
+      })();
+    </script>
   </body>
 </html>

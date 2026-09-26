@@ -52,17 +52,17 @@ export function FeedbackPage() {
       <JsonLd data={FEEDBACK_SCHEMA} />
       <header className="space-y-2">
         <h1 className="font-display text-3xl font-semibold">Tell us what’s missing</h1>
-        <p className="text-ink-soft">
+        <p className="text-muted">
           A pantry we should list, a class that would help, or a note on how this site works on your
           phone.
         </p>
       </header>
 
       {submitted ? (
-        <div className="rounded-2xl bg-ok-soft px-5 py-8 text-center text-ok">
+        <div className="rounded-2xl bg-tint-positive px-5 py-8 text-center text-positive">
           <CheckCircle className="mx-auto size-10" aria-hidden />
-          <h2 className="mt-3 font-display text-2xl font-semibold text-ink">Email draft opened</h2>
-          <p className="mt-2 text-ink-soft">
+          <h2 className="mt-3 font-display text-2xl font-semibold text-body">Email draft opened</h2>
+          <p className="mt-2 text-muted">
             Send it from your mail app. If nothing opened, write hello@baseimpact.org.
           </p>
           <Button
@@ -77,7 +77,7 @@ export function FeedbackPage() {
           </Button>
         </div>
       ) : (
-        <form onSubmit={onSubmit} className="space-y-4 rounded-2xl bg-paper-raised p-5 shadow-[var(--shadow-border)] sm:p-6">
+        <form onSubmit={onSubmit} className="space-y-4 rounded-2xl bg-card p-5 shadow-[var(--shadow-border)] sm:p-6">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
               <FieldLabel htmlFor="name">Name (optional)</FieldLabel>
@@ -159,7 +159,7 @@ export function FeedbackPage() {
             aria-hidden="true"
           />
 
-          <p className="text-xs text-ink-soft">
+          <p className="text-xs text-muted">
             This form opens your email app with a pre-filled message. If nothing opens, write hello@baseimpact.org directly.
           </p>
 

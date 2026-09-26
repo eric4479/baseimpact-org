@@ -51,9 +51,9 @@ export function PartnersPage() {
       />
       <JsonLd data={PARTNERS_SCHEMA} />
       <header className="space-y-2">
-        <p className="text-xs font-bold uppercase tracking-widest text-sea">Partner hub</p>
+        <p className="text-xs font-bold uppercase tracking-widest text-accent">Partner hub</p>
         <h1 className="font-display text-3xl font-semibold">Work with Base Impact</h1>
-        <p className="max-w-2xl text-ink-soft">
+        <p className="max-w-2xl text-muted">
           We share digital tools, help with grant paperwork, and send neighbors to partners who
           actually have capacity.
         </p>
@@ -77,28 +77,28 @@ export function PartnersPage() {
             body: "Help with free nonprofit software, email security, and basic bookkeeping paths.",
           },
         ].map((card) => (
-          <article key={card.n} className="rounded-2xl bg-paper-raised p-5 shadow-[var(--shadow-border)]">
-            <span className="flex size-10 items-center justify-center rounded-lg bg-paper-sunken font-display text-lg font-semibold text-sea">
+          <article key={card.n} className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)]">
+            <span className="flex size-10 items-center justify-center rounded-lg bg-inset font-display text-lg font-semibold text-accent">
               {card.n}
             </span>
             <h2 className="mt-4 font-display text-xl font-semibold">{card.title}</h2>
-            <p className="mt-2 text-ink-soft">{card.body}</p>
+            <p className="mt-2 text-muted">{card.body}</p>
           </article>
         ))}
       </div>
 
-      <section className="rounded-3xl bg-pine p-5 text-paper-raised sm:p-8">
+      <section className="rounded-3xl bg-band p-5 text-on-fill sm:p-8">
         <h2 className="font-display text-2xl font-semibold">Register your organization</h2>
-        <p className="mt-2 text-paper-sunken">
+        <p className="mt-2 text-faint">
           Join the Brevard referral network. This opens your email app so the note actually reaches
           us.
         </p>
 
         {submitted ? (
-          <div className="mt-6 rounded-2xl bg-pine-deep p-5">
-            <Check className="size-8 text-paper-sunken" aria-hidden />
-            <h3 className="mt-2 font-display text-xl font-semibold text-paper-raised">Email draft opened</h3>
-            <p className="mt-1 text-paper-sunken">
+          <div className="mt-6 rounded-2xl bg-band-deep p-5">
+            <Check className="size-8 text-faint" aria-hidden />
+            <h3 className="mt-2 font-display text-xl font-semibold text-on-fill">Email draft opened</h3>
+            <p className="mt-1 text-faint">
               Send it when you’re ready. If nothing opened, write us at hello@baseimpact.org.
             </p>
             <Button className="mt-4" variant="outline" onClick={() => setSubmitted(false)}>
@@ -115,7 +115,7 @@ export function PartnersPage() {
                 value={form.orgName}
                 onChange={(e) => setForm({ ...form, orgName: e.target.value })}
                 placeholder="Ministry or pantry name"
-                className="bg-pine-deep text-paper-raised placeholder:text-paper-sunken/80"
+                className="bg-band-deep text-on-fill placeholder:text-faint/80"
               />
             </div>
             <div>
@@ -126,7 +126,7 @@ export function PartnersPage() {
                 value={form.contactPerson}
                 onChange={(e) => setForm({ ...form, contactPerson: e.target.value })}
                 placeholder="Contact person"
-                className="bg-pine-deep text-paper-raised placeholder:text-paper-sunken/80"
+                className="bg-band-deep text-on-fill placeholder:text-faint/80"
               />
             </div>
             <div>
@@ -140,7 +140,7 @@ export function PartnersPage() {
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 placeholder="you@organization.org"
-                className="bg-pine-deep text-paper-raised placeholder:text-paper-sunken/80"
+                className="bg-band-deep text-on-fill placeholder:text-faint/80"
               />
             </div>
             <div>
@@ -153,7 +153,7 @@ export function PartnersPage() {
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 placeholder="(321) 555-0100"
-                className="bg-pine-deep text-paper-raised placeholder:text-paper-sunken/80"
+                className="bg-band-deep text-on-fill placeholder:text-faint/80"
               />
             </div>
             <div className="sm:col-span-2">
@@ -162,7 +162,7 @@ export function PartnersPage() {
                 id="type"
                 value={form.serviceType}
                 onChange={(e) => setForm({ ...form, serviceType: e.target.value })}
-                className="bg-pine-deep text-paper-raised"
+                className="bg-band-deep text-on-fill"
               >
                 <option>Food Pantry / Meal Provider</option>
                 <option>Shelter & Housing Provider</option>
@@ -178,7 +178,7 @@ export function PartnersPage() {
                 value={form.needs}
                 onChange={(e) => setForm({ ...form, needs: e.target.value })}
                 placeholder="Hours, capacity, tech needs…"
-                className="bg-pine-deep text-paper-raised placeholder:text-paper-sunken/80"
+                className="bg-band-deep text-on-fill placeholder:text-faint/80"
               />
             </div>
 
@@ -198,7 +198,7 @@ export function PartnersPage() {
               aria-hidden="true"
             />
 
-            <p className="sm:col-span-2 text-xs text-paper-sunken">
+            <p className="sm:col-span-2 text-xs text-faint">
               This form opens your email app with a pre-filled message. If nothing opens, write hello@baseimpact.org directly.
             </p>
 

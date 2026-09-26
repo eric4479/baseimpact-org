@@ -21,9 +21,9 @@ export function AboutPage() {
       />
       <JsonLd data={ABOUT_SCHEMA} />
       <header className="space-y-2">
-        <p className="text-xs font-bold uppercase tracking-[0.16em] text-sea">Mission & governance</p>
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-accent">Mission & governance</p>
         <h1 className="font-display text-3xl font-semibold">How Base Impact is built</h1>
-        <p className="max-w-2xl text-ink-soft">
+        <p className="max-w-2xl text-muted">
           I&apos;m Eric Douglas. I&apos;ve spent my life working with computers and technology, running
           Douglas PC tech support in Mims, FL. Base Impact is the nonprofit I&apos;m building to take
           that same instinct — show up, fix what&apos;s broken, help the person in front of you — and
@@ -31,9 +31,9 @@ export function AboutPage() {
         </p>
       </header>
 
-      <section className="rounded-3xl bg-pine p-5 text-paper-raised sm:p-8">
+      <section className="rounded-3xl bg-band p-5 text-on-fill sm:p-8">
         <h2 className="flex items-center gap-2 font-display text-2xl font-semibold">
-          <Shield className="size-6 text-paper-sunken" aria-hidden />
+          <Shield className="size-6 text-faint" aria-hidden />
           Board duties
         </h2>
         <div className="mt-5 grid grid-cols-1 gap-3 md:grid-cols-3">
@@ -51,17 +51,17 @@ export function AboutPage() {
               body: "Stay inside 501(c)(3) rules, Florida filings, and the purpose of each grant.",
             },
           ].map((duty) => (
-            <article key={duty.title} className="rounded-2xl bg-pine-deep p-4">
-              <h3 className="font-display text-lg font-semibold text-paper-raised">{duty.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-paper-sunken">{duty.body}</p>
+            <article key={duty.title} className="rounded-2xl bg-band-deep p-4">
+              <h3 className="font-display text-lg font-semibold text-on-fill">{duty.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-faint">{duty.body}</p>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="rounded-2xl bg-paper-raised p-5 shadow-[var(--shadow-border)] sm:p-6">
+      <section className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)] sm:p-6">
         <h2 className="font-display text-xl font-semibold">Why I started this</h2>
-        <p className="mt-3 text-sm leading-relaxed text-ink-soft">
+        <p className="mt-3 text-sm leading-relaxed text-muted">
           I&apos;ve spent years helping people one-on-one — fixing laptops, setting up Wi-Fi for
           churches, walking someone through a job application. Lately some of those conversations
           turned into something bigger. Two people on a bike path, living in a tent, walking from
@@ -71,7 +71,7 @@ export function AboutPage() {
           someone who&apos;d show up every week and keep them running. A rummage sale at LifePointe
           Ministries raising money for clothing, food, and shelter.
         </p>
-        <p className="mt-3 text-sm leading-relaxed text-ink-soft">
+        <p className="mt-3 text-sm leading-relaxed text-muted">
           Every one of those moments had the same gap: people who need help don&apos;t have a single
           place to go to find out who&apos;s open, who has what, and how to get there. They&apos;re
           hunting through ten different websites or making calls that go nowhere. Base Impact is my
@@ -79,24 +79,24 @@ export function AboutPage() {
         </p>
       </section>
 
-      <section className="rounded-2xl bg-paper-raised p-5 shadow-[var(--shadow-border)] sm:p-6">
+      <section className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)] sm:p-6">
         <h2 className="font-display text-xl font-semibold">Our partners</h2>
-        <p className="mt-3 text-sm text-ink-soft">
+        <p className="mt-3 text-sm text-muted">
           We work with and through local organizations — churches, food pantries, shelters,
           community gardens, CPR and first-aid trainers, and tiny teams doing big work. We don&apos;t
           replace any of them. We try to make it easier for people to find them and for them to be
           found.
         </p>
-        <p className="mt-2 text-sm text-ink-soft">
+        <p className="mt-2 text-sm text-muted">
           Current partners include St. Gabriel Episcopal Hope Center, North Brevard Food Pantry &
           Outreach, Mims Community Garden & Produce Pantry, and LifePointe
           Ministries. This list is growing.
         </p>
       </section>
 
-      <section className="rounded-2xl bg-paper-raised p-5 shadow-[var(--shadow-border)] sm:p-6">
+      <section className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)] sm:p-6">
         <h2 className="font-display text-xl font-semibold">Our status</h2>
-        <p className="mt-3 text-sm text-ink-soft">
+        <p className="mt-3 text-sm text-muted">
           Base Impact Inc. is a pre-filing nonprofit in Scottsmoor, FL. We&apos;re preparing our
           Florida Sunbiz filing and our 501(c)(3) application. We&apos;re not there yet. We&apos;re
           building in the open about that — because if we&apos;re asking for your trust, you should
@@ -104,14 +104,14 @@ export function AboutPage() {
         </p>
       </section>
 
-      <section className="rounded-2xl bg-paper-sunken px-5 py-8 sm:p-8">
+      <section className="rounded-2xl bg-inset px-5 py-8 sm:p-8">
         <h2 className="font-display text-2xl font-semibold sm:text-3xl">Our board</h2>
-        <p className="mt-3 max-w-2xl text-ink-soft">
+        <p className="mt-3 max-w-2xl text-muted">
           We&apos;re looking for founding board members — people who care about this community and are
           willing to show up, read the numbers before a vote, and treat other people&apos;s money like
           it&apos;s not theirs. If that&apos;s you, we&apos;d like to talk.
         </p>
-        <p className="mt-2 text-sm text-ink-soft">
+        <p className="mt-2 text-sm text-muted">
           The application asks for your legal name as on government ID, a physical residential
           address (no P.O. Boxes), your contact phone, the board position you&apos;re interested in
           (President/Chair, Secretary, or Treasurer), and a conflict-of-interest disclosure. All
@@ -129,16 +129,16 @@ export function AboutPage() {
           </Button>
           <Link
             to="/feedback"
-            className="text-sm text-sea hover:underline"
+            className="text-sm text-accent hover:underline"
           >
             Or send general feedback →
           </Link>
         </div>
       </section>
 
-      <section className="rounded-2xl bg-paper-raised p-5 shadow-[var(--shadow-border)] sm:p-6">
+      <section className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)] sm:p-6">
         <h2 className="font-display text-xl font-semibold">Draft IRS purpose clause</h2>
-        <p className="mt-3 rounded-xl bg-paper-sunken p-4 font-mono text-sm leading-relaxed text-ink">
+        <p className="mt-3 rounded-xl bg-inset p-4 font-mono text-sm leading-relaxed text-body">
           Base Impact Inc. is organized exclusively for charitable and educational purposes under
           Section 501(c)(3) of the Internal Revenue Code. Specifically, the organization delivers
           technical literacy instruction, digital navigation assistance for housing and employment,
@@ -146,16 +146,16 @@ export function AboutPage() {
           support for community gardens, and free technology assistance to grassroots charitable and
           faith-based entities.
         </p>
-        <p className="mt-2 text-xs text-ink-soft">
+        <p className="mt-2 text-xs text-muted">
           Note: &quot;scientific purposes&quot; was removed from an earlier draft — it doesn&apos;t fit
           what we do and could complicate the filing. Have a tax professional or attorney review
           this before you submit.
         </p>
       </section>
 
-      <p className="text-ink-soft">
+      <p className="text-muted">
         Have a correction or want to join the board conversation?{" "}
-        <Link to="/feedback" className="font-semibold text-sea underline-offset-2 hover:underline">
+        <Link to="/feedback" className="font-semibold text-accent underline-offset-2 hover:underline">
           Send feedback
         </Link>
         .

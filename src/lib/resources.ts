@@ -1795,6 +1795,18 @@ export function telHref(phone: string): string {
   return `tel:${phone.replace(/[^\d+]/g, "")}`;
 }
 
-export function mapsHref(address: string): string {
-  return `https://maps.google.com/?q=${encodeURIComponent(address)}`;
+/**
+ * A directions link that hands off to whatever map app the phone already has.
+ *
+ * The Google Maps URL scheme is the only one that works on both iOS and Android: it
+ * opens the installed Google Maps app when there is one and falls back to the web
+ * page when there is not. Apple Maps would only work on iOS, and the `geo:` scheme
+ * only on Android, so neither can be the single link for everyone.
+ *
+ * No travel mode is passed. The map app already has walking, driving, and transit
+ * built in and remembers what the person chose last time, so duplicating that choice
+ * on our page would add buttons without adding any capability.
+ */
+export function directionsHref(address: string): string {
+  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`;
 }

@@ -117,18 +117,18 @@ export function GuidePage() {
       />
       <JsonLd data={ORG_SCHEMA} />
 
-      <section className="overflow-hidden rounded-3xl bg-pine px-5 py-8 text-paper-raised sm:px-10 sm:py-12">
+      <section className="overflow-hidden rounded-3xl bg-band px-5 py-8 text-on-fill sm:px-10 sm:py-12">
         <h1 className="max-w-2xl font-display text-3xl font-semibold tracking-tight sm:text-5xl">
           Not sure where to start? Pick your situation.
         </h1>
-        <p className="mt-4 max-w-xl text-base leading-relaxed text-paper-sunken sm:text-lg">
+        <p className="mt-4 max-w-xl text-base leading-relaxed text-faint sm:text-lg">
           No sign-up. No judgment. Pick what fits and we&apos;ll point you to the right place.
           If you need help right now, skip this and{" "}
-          <a href="tel:211" className="font-semibold text-paper-raised underline-offset-2 hover:underline">
+          <a href="tel:211" className="font-semibold text-on-fill underline-offset-2 hover:underline">
             call 211
           </a>{" "}
           or{" "}
-          <a href="tel:911" className="font-semibold text-paper-raised underline-offset-2 hover:underline">
+          <a href="tel:911" className="font-semibold text-on-fill underline-offset-2 hover:underline">
             call 911
           </a>
           .
@@ -138,25 +138,25 @@ export function GuidePage() {
       <section>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {SITUATIONS.map((s) => (
-            <div key={s.title} className="rounded-2xl bg-paper-raised p-5 shadow-[var(--shadow-border)]">
+            <div key={s.title} className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)]">
               <h2 className="font-display text-xl font-semibold">{s.title}</h2>
               <ul className="mt-3 space-y-2">
                 {s.links.map((l) => (
                   <li key={l.label}>
                     {l.to.startsWith("tel:") ? (
-                      <a href={l.to} className="text-sm font-semibold text-sea hover:underline">
+                      <a href={l.to} className="text-sm font-semibold text-accent hover:underline">
                         {l.label} →
                       </a>
                     ) : l.to.startsWith("http") ? (
-                      <a href={l.to} target="_blank" rel="noreferrer" className="text-sm font-semibold text-sea hover:underline">
+                      <a href={l.to} target="_blank" rel="noreferrer" className="text-sm font-semibold text-accent hover:underline">
                         {l.label} →
                       </a>
                     ) : (
-                      <Link to={l.to as Path} className="text-sm font-semibold text-sea hover:underline">
+                      <Link to={l.to as Path} className="text-sm font-semibold text-accent hover:underline">
                         {l.label} →
                       </Link>
                     )}
-                    <p className="text-xs text-ink-soft">{l.detail}</p>
+                    <p className="text-xs text-muted">{l.detail}</p>
                   </li>
                 ))}
               </ul>
@@ -165,11 +165,11 @@ export function GuidePage() {
         </div>
       </section>
 
-      <section className="rounded-3xl bg-paper-sunken px-5 py-8 sm:p-8">
+      <section className="rounded-3xl bg-inset px-5 py-8 sm:p-8">
         <h2 className="font-display text-2xl font-semibold sm:text-3xl">Phone always works.</h2>
-        <p className="mt-3 max-w-2xl text-ink-soft">
+        <p className="mt-3 max-w-2xl text-muted">
           If this is a lot to read on a screen,{" "}
-          <a href="tel:211" className="font-semibold text-sea underline-offset-2 hover:underline">
+          <a href="tel:211" className="font-semibold text-accent underline-offset-2 hover:underline">
             call 211
           </a>
           . They&apos;re open 24/7 and they know the current list of who&apos;s open, who has beds,
@@ -191,7 +191,7 @@ export function GuidePage() {
 
       <section className="space-y-4">
         <h2 className="font-display text-2xl font-semibold sm:text-3xl">Other resource directories worth knowing</h2>
-        <p className="text-ink-soft">
+        <p className="text-muted">
           These national and state directories cover broader areas — useful if our local directory
           doesn&apos;t have what you need:
         </p>
@@ -202,10 +202,10 @@ export function GuidePage() {
                 href={d.url}
                 target="_blank"
                 rel="noreferrer"
-                className="rounded-xl bg-paper-raised px-4 py-3 text-sm font-semibold text-sea shadow-[var(--shadow-border)] hover:shadow-[var(--shadow-border-hover)] block"
+                className="rounded-xl bg-card px-4 py-3 text-sm font-semibold text-accent shadow-[var(--shadow-border)] hover:shadow-[var(--shadow-border-hover)] block"
               >
                 {d.label} →
-                <span className="block text-xs font-normal text-ink-soft">{d.desc}</span>
+                <span className="block text-xs font-normal text-muted">{d.desc}</span>
               </a>
             </li>
           ))}

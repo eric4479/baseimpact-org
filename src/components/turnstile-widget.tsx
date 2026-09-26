@@ -114,7 +114,7 @@ export default function TurnstileWidget({ fallbackHref }: { fallbackHref?: strin
         style={{ minHeight: "65px", margin: "1rem 0" }}
       />
       {error && (
-        <p className="text-xs text-amber">
+        <p className="text-xs text-caution">
           Verification failed or expired. {fallbackHref ? <a href={fallbackHref}>Email us instead</a> : "Please try again or email us directly."}
         </p>
       )}

@@ -8,14 +8,14 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-sea text-paper-raised hover:bg-sea-bright shadow-[var(--shadow-border)]",
-        pine: "bg-pine text-paper-raised hover:bg-pine-deep",
-        emergency: "bg-amber text-paper-raised hover:brightness-110",
+        primary: "bg-fill text-on-fill hover:bg-fill-hover shadow-[var(--shadow-border)]",
+        pine: "bg-band text-on-fill hover:bg-band-deep",
+        emergency: "bg-fill-caution text-on-fill hover:brightness-110",
         outline:
-          "bg-paper-raised text-ink shadow-[var(--shadow-border)] hover:shadow-[var(--shadow-border-hover)]",
-        ghost: "bg-transparent text-ink-soft hover:bg-paper-sunken hover:text-ink",
-        call: "bg-sea text-paper-raised hover:bg-sea-bright",
-        danger: "bg-danger text-paper-raised",
+          "bg-card text-body shadow-[var(--shadow-border)] hover:shadow-[var(--shadow-border-hover)]",
+        ghost: "bg-transparent text-muted hover:bg-inset hover:text-body",
+        call: "bg-fill text-on-fill hover:bg-fill-hover",
+        danger: "bg-fill-critical text-on-fill",
       },
       size: {
         sm: "min-h-11 px-3.5 text-sm rounded-lg",

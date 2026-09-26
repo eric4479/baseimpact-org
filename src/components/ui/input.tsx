@@ -2,7 +2,7 @@ import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTML
 import { cn } from "@/lib/utils";
 
 const fieldClass =
-  "w-full min-h-12 rounded-xl bg-paper-raised px-3.5 text-base text-ink shadow-[var(--shadow-border)] placeholder:text-ink-soft/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sea";
+  "w-full min-h-12 rounded-xl bg-card px-3.5 text-base text-body shadow-[var(--shadow-border)] placeholder:text-muted/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent";
 
 export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElement>) {
   return <input className={cn(fieldClass, className)} {...props} />;
@@ -18,7 +18,7 @@ export function Textarea({ className, ...props }: TextareaHTMLAttributes<HTMLTex
 
 export function FieldLabel({ children, htmlFor }: { children: ReactNode; htmlFor?: string }) {
   return (
-    <label htmlFor={htmlFor} className="mb-1.5 block text-sm font-semibold text-ink-soft">
+    <label htmlFor={htmlFor} className="mb-1.5 block text-sm font-semibold text-muted">
       {children}
     </label>
   );

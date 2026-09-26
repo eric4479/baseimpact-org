@@ -19,36 +19,36 @@ export function ContactPage() {
         path="/contact"
       />
       <JsonLd data={CONTACT_SCHEMA} />
-      <section className="overflow-hidden rounded-3xl bg-pine px-5 py-8 text-paper-raised sm:px-10 sm:py-12">
+      <section className="overflow-hidden rounded-3xl bg-band px-5 py-8 text-on-fill sm:px-10 sm:py-12">
         <h1 className="max-w-2xl font-display text-3xl font-semibold tracking-tight sm:text-5xl">
           Reach Base Impact.
         </h1>
-        <p className="mt-4 max-w-xl text-base leading-relaxed text-paper-sunken sm:text-lg">
+        <p className="mt-4 max-w-xl text-base leading-relaxed text-faint sm:text-lg">
           We&apos;re a small, pre-filing nonprofit. We read every message. Response times vary — if
           you need help now, call 211 or 911.
         </p>
       </section>
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="rounded-2xl bg-paper-raised p-5 shadow-[var(--shadow-border)]">
+        <div className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)]">
           <h2 className="font-display text-xl font-semibold">By phone</h2>
           <ul className="mt-3 space-y-2 text-sm">
             <li>
               <strong>Base Impact:</strong>{" "}
-              <a href="tel:+13213230999" className="font-semibold text-sea hover:underline">
+              <a href="tel:+13213230999" className="font-semibold text-accent hover:underline">
                 (321) 323-0999
               </a>
-              <span className="mt-1 block text-xs text-ink-soft">
+              <span className="mt-1 block text-xs text-muted">
                 Call or text. By appointment only — we have no public office.
               </span>
             </li>
             <li>
               <strong>Emergency:</strong>{" "}
-              <a href="tel:911" className="font-semibold text-danger hover:underline">Call 911</a>
+              <a href="tel:911" className="font-semibold text-critical hover:underline">Call 911</a>
             </li>
             <li>
               <strong>24/7 local help:</strong>{" "}
-              <a href="tel:211" className="font-semibold text-sea hover:underline">Call 211</a>
+              <a href="tel:211" className="font-semibold text-accent hover:underline">Call 211</a>
             </li>
             <li>
               <strong>Mailing address:</strong>{" "}
@@ -57,26 +57,26 @@ export function ContactPage() {
           </ul>
         </div>
 
-        <div className="rounded-2xl bg-paper-raised p-5 shadow-[var(--shadow-border)]">
+        <div className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)]">
           <h2 className="font-display text-xl font-semibold">By email</h2>
           <p className="mt-3">
-            <a href="mailto:hello@baseimpact.org" className="font-semibold text-sea hover:underline">
+            <a href="mailto:hello@baseimpact.org" className="font-semibold text-accent hover:underline">
               hello@baseimpact.org
             </a>
           </p>
         </div>
 
-        <div className="rounded-2xl bg-paper-raised p-5 shadow-[var(--shadow-border)]">
+        <div className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)]">
           <h2 className="font-display text-xl font-semibold">By mail</h2>
-          <p className="mt-3 text-sm text-ink-soft">
+          <p className="mt-3 text-sm text-muted">
             Write to us at hello@baseimpact.org and we will provide the correct mailing address
             once your message is received. This keeps mail directed to the right place.
           </p>
         </div>
 
-        <div className="rounded-2xl bg-paper-raised p-5 shadow-[var(--shadow-border)]">
+        <div className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)]">
           <h2 className="font-display text-xl font-semibold">In person</h2>
-          <p className="mt-3 text-sm text-ink-soft">
+          <p className="mt-3 text-sm text-muted">
             We are not open for walk-in visits at this time. We partner with local churches and
             community spaces for outreach — contact us and we will tell you where and when the
             next available session is.
@@ -84,16 +84,16 @@ export function ContactPage() {
         </div>
       </section>
 
-      <section className="rounded-2xl bg-paper-raised p-5 shadow-[var(--shadow-border)] sm:p-6">
+      <section className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)] sm:p-6">
         <h2 className="font-display text-xl font-semibold">When you write to us</h2>
-        <p className="mt-3 text-sm text-ink-soft">
+        <p className="mt-3 text-sm text-muted">
           Tell us what you need and what&apos;s most urgent. If we can help directly, we will. If
           we can&apos;t, we&apos;ll point you to the place that can — and we&apos;ll tell you what to
           say when you get there.
         </p>
 
         <h3 className="mt-4 font-display text-lg font-semibold">Response expectations</h3>
-        <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-ink-soft">
+        <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted">
           <li>
             <strong>Immediate needs</strong> (food, shelter, safety): we try same-day, but we&apos;re
             a small team — if it&apos;s urgent, call 211 or 911 first
@@ -108,10 +108,10 @@ export function ContactPage() {
         </ul>
       </section>
 
-      <section className="rounded-3xl bg-paper-sunken px-5 py-8 sm:p-8 space-y-3">
+      <section className="rounded-3xl bg-inset px-5 py-8 sm:p-8 space-y-3">
         <h2 className="font-display text-2xl font-semibold sm:text-3xl">Urgent needs reminder</h2>
-        <p className="text-ink-soft">This site is not a crisis service.</p>
-        <ul className="list-disc space-y-1 pl-5 text-sm text-ink-soft">
+        <p className="text-muted">This site is not a crisis service.</p>
+        <ul className="list-disc space-y-1 pl-5 text-sm text-muted">
           <li>
             <strong>911</strong> — immediate danger
           </li>
