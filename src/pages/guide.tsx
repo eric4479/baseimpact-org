@@ -104,17 +104,17 @@ const SITUATIONS: Array<{
           "Tuesdays 10 AM–12 PM — 418 Pine St, Titusville. Bring ID or proof of Brevard County residency.",
       },
     ],
-    note: "Need something today and these hours have passed? 211 knows who else is open.",
+    note: "Out of hours? The numbers above know who else is open today.",
   },
   {
     title: "I need a place to stay tonight",
     providers: [],
-    note: "Start with 211 — they hold the current shelter bed list, and it changes daily. If you are in immediate danger, use 911.",
+    note: "Shelter beds change daily and are not listed here — 211 holds the current list. If you are in immediate danger, use 911.",
   },
   {
     title: "I'm traveling and stranded",
     providers: [],
-    note: "211 can point you to transit and traveler resources in whatever county you've stopped in.",
+    note: "Transit and traveler help depends on the county you have stopped in. The numbers above can route you.",
   },
   {
     title: "I need a computer or help with a job application",
@@ -144,12 +144,12 @@ const SITUATIONS: Array<{
   {
     title: "I need mental health or disability support",
     providers: [],
-    note: "988 is the fastest route for crisis support. For disability and benefits questions, 211 can route you to county and community programs.",
+    note: "For disability and benefits questions, the numbers above can route you to county and community programs.",
   },
   {
     title: "I don't see my situation here",
     providers: [],
-    note: "Call 211 — they cover far more than we do. You can also contact us and we'll point you the right direction, even outside Central Florida.",
+    note: "The numbers above cover far more than we do. You can also contact us and we'll point you the right direction, even outside Central Florida.",
   },
 ];
 
