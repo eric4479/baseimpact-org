@@ -113,8 +113,27 @@ const SITUATIONS: Array<{
   },
   {
     title: "I'm traveling and stranded",
-    providers: [],
-    note: "Transit and traveler help depends on the county you have stopped in. The numbers above can route you.",
+    providers: [
+      {
+        label: "Florida Road Rangers — dial *347",
+        to: "tel:*347",
+        detail:
+          "Free roadside help on Florida highways, 24/7: flat tires, jump starts, emergency gas and water, and two free local calls. Funded by FDOT, so there is no charge to you. They aim to reach you within 15–30 minutes.",
+      },
+      {
+        label: "Florida 511",
+        to: "https://fl511.com",
+        detail:
+          "Live crashes, closures, and backups on Florida roads. Free, 24/7 — worth checking before you set off again.",
+      },
+      {
+        label: "Halifax Urban Ministries — Hope Place",
+        to: "/directory",
+        detail:
+          "Daytona Beach, serving Volusia and Flagler. A Travelers Aid International member offering stranded traveler assistance.",
+      },
+    ],
+    note: "Dial *347 from a mobile phone — it will not work from a landline. Road Ranger coverage varies by road, so if nobody comes, 511 knows what is open. If a crash has hurt someone, use 911.",
   },
   {
     title: "I need a computer or help with a job application",
