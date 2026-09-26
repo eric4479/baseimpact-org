@@ -3,7 +3,7 @@
   X-Content-Type-Options: nosniff
   X-XSS-Protection: 0
   Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()
+  Permissions-Policy: camera=(), microphone=(), geolocation=(self), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()
   Cross-Origin-Opener-Policy: same-origin
 
   Strict-Transport-Security: max-age=31536000
