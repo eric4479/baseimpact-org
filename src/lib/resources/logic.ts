@@ -12,7 +12,7 @@ import type {
   ProcessedResource,
   Resource,
   TownName,
-  TriageNeed,
+  HelpGroup,
 } from "./types";
 import { PRESET_TOWNS, TOWN_NAMES } from "./data/towns";
 import { ALL_RESOURCES } from "./data";
@@ -146,10 +146,9 @@ export function processResources(
     });
 }
 
-export function resourcesForTriage(need: TriageNeed): Resource[] {
-  return ALL_RESOURCES.filter(
-    (res) =>
-      res.triageCategory === need ||
-      res.tags.some((t) => t.toLowerCase().includes(need.replace("_", " "))),
-  );
+export function resourcesForTriage(need: HelpGroup): Resource[] {
+  // Exact match on the group. The old version also matched on tag substrings as a
+  // fallback, which is what let a crisis line surface under "shelter" - a tag saying
+  // "Crisis" should not be able to place an entry in a group it does not belong to.
+  return ALL_RESOURCES.filter((res) => res.group === need);
 }

@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { AlertTriangle, Check, ExternalLink, Globe, Link2Off, MapPin, Navigation, Phone, Search, Users } from "lucide-react";
+import { AlertTriangle, Check, ExternalLink, Globe, Link2Off, MapPin, Navigation, Phone, Search, Users, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PageMeta } from "@/components/page-meta";
 import { JsonLd } from "@/components/json-ld";
 import { calculateDistanceMiles, nearestTownName, PRESET_TOWNS, type Coordinates } from "@/lib/resources";
-import { ALL_RESOURCES, type Resource, type Availability, getNextAvailableInfo, telHref } from "@/lib/resources";
+import { ALL_RESOURCES, type Resource, type Availability, type HelpGroup, getNextAvailableInfo, telHref } from "@/lib/resources";
 import { domainOf, servicePageLabel } from "@/lib/resources";
 
 const DIRECTORY_SCHEMA = {
@@ -60,37 +60,39 @@ function writeSavedLocation(value: SavedLocation) {
   }
 }
 
-const NEED_CATEGORIES = [
-  { key: "food", label: "Food", icon: "🍽️", desc: "Food banks, pantries, hot meals" },
-  { key: "shelter", label: "Shelter", icon: "🏠", desc: "Shelters, housing help, cold weather" },
-  { key: "bills", label: "Bills & Help", icon: "💰", desc: "Rent, utilities, financial help" },
-  { key: "jobs", label: "Jobs & Work", icon: "💼", desc: "Job search, applications, IDs" },
-  { key: "hygiene", label: "Showers & Hygiene", icon: "🚿", desc: "Showers, laundry, hygiene kits" },
-  { key: "other", label: "Other Help", icon: "🤝", desc: "Anything else you might need" },
+/**
+ * The browse taxonomy: six plain answers to "what kind of help is this?".
+ *
+ * One word each, and no word repeats across the set, so no chip is ambiguous and the
+ * row stays scannable on a phone. `crisis` is the one entry that names a state of
+ * emergency rather than a kind of service, which is why it is styled apart from the
+ * others and sorted last - it should be easy to find and hard to hit by accident.
+ */
+const NEED_CATEGORIES: Array<{
+  key: HelpGroup;
+  label: string;
+  icon: string;
+  desc: string;
+  urgent?: boolean;
+}> = [
+  { key: "food", label: "Food", icon: "🍽️", desc: "Pantries, groceries, hot meals" },
+  { key: "shelter", label: "Shelter", icon: "🏠", desc: "Beds, cold night, housing" },
+  { key: "health", label: "Health", icon: "🩺", desc: "Clinics, insurance, WIC" },
+  { key: "money", label: "Money", icon: "💵", desc: "Rent, utilities, benefits, legal" },
+  { key: "basics", label: "Basics", icon: "🚿", desc: "Showers, laundry, hygiene, ID" },
+  { key: "crisis", label: "Crisis", icon: "🆘", desc: "988 and abuse hotlines", urgent: true },
 ];
 
-function getCategoryForResource(res: Resource): string {
-  // `triageCategory` is set deliberately on every entry, so it is the reliable signal.
-  // Matching on tag strings alone sent anything without one of the exact tags below —
-  // legal aid, veterans' services, coordinated entry — to "Other Help".
-  switch (res.triageCategory) {
-    case "food":
-      return "food";
-    case "shelter":
-      return "shelter";
-    case "id_tech":
-      return "jobs";
-    case "travel":
-      return "bills";
-  }
-
-  // Fallback for entries that predate the field.
-  if (res.tags.some(t => ["Groceries", "Food", "Hot Meals", "Food Pantry"].includes(t))) return "food";
-  if (res.tags.some(t => ["Shelter", "Housing", "Beds"].includes(t))) return "shelter";
-  if (res.tags.some(t => ["Rent Help", "Utilities", "Financial"].includes(t))) return "bills";
-  if (res.tags.some(t => ["Employment", "Job", "IDs", "Documents", "Tech Assistance"].includes(t))) return "jobs";
-  if (res.tags.some(t => ["Showers", "Hygiene", "Laundry"].includes(t))) return "hygiene";
-  return "other";
+/**
+ * Every entry carries exactly one group, so this is a lookup and not a guess.
+ *
+ * It previously inferred a group from tags whenever `triageCategory` was missing, which
+ * sent legal aid, veterans' services and coordinated entry to "Other Help". Worse, the
+ * single `id_tech` value had absorbed healthcare, legal aid and benefit applications
+ * and was rendered as "Jobs & Work" - a heading that held no job listings at all.
+ */
+function getCategoryForResource(res: Resource): HelpGroup {
+  return res.group;
 }
 
 export function DirectoryPage() {
@@ -117,6 +119,15 @@ export function DirectoryPage() {
   // Filters
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedNeed, setSelectedNeed] = useState<string>("all");
+  /**
+   * A single tag the visitor tapped on a card, e.g. "Showers" or "North Brevard".
+   *
+   * Tags cut across the groups - a shower is offered by a food pantry, a shelter and a
+   * day centre alike - so this is an independent filter rather than a synonym for one
+   * of the chips above. Kept separate from `searchQuery` so tapping a tag can show its
+   * own dismissible chip instead of silently filling the search box.
+   */
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [radius, setRadius] = useState(100); // Default 100 miles
 
   const applyLocation = useCallback(
@@ -304,6 +315,7 @@ export function DirectoryPage() {
 
       const category = getCategoryForResource(res);
       if (category !== selectedNeed && selectedNeed !== "all") continue;
+      if (selectedTag && !res.tags.includes(selectedTag)) continue;
 
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
@@ -321,7 +333,7 @@ export function DirectoryPage() {
     // Sort by distance
     results.sort((a, b) => a.distance - b.distance);
     return results;
-  }, [currentLocation, radius, selectedNeed, searchQuery]);
+  }, [currentLocation, radius, selectedNeed, selectedTag, searchQuery]);
 
   const totalResources = filteredResources.length;
 
@@ -435,11 +447,16 @@ export function DirectoryPage() {
               key={cat.key}
               type="button"
               onClick={() => setSelectedNeed(cat.key)}
+              aria-pressed={selectedNeed === cat.key}
               className={`
                 flex flex-col items-center gap-1 rounded-xl px-4 py-3 text-center transition-all
                 ${selectedNeed === cat.key
-                  ? "bg-fill text-on-fill shadow-[var(--shadow-border)]"
-                  : "bg-inset text-body hover:bg-card"
+                  ? cat.urgent
+                    ? "bg-critical text-on-fill shadow-[var(--shadow-border)]"
+                    : "bg-fill text-on-fill shadow-[var(--shadow-border)]"
+                  : cat.urgent
+                    ? "bg-tint-critical text-critical hover:bg-card"
+                    : "bg-inset text-body hover:bg-card"
                 }
               `}
             >
@@ -450,6 +467,7 @@ export function DirectoryPage() {
           <button
             type="button"
             onClick={() => setSelectedNeed("all")}
+            aria-pressed={selectedNeed === "all"}
             className={`
               flex flex-col items-center gap-1 rounded-xl px-4 py-3 text-center transition-all
               ${selectedNeed === "all"
@@ -483,18 +501,37 @@ export function DirectoryPage() {
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted">
-            <strong className="text-body">{totalResources}</strong> resources found
+            <strong className="text-body">{totalResources}</strong>{" "}
+            {totalResources === 1 ? "resource" : "resources"} found
           </p>
-          {selectedNeed !== "all" && (
+          {(selectedNeed !== "all" || selectedTag) && (
             <button
               type="button"
-              onClick={() => setSelectedNeed("all")}
+              onClick={() => {
+                setSelectedNeed("all");
+                setSelectedTag(null);
+              }}
               className="text-sm text-accent hover:underline"
             >
-              Show all needs
+              Show everything
             </button>
           )}
         </div>
+
+        {selectedTag && (
+          <div className="flex items-center gap-2 rounded-xl bg-inset px-3 py-2">
+            <span className="text-xs font-semibold text-muted">Filtering by</span>
+            <button
+              type="button"
+              onClick={() => setSelectedTag(null)}
+              aria-label={`Stop filtering by ${selectedTag}`}
+              className="inline-flex items-center gap-1 rounded-md bg-fill px-2 py-1 text-xs font-bold text-on-fill"
+            >
+              {selectedTag}
+              <X className="size-3" aria-hidden />
+            </button>
+          </div>
+        )}
 
         {totalResources === 0 ? (
           <div className="rounded-2xl bg-card px-5 py-10 text-center shadow-[var(--shadow-border)]">
@@ -509,6 +546,7 @@ export function DirectoryPage() {
               onClick={() => {
                 setRadius(100);
                 setSelectedNeed("all");
+                setSelectedTag(null);
                 setSearchQuery("");
               }}
             >
@@ -536,15 +574,32 @@ export function DirectoryPage() {
                       </div>
                       <p className="mt-1 text-sm text-muted">{res.description}</p>
 
+                      {/*
+                        Tags are the one control that cuts across the groups: a shower is
+                        offered by a pantry, a shelter and a day centre alike, so tapping
+                        "Showers" has to reach all three. Rendered as buttons with a real
+                        pressed state rather than clickable-looking text, so the control is
+                        reachable by keyboard and announced as a filter to a screen reader.
+                      */}
                       <div className="mt-2 flex flex-wrap gap-1.5">
-                        {res.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="rounded-md bg-inset px-2 py-1 text-xs font-semibold text-muted"
-                          >
-                            {tag}
-                          </span>
-                        ))}
+                        {res.tags.map((tag) => {
+                          const active = selectedTag === tag;
+                          return (
+                            <button
+                              key={tag}
+                              type="button"
+                              aria-pressed={active}
+                              onClick={() => setSelectedTag(active ? null : tag)}
+                              className={`rounded-md px-2 py-1 text-xs font-semibold transition-colors ${
+                                active
+                                  ? "bg-fill text-on-fill"
+                                  : "bg-inset text-muted hover:bg-card hover:text-body"
+                              }`}
+                            >
+                              {tag}
+                            </button>
+                          );
+                        })}
                       </div>
 
                       <p className="mt-2 text-sm font-semibold text-body">

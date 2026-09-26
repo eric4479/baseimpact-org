@@ -52,7 +52,9 @@ const warn = (id, msg) => warnings.push(`${id}: ${msg}`);
 
 const KNOWN_COUNTIES = new Set(["Brevard", "Volusia", "Orange", "Statewide"]);
 const KNOWN_CATEGORIES = new Set(CATEGORIES.filter((c) => c !== "All"));
-const KNOWN_TRIAGE = new Set(["shelter", "food", "travel", "id_tech"]);
+// The browse taxonomy. Kept in step with `HelpGroup` in src/lib/resources/types.ts;
+// a value that drifts out of this set would leave a listing unreachable by any chip.
+const KNOWN_GROUPS = new Set(["food", "shelter", "health", "money", "basics", "crisis"]);
 
 const isUrl = (s) => {
   try {
@@ -93,7 +95,7 @@ for (const res of ALL_RESOURCES) {
 
   // --- required text ------------------------------------------------------
   for (const field of ["name", "category", "address", "description", "hoursText",
-                       "partnerType", "capacityStatus", "triageCategory", "county"]) {
+                       "partnerType", "capacityStatus", "group", "county"]) {
     if (typeof res[field] !== "string" || res[field].trim() === "") {
       fail(id, `${field} is empty`);
     }
@@ -101,7 +103,7 @@ for (const res of ALL_RESOURCES) {
 
   if (!KNOWN_CATEGORIES.has(res.category)) fail(id, `unknown category "${res.category}"`);
   if (!KNOWN_COUNTIES.has(res.county)) fail(id, `unknown county "${res.county}"`);
-  if (!KNOWN_TRIAGE.has(res.triageCategory)) fail(id, `unknown triageCategory "${res.triageCategory}"`);
+  if (!KNOWN_GROUPS.has(res.group)) fail(id, `unknown group "${res.group}"`);
 
   // --- coordinates --------------------------------------------------------
   const { lat, lng } = res;

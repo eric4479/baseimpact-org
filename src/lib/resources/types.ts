@@ -14,7 +14,15 @@ export type ResourceCategory =
 
 export type ResourceCounty = "Brevard" | "Volusia" | "Orange" | "Statewide";
 
-export type TriageNeed = "shelter" | "food" | "travel" | "id_tech";
+/**
+ * What kind of help an entry provides - the single browse taxonomy.
+ *
+ * Deliberately separate from `category` (which files an entry by the kind of
+ * organization it is). Someone looking for help is asking "what do I need", not "who
+ * runs it", and conflating the two is what put children's health insurance under a
+ * jobs heading.
+ */
+export type HelpGroup = "food" | "shelter" | "health" | "money" | "basics" | "crisis";
 
 export type Resource = {
   id: string;
@@ -61,7 +69,8 @@ export type Resource = {
   tags: string[];
   partnerType: string;
   capacityStatus: string;
-  triageCategory: TriageNeed;
+  /** The browse group this entry appears under. Exactly one, and always set. */
+  group: HelpGroup;
   county: ResourceCounty;
   /** ISO date the listing was last checked against the organization's own website. */
   lastVerified?: string;
