@@ -20,7 +20,7 @@ const ROUTES: Array<{ label: string; desc: string; to?: Path; cta: string; exter
   },
   {
     label: "I want to partner as an organization",
-    desc: "Pantries, shelters, churches, CPR/first-aid trainers, small teams: register.",
+    desc: "Pantries, shelters, churches, small teams: register.",
     to: "/partners",
     cta: "Register your organization →",
   },

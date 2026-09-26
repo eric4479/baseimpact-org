@@ -29,7 +29,7 @@ const PILLARS = [
   {
     icon: Heart,
     title: "Direct referrals",
-    body: "Food, shelter, showers, and first-aid training — pointed to partners who are open.",
+    body: "Food, shelter, and showers — pointed to partners who are open.",
   },
   {
     icon: Leaf,

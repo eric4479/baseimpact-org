@@ -83,7 +83,7 @@ export function AboutPage() {
         <h2 className="font-display text-xl font-semibold">Our partners</h2>
         <p className="mt-3 text-sm text-muted">
           We work with and through local organizations — churches, food pantries, shelters,
-          community gardens, CPR and first-aid trainers, and tiny teams doing big work. We don&apos;t
+          community gardens, and tiny teams doing big work. We don&apos;t
           replace any of them. We try to make it easier for people to find them and for them to be
           found.
         </p>

@@ -59,22 +59,17 @@ export function PartnersPage() {
         </p>
       </header>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {[
           {
             n: "1",
             title: "Pantries & shelters",
-            body: "Post hours, flag when food arrives, and keep the public schedule honest.",
+            body: "Post your hours and keep the public schedule honest.",
           },
           {
             n: "2",
-            title: "CPR & first-aid trainers",
-            body: "Get referrals when someone needs a real certification for work or licensing.",
-          },
-          {
-            n: "3",
             title: "Tiny teams (1–5 people)",
-            body: "Help with free nonprofit software, email security, and basic bookkeeping paths.",
+            body: "Help with free nonprofit software, email security, and getting a simple website online.",
           },
         ].map((card) => (
           <article key={card.n} className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)]">
@@ -166,7 +161,6 @@ export function PartnersPage() {
               >
                 <option>Food Pantry / Meal Provider</option>
                 <option>Shelter & Housing Provider</option>
-                <option>Certified CPR / First Aid Business Partner</option>
                 <option>Small Business / Micro-Enterprise (1–5 staff)</option>
                 <option>Church / Faith-Based Outreach</option>
               </SelectField>
