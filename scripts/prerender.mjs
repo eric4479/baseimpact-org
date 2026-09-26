@@ -84,6 +84,18 @@ if (problems.length) {
 const esc = (s) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
+// Cloudflare Pages sets CF_PAGES_BRANCH during the build. Any branch other than the
+// production one is a preview deployment, and a preview must never be indexed: a
+// staging copy competing with production in search results is worse than useless.
+// Absent the variable (local builds) we treat it as production.
+const isPreview =
+  Boolean(process.env.CF_PAGES_BRANCH) && process.env.CF_PAGES_BRANCH !== "main";
+
+const robotsFor = (route) =>
+  isPreview || route.noindex
+    ? "noindex, nofollow"
+    : "index, follow, max-image-preview:large, max-snippet:-1";
+
 const template = readFileSync(join(distDir, "index.html"), "utf8");
 
 function applyMeta(html, route) {
@@ -118,7 +130,7 @@ function applyMeta(html, route) {
     )
     .replace(
       /<meta name="robots" content="[^"]*"\s*\/>/,
-      `<meta name="robots" content="${route.noindex ? "noindex, follow" : "index, follow, max-image-preview:large, max-snippet:-1"}" />`,
+      `<meta name="robots" content="${robotsFor(route)}" />`,
     );
 }
 
