@@ -15,6 +15,7 @@ export type Resource = {
   lat: number;
   lng: number;
   phone: string;
+  website?: string;
   description: string;
   hoursText: string;
   schedule: Partial<Record<number, [number, number]>>;
@@ -23,7 +24,15 @@ export type Resource = {
   capacityStatus: string;
   triageCategory: TriageNeed;
   county: "Brevard" | "Volusia" | "Orange";
-};
+    /** ISO date the listing was last checked against the organization's own website. */
+    lastVerified?: string;
+    /**
+     * True when the organization has no public walk-in location.
+     * Distance and street directions are meaningless for these entries, so the UI
+     * must not present them as a place to travel to.
+     */
+    mobileOnly?: boolean;
+  };
 
 export type TownName =
   | "Scottsmoor"
@@ -113,21 +122,23 @@ export const BREVARD_RESOURCES: Resource[] = [
   },
   {
     id: "res-3",
-    name: "Base Impact",
+    name: "Base Impact Inc.",
     category: "Charity Free Services",
-    address: "",
-    lat: 0,
-    lng: 0,
-    phone: "",
+    address: "Mobile service — no public office. By appointment only.",
+    lat: 28.7617,
+    lng: -80.8625,
+    phone: "(321) 323-0999",
+    website: "https://baseimpact.org",
     description:
-      "Digital application help, computer access, housing navigation, and hygiene kit distribution. Not open for walk-in visits — contact us first.",
-    hoursText: "By appointment only",
+      "Digital application help, computer access, housing navigation, and hygiene kit distribution. We have no public office and do not accept walk-in visitors — call or email first, and we will arrange to meet you at a location that works for you.",
+    hoursText: "By appointment only — call or email first",
     schedule: {},
-    tags: ["Tech Assistance", "Housing Help", "Job Search", "Hygiene", "North Brevard"],
-    partnerType: "Direct Base Impact Station",
+    tags: ["Tech Assistance", "Housing Help", "Job Search", "Hygiene", "North Brevard", "By Appointment"],
+    partnerType: "Base Impact Direct Service",
     capacityStatus: "Contact for availability",
     triageCategory: "id_tech",
     county: "Brevard",
+    mobileOnly: true,
   },
   {
     id: "res-4",
@@ -180,7 +191,7 @@ export const BREVARD_RESOURCES: Resource[] = [
     address: "2470 Kelly Rd, Mims, FL 32754",
     lat: 28.6653,
     lng: -80.8481,
-    phone: "(321) 555-0144",
+    phone: "",
     description:
       "Fresh vegetable distribution from local community gardens and nutrition education workshops.",
     hoursText: "Saturday 8:00 AM – 11:00 AM",
@@ -386,7 +397,7 @@ const ORANGE_RESOURCES: Resource[] = [
     lng: -81.3853,
     phone: "(407) 652-5300",
     description:
-      "Central Florida&apos;s largest homeless services provider. Emergency shelter, meals, case management, and rapid rehousing.",
+      "Central Florida's largest homeless services provider. Emergency shelter, meals, case management, and rapid rehousing.",
     hoursText: "Intake 24/7 — call first",
     schedule: { 0: [0, 24], 1: [0, 24], 2: [0, 24], 3: [0, 24], 4: [0, 24], 5: [0, 24], 6: [0, 24] },
     tags: ["Shelter", "Meals", "Case Management", "Rapid Rehousing", "Orange County"],

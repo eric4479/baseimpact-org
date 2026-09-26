@@ -15,7 +15,7 @@ export function VolunteerPage() {
     <div className="space-y-10">
       <PageMeta
         title="Volunteer with Base Impact"
-        description="Give a few hours at our Scottsmoor station, care-package days, or community garden."
+        description="Give a few hours at a care-package day, at a community garden, or helping a small church with tech."
         path="/volunteer"
       />
       <JsonLd data={VOLUNTEER_SCHEMA} />

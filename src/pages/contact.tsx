@@ -34,6 +34,15 @@ export function ContactPage() {
           <h2 className="font-display text-xl font-semibold">By phone</h2>
           <ul className="mt-3 space-y-2 text-sm">
             <li>
+              <strong>Base Impact:</strong>{" "}
+              <a href="tel:+13213230999" className="font-semibold text-sea hover:underline">
+                (321) 323-0999
+              </a>
+              <span className="mt-1 block text-xs text-ink-soft">
+                Call or text. By appointment only — we have no public office.
+              </span>
+            </li>
+            <li>
               <strong>Emergency:</strong>{" "}
               <a href="tel:911" className="font-semibold text-danger hover:underline">Call 911</a>
             </li>

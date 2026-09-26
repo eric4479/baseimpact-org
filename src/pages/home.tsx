@@ -16,6 +16,7 @@ const ORG_SCHEMA = {
     "@type": "ContactPoint",
     contactType: "customer service",
     email: "hello@baseimpact.org",
+    telephone: "+1-321-323-0999",
   },
 };
 
@@ -85,7 +86,7 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <section className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <a
           href="tel:911"
           className="flex min-h-16 items-center justify-between rounded-2xl bg-paper-raised px-4 shadow-[var(--shadow-border)]"
@@ -107,6 +108,18 @@ export function HomePage() {
               24/7 local help
             </span>
             <span className="font-display text-xl font-semibold">Call 211</span>
+          </span>
+          <Phone className="size-5 text-sea" aria-hidden />
+        </a>
+        <a
+          href="tel:+13213230999"
+          className="flex min-h-16 items-center justify-between rounded-2xl bg-paper-raised px-4 shadow-[var(--shadow-border)]"
+        >
+          <span>
+            <span className="block text-xs font-bold uppercase tracking-wide text-sea">
+              Base Impact · by appointment
+            </span>
+            <span className="font-display text-xl font-semibold">(321) 323-0999</span>
           </span>
           <Phone className="size-5 text-sea" aria-hidden />
         </a>

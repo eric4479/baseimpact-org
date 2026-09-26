@@ -21,7 +21,7 @@ const STEPS = [
   },
   {
     title: "Give time",
-    body: "Volunteer at our Scottsmoor station, help pack care packages, work the community garden, or help a small church with tech. You don't need a nonprofit background — just show up and listen.",
+    body: "Volunteer on a care-package day, help at a community garden, or help a small church with tech. You don't need a nonprofit background — just show up and listen.",
   },
   {
     title: "When we're 501(c)(3) approved",

@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
-import { AlertTriangle, MapPin, Navigation, Phone, Search } from "lucide-react";
+import { AlertTriangle, Globe, MapPin, Navigation, Phone, Search, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PageMeta } from "@/components/page-meta";
@@ -397,32 +397,60 @@ export function DirectoryPage() {
                       </p>
 
                       <div className="mt-2 flex items-start gap-2 text-sm text-ink-soft">
-                        <MapPin className="mt-0.5 size-4 shrink-0" aria-hidden />
-                        <span>{res.address}</span>
+                      {res.mobileOnly ? (
+                        <>
+                          <Users className="mt-0.5 size-4 shrink-0" aria-hidden />
+                          <span>{res.address}</span>
+                        </>
+                      ) : (
+                        <>
+                          <MapPin className="mt-0.5 size-4 shrink-0" aria-hidden />
+                          <span>{res.address}</span>
+                        </>
+                      )}
                       </div>
 
+                      <div className="mt-3 flex flex-wrap gap-2">
                       {res.phone && (
-                        <div className="mt-3 flex gap-2">
-                          <a
-                            href={`tel:${res.phone.replace(/[^\d+]/g, "")}`}
-                            className="inline-flex items-center gap-2 rounded-xl bg-sea px-4 py-3 text-sm font-semibold text-paper-raised hover:bg-sea-bright transition-colors"
-                          >
-                            <Phone className="size-4" aria-hidden />
-                            Call {res.phone}
-                          </a>
-                          <a
-                            href={`https://maps.google.com/?q=${encodeURIComponent(res.address)}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 rounded-xl bg-paper-sunken px-4 py-3 text-sm font-semibold text-ink hover:bg-paper-raised transition-colors"
-                            >
-                            <Navigation className="size-4" aria-hidden />
-                            Directions
-                          </a>
-                        </div>
+                        <a
+                          href={`tel:${res.phone.replace(/[^\d+]/g, "")}`}
+                          className="inline-flex items-center gap-2 rounded-xl bg-sea px-4 py-3 text-sm font-semibold text-paper-raised hover:bg-sea-bright transition-colors"
+                        >
+                          <Phone className="size-4" aria-hidden />
+                          Call {res.phone}
+                        </a>
+                      )}
+                      {!res.mobileOnly && res.address && (
+                        <a
+                          href={`https://maps.google.com/?q=${encodeURIComponent(res.address)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 rounded-xl bg-paper-sunken px-4 py-3 text-sm font-semibold text-ink hover:bg-paper-raised transition-colors"
+                        >
+                          <Navigation className="size-4" aria-hidden />
+                          Directions
+                        </a>
+                      )}
+                      {res.website && (
+                        <a
+                          href={res.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 rounded-xl bg-paper-sunken px-4 py-3 text-sm font-semibold text-ink hover:bg-paper-raised transition-colors"
+                        >
+                          <Globe className="size-4" aria-hidden />
+                          Website
+                        </a>
+                      )}
+                      </div>
+
+                      {!res.mobileOnly && (
+                      <p className="mt-3 rounded-lg bg-paper-sunken px-3 py-2 text-xs text-ink-soft">
+                        Hours and availability change without notice. Call before you travel.
+                      </p>
                       )}
 
-                      {res.distance < 999 && (
+                      {!res.mobileOnly && res.distance < 999 && (
                         <p className="mt-2 text-xs text-ink-soft">
                           {res.distance.toFixed(1)} miles away
                         </p>

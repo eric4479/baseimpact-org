@@ -97,7 +97,7 @@ export function ImpactPage() {
         </p>
         <p className="text-sm text-ink-soft">
           <strong>What this points to:</strong> Digital navigation help is one of the most-requested
-          things at our Scottsmoor station. People don&apos;t need more websites — they need someone
+          things people ask us for most. People don&apos;t need more websites — they need someone
           to walk through the one they&apos;re on with them.
         </p>
         <ul className="list-disc space-y-1 pl-5 text-sm text-ink-soft">

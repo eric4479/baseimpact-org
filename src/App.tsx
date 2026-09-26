@@ -10,6 +10,7 @@ import { ImpactPage } from "@/pages/impact";
 import { JoinPage } from "@/pages/join";
 import { DonatePage } from "@/pages/donate";
 import { PrivacyPage } from "@/pages/privacy";
+import { TermsPage } from "@/pages/terms";
 import { HomePage } from "@/pages/home";
 import { PartnersPage } from "@/pages/partners";
 import { VolunteerPage } from "@/pages/volunteer";
@@ -41,6 +42,8 @@ export default function App() {
       <DonatePage />
     ) : path === "/privacy" ? (
       <PrivacyPage />
+    ) : path === "/terms" ? (
+      <TermsPage />
     ) : (
       <HomePage />
     );

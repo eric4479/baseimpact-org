@@ -60,7 +60,7 @@ const SITUATIONS: Array<{
     links: [
       { label: "St. Gabriel Hope Center", to: "/directory", detail: "shower vouchers and emergency gas cards for travelers" },
       { label: "Call 211", to: "tel:211", detail: "for transit and traveler resources" },
-      { label: "Base Impact station", to: "/contact", detail: "we can help with a phone, a map, and a call" },
+      { label: "Base Impact (by appointment)", to: "/contact", detail: "we can help with a phone, a map, and a call — call or text first" },
     ],
   },
   {

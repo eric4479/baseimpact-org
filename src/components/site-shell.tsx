@@ -112,11 +112,21 @@ export function SiteShell({ children }: { children: ReactNode }) {
           <div>
             <p className="font-display text-lg font-semibold text-paper-raised">Base Impact Inc.</p>
             <p className="mt-1">Scottsmoor, FL 32775 · Brevard County</p>
+            <p className="mt-1">
+              <a href="tel:+13213230999" className="font-semibold text-paper-raised underline-offset-2 hover:underline">
+                (321) 323-0999
+              </a>
+              {" "}· call or text · by appointment only
+            </p>
             <p className="mt-2">
               <a href="tel:211" className="font-semibold text-paper-raised underline-offset-2 hover:underline">
                 Call 211
               </a>
               {" "}for 24/7 local help ·{" "}
+              <a href="tel:988" className="font-semibold text-paper-raised underline-offset-2 hover:underline">
+                988
+              </a>
+              {" "}for crisis support ·{" "}
               <a href="tel:911" className="font-semibold text-paper-raised underline-offset-2 hover:underline">
                 911
               </a>
@@ -127,6 +137,9 @@ export function SiteShell({ children }: { children: ReactNode }) {
             <p>© {new Date().getFullYear()} Base Impact Inc.</p>
             <Link to="/privacy" className="mt-1 inline-block text-paper-raised underline-offset-2 hover:underline">
               Privacy policy
+            </Link>
+            <Link to="/terms" className="mt-1 inline-block text-paper-raised underline-offset-2 hover:underline">
+              Terms &amp; disclaimer
             </Link>
             <Link to="/feedback" className="mt-1 inline-block text-paper-raised underline-offset-2 hover:underline">
               Share feedback
