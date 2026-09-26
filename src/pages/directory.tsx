@@ -511,6 +511,12 @@ export function DirectoryPage() {
 
       {/* Results */}
       <div className="space-y-3">
+        {/*
+          The cards below are h3, so without this the document jumps h1 -> h3 and a
+          screen-reader user loses the shape of the page. Visually hidden: the count
+          line beneath already tells a sighted reader what they are looking at.
+        */}
+        <h2 className="sr-only">Results</h2>
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted">
             <strong className="text-body">{totalResources}</strong>{" "}
@@ -608,7 +614,7 @@ export function DirectoryPage() {
                                 type="button"
                                 aria-pressed={active}
                                 onClick={() => setSelectedTag(active ? null : svc)}
-                                className={`rounded-md px-2 py-1 text-xs font-bold transition-colors ${
+                                className={`rounded-md px-2.5 py-1.5 text-xs font-bold transition-colors ${
                                   active
                                     ? "bg-fill text-on-fill"
                                     : svc === "Food"
@@ -639,7 +645,7 @@ export function DirectoryPage() {
                               type="button"
                               aria-pressed={active}
                               onClick={() => setSelectedTag(active ? null : tag)}
-                              className={`rounded-md px-2 py-1 text-xs font-semibold transition-colors ${
+                              className={`rounded-md px-2.5 py-1.5 text-xs font-semibold transition-colors ${
                                 active
                                   ? "bg-fill text-on-fill"
                                   : "bg-inset text-muted hover:bg-card hover:text-body"
@@ -775,7 +781,7 @@ export function DirectoryPage() {
           Base Impact Inc. is a pre-filing nonprofit in Scottsmoor, FL.{" "}
           We're building a directory to help neighbors find resources.{" "}
           If something looks wrong,{" "}
-          <a href="/feedback" className="text-accent hover:underline">
+          <a href="/feedback" className="text-accent underline underline-offset-2">
             let us know
           </a>
           .
