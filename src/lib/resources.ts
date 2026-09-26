@@ -529,7 +529,7 @@ export const BREVARD_RESOURCES: Resource[] = [
     lat: 28.7617,
     lng: -80.8625,
     phone: "",
-    website: "https://streetsideshowers.org/",
+    website: "https://streetsideshowers.com/",
     description: "Mobile shower trailer bringing hot showers, hygiene kits, and a clean change of clothes to people experiencing homelessness across Brevard County. No fixed location — check the published schedule.",
     hoursText: "Rotating schedule — check the website",
     schedule: {},
@@ -1402,7 +1402,7 @@ const ORANGE_RESOURCES: Resource[] = [
     lat: 28.513649,
     lng: -81.3109305,
     phone: "407-658-1818",
-    website: "https://cflcc.org/mission-market-orlando",
+    website: "https://cflcc.org/mission-markets/",
     description: "Choice food pantry with fresh produce, meat, dairy, and groceries, at the Catholic Charities main office. Food assistance is by appointment only through the online form — this is not a walk-in pantry.",
     hoursText: "By appointment only: Mon, Wed & Fri",
     schedule: {1: [[9, 12.5]], 3: [[9, 12.5]], 5: [[9, 12.5]]},
@@ -1792,7 +1792,14 @@ export function resourcesForTriage(need: TriageNeed): Resource[] {
 }
 
 export function telHref(phone: string): string {
-  return `tel:${phone.replace(/[^\d+]/g, "")}`;
+  // A naive strip of every non-digit turns "(386) 734-8120 ext. 601" into the
+  // 13-digit "3867348120601", which no phone can dial - the extension is not part of
+  // the number. RFC 3966 carries it in the `;ext=` parameter instead. Phones ignore
+  // that parameter rather than misdialing, so the entry stays usable either way.
+  const ext = phone.match(/\b(?:ext\.?|extension|x)\s*(\d{1,6})\b/i);
+  const base = (ext ? phone.slice(0, ext.index) : phone).replace(/[^\d+]/g, "");
+  if (!base) return "";
+  return ext ? `tel:${base};ext=${ext[1]}` : `tel:${base}`;
 }
 
 /**

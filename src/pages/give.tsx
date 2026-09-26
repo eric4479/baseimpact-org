@@ -2,6 +2,7 @@ import { Link } from "@/lib/nav";
 import { Button } from "@/components/ui/button";
 import { PageMeta } from "@/components/page-meta";
 import { JsonLd } from "@/components/json-ld";
+import { telHref } from "@/lib/resources";
 
 const GIVE_SCHEMA = {
   "@context": "https://schema.org",
@@ -98,7 +99,7 @@ export function GivePage() {
               <p className="mt-1 text-sm text-muted">{p.note}</p>
               <p className="mt-2 text-sm font-semibold">{p.hours}</p>
               {p.phone && (
-                <a href={`tel:${p.phone.replace(/[^\d+]/g, "")}`} className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-accent">
+                <a href={telHref(p.phone)} className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-accent">
                   Call {p.phone}
                 </a>
               )}

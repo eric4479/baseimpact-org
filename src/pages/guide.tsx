@@ -175,7 +175,7 @@ const SITUATIONS: Array<{
 const EXTERNAL_DIRECTORIES = [
   { label: "SAMHSA Treatment Locator", url: "https://findtreatment.samhsa.gov", desc: "Mental health and substance use resources" },
   { label: "Florida DCF", url: "https://www.myflorida.com/accessflorida/", desc: "SNAP, TANF, and state assistance programs" },
-  { label: "Brevard County", url: "https://www.brevardcounty.us", desc: "County services and programs" },
+  { label: "Brevard County", url: "https://www.brevardfl.gov/", desc: "County services and programs" },
   { label: "Feeding Florida", url: "https://feedingflorida.org", desc: "State food bank network" },
 ];
 

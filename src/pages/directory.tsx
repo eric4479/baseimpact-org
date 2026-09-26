@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { PageMeta } from "@/components/page-meta";
 import { JsonLd } from "@/components/json-ld";
 import { calculateDistanceMiles, PRESET_TOWNS, type Coordinates } from "@/lib/resources";
-import { ALL_RESOURCES, type Resource, type Availability, getNextAvailableInfo } from "@/lib/resources";
+import { ALL_RESOURCES, type Resource, type Availability, getNextAvailableInfo, telHref } from "@/lib/resources";
 
 const DIRECTORY_SCHEMA = {
   "@context": "https://schema.org",
@@ -500,7 +500,7 @@ export function DirectoryPage() {
                       <div className="mt-3 flex flex-wrap gap-2">
                       {res.phone && (
                         <a
-                          href={`tel:${res.phone.replace(/[^\d+]/g, "")}`}
+                          href={telHref(res.phone)}
                           className="inline-flex items-center gap-2 rounded-xl bg-fill px-4 py-3 text-sm font-semibold text-on-fill hover:bg-fill-hover transition-colors"
                         >
                           <Phone className="size-4" aria-hidden />
