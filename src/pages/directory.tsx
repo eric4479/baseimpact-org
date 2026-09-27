@@ -444,6 +444,11 @@ export function DirectoryPage() {
           <p className="text-sm font-semibold text-muted">Search radius</p>
           <span className="text-sm font-semibold text-body">{radius} miles</span>
         </div>
+        {/*
+          h-6 keeps the hit area at the 24px WCAG 2.2 SC 2.5.8 floor. A native range control
+          renders about 16px tall, and clicking anywhere on the track moves the thumb, so the
+          track itself is the target -- 16px is under the minimum.
+        */}
         <input
           type="range"
           min={10}
@@ -451,7 +456,7 @@ export function DirectoryPage() {
           step={10}
           value={radius}
           onChange={(e) => setRadius(Number(e.target.value))}
-          className="w-full accent-sea"
+          className="h-6 w-full accent-sea"
           aria-label="Search radius in miles"
         />
         <div className="flex justify-between text-xs text-muted mt-1">

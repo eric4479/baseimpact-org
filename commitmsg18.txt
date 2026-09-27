@@ -1,0 +1,31 @@
+Give the search radius slider a 24px hit area
+
+Found while checking the live site: the range input rendered 348x16. A native range control
+is about 16px tall, and clicking anywhere on the track moves the thumb, so the track itself
+is the target -- under the 24x24 minimum in WCAG 2.2 SC 2.5.8. It is now h-6, which measures
+348x24 on a phone and 1080x24 on desktop.
+
+Everything else the live check turned up was a fault in the checking, not in the site, and I
+confirmed each one rather than trusting the first reading:
+
+- The group chips are emoji-prefixed ("Food" renders as the emoji plus the word), so a
+  selector matching text that *starts with* the group name was really clicking a tag chip on
+  a card. Re-tested by reading the chip row directly: Food 28, Shelter 25, Health 6, Money 10,
+  Basics 7, Crisis 4 -- every group matches the data exactly.
+- Distances render as "12.3 miles away". A regex looking for "mi" followed by a word boundary
+  cannot match "miles", so the distance check reported an empty list. Distances are present on
+  66 of 80 cards; the other 14 are the mobileOnly helplines, which deliberately carry no
+  distance.
+- The ZIP search appeared not to work because the default radius is 100 miles, so a Mims ZIP
+  legitimately shows all 80 entries. Narrowing the radius filters correctly (10mi -> 32,
+  20mi -> 39, 30mi -> 45), and three ZIPs resolve to three distinct sets of distances
+  (32114 -> nearest 0.8mi, 32801 -> 0.4mi, 32927 -> 6.5mi). The second ZIP in an earlier pass
+  matched the first because the field is maxLength=5 and was already full from a saved
+  location, so nothing typed into it.
+
+Live checks that did pass unchanged: all 13 routes HTTP 200 with prerendered content, 404 on
+an unknown path, robots.txt and a 13-URL sitemap, no noindex on indexable pages, and
+HSTS/nosniff/DENY/CSP/referrer/permissions headers all set.
+
+Audit: 0 axe violations across 52 route/viewport combinations, 0 horizontal overflow, 0
+controls without a focus indicator. Build clean, validator 80/80, gate suite 7/7.
