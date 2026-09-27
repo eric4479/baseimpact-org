@@ -1,0 +1,25 @@
+Move 2-1-1 into Crisis, and stop rendering Charity as a filter
+
+Two decisions from reviewing the preview.
+
+2-1-1 was filed under Money. It is a 24/7 referral gateway, not a money programme -- you
+call it and it routes you to food, shelter, utilities, mental health or legal help -- so
+Money was the wrong shelf. It was also already carrying a "Crisis" tag, which meant the
+Crisis filter returned only 988 and the Abuse Hotline while two entries that call
+themselves crisis lines sat one group away. Both 2-1-1 entries (res-40 Volusia-Flagler,
+res-71 Central Florida) move to Crisis. Groups are now Food 28, Shelter 25, Money 10,
+Basics 7, Health 6, Crisis 4, still 80 total.
+
+Charity is no longer drawn as a badge. It is carried by 63 of the 80 listings, so the chip
+appeared on nearly every card and tapping it removed almost nothing -- a label wearing the
+costume of a filter, and the third colour on cards that already had two. Food (42) and
+Faith (26) do narrow the list and keep their badges. The data is untouched: `services`
+still carries Charity on all 63 entries and `matchesFilter` still matches it, so nothing
+is lost if we ever want it back or want to surface it differently.
+
+Verified in a real browser: 68 badge buttons across the 80 cards, exactly Food 42 + Faith
+26, and zero Charity. Crisis returns "4 resources found". Confirmed no descriptive tag is
+named Food/Faith/Charity, so the badge count cannot be double-counting a tag chip.
+
+Audit: 0 axe violations across all 52 route/viewport combinations, 0 horizontal overflow,
+0 controls missing a focus indicator. Build clean, validator 80/80, gate suite 7/7.

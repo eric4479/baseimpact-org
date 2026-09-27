@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { CheckCircle, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FieldLabel, Input, SelectField, Textarea } from "@/components/ui/input";
@@ -21,6 +21,24 @@ export function FeedbackPage() {
     type: "General Suggestion",
     message: "",
   });
+
+  /**
+   * Pick up ?about=<organization>, which the directory attaches to the "No website
+   * found" link. The visitor should not have to retype which listing they mean.
+   *
+   * Done in an effect rather than a state initialiser because this page is
+   * prerendered: reading `window` during render would break the static build.
+   */
+  useEffect(() => {
+    const about = new URLSearchParams(window.location.search).get("about");
+    if (!about) return;
+    setForm((f) => ({
+      ...f,
+      type: "Recommend a Service/Pantry to List",
+      // Only fill an untouched message, so we never overwrite what they have typed.
+      message: f.message.trim() ? f.message : `Website for ${about}: `,
+    }));
+  }, []);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();

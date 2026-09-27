@@ -1,5 +1,5 @@
 import { useEffect, type ReactNode } from "react";
-import { Building2, Compass, Heart, MessageSquare, Search, Shield, Zap } from "lucide-react";
+import { Building2, Compass, Heart, Search, Shield, Zap } from "lucide-react";
 import { Link, useNav, type Path } from "@/lib/nav";
 import { useSavedStore, useUiStore } from "@/lib/stores";
 import { cn } from "@/lib/utils";
@@ -39,9 +39,12 @@ export function SiteShell({ children }: { children: ReactNode }) {
         Skip to content
       </a>
 
-      <div className="bg-inset px-4 py-2 text-center text-xs font-medium text-muted pt-[max(0.5rem,env(safe-area-inset-top))] sm:text-sm">
+      <aside
+        aria-label="Organisation status"
+        className="bg-inset px-4 py-2 text-center text-xs font-medium text-muted pt-[max(0.5rem,env(safe-area-inset-top))] sm:text-sm"
+      >
         Base Impact Inc. · Pre-filing nonprofit in Scottsmoor, FL · Preparing Sunbiz & 501(c)(3)
-      </div>
+      </aside>
 
       <header className="sticky top-0 z-40 border-b border-line/80 bg-band text-on-fill">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4">
@@ -59,7 +62,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
+          <nav className="hidden items-center gap-1 xl:flex" aria-label="Primary">
                 {NAV.map((item) => {
                   const active = path === item.to;
                   const Icon = item.icon;
@@ -79,18 +82,6 @@ export function SiteShell({ children }: { children: ReactNode }) {
                     </Link>
                   );
                 })}
-                <Link
-                  to="/feedback"
-                  className={cn(
-                    "flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-semibold",
-                    path === "/feedback"
-                      ? "bg-fill text-on-fill"
-                      : "text-faint hover:bg-band-deep hover:text-on-fill",
-                  )}
-                >
-                  <MessageSquare className="size-4" aria-hidden />
-                  Feedback
-                </Link>
               </nav>
 
           <div className="flex items-center gap-2">
@@ -103,12 +94,12 @@ export function SiteShell({ children }: { children: ReactNode }) {
         </div>
       </header>
 
-      <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-4 py-5 sm:py-8 pb-nav lg:pb-12">
+      <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-4 py-5 sm:py-8 xl:pb-12">
         {children}
       </main>
 
-      <footer className="hidden border-t border-line bg-band px-4 py-8 text-sm text-faint lg:block">
-        <div className="mx-auto flex max-w-6xl items-end justify-between gap-6">
+      <footer className="border-t border-line bg-band px-4 pt-8 pb-nav xl:pb-8 text-sm text-faint">
+        <div className="mx-auto flex max-w-6xl flex-col gap-5 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
           <div>
             <p className="font-display text-lg font-semibold text-on-fill">Base Impact Inc.</p>
             <p className="mt-1">Scottsmoor, FL 32775 · Brevard County</p>
@@ -133,7 +124,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
               {" "}in an emergency
             </p>
           </div>
-          <div className="text-right">
+          <div className="sm:text-right">
             <p>© {new Date().getFullYear()} Base Impact Inc.</p>
             <Link to="/privacy" className="mt-1 inline-block text-on-fill underline-offset-2 hover:underline">
               Privacy policy
@@ -150,7 +141,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
 
       <nav
         aria-label="Mobile"
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-card pb-[env(safe-area-inset-bottom)] lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-card pb-[env(safe-area-inset-bottom)] xl:hidden"
       >
         {/*
                 Seven tabs across a 390px phone is ~55px each, so this row deliberately does

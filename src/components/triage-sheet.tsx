@@ -1,27 +1,35 @@
 import { useState } from "react";
-import { Heart, Laptop, Navigation, Phone, Shield, X, Zap } from "lucide-react";
+import { Droplets, Heart, Phone, Shield, X, Zap } from "lucide-react";
 import { Link } from "@/lib/nav";
-import { resourcesForTriage, telHref, type TriageNeed } from "@/lib/resources";
+import { resourcesForTriage, telHref, type HelpGroup } from "@/lib/resources";
 import { useUiStore } from "@/lib/stores";
 import { Button } from "@/components/ui/button";
 
+/**
+ * The four things somebody needs *tonight*, in the order they usually need them.
+ *
+ * A deliberately narrower set than the directory's browse groups: health cover and
+ * benefit applications are appointment-shaped, so offering them here would push the
+ * things that cannot wait further down. Crisis is included because a crisis line is
+ * the one listing where making somebody browse is itself the failure.
+ */
 const NEEDS: Array<{
-  key: TriageNeed;
+  key: HelpGroup;
   label: string;
   desc: string;
   icon: typeof Shield;
 }> = [
-  { key: "shelter", label: "Shelter tonight", desc: "Beds, day center, vouchers", icon: Shield },
-  { key: "food", label: "Meal or pantry", desc: "Hot lunch, groceries, no ID", icon: Heart },
-  { key: "travel", label: "Fuel or travel", desc: "Gas cards, stranded help", icon: Navigation },
-  { key: "id_tech", label: "ID & computer", desc: "Applications, job search", icon: Laptop },
+  { key: "shelter", label: "Shelter tonight", desc: "Beds, day center, cold night", icon: Shield },
+  { key: "food", label: "Food today", desc: "Hot meals, groceries, no ID", icon: Heart },
+  { key: "crisis", label: "In crisis", desc: "988, abuse hotline, 24/7", icon: Zap },
+  { key: "basics", label: "Shower & basics", desc: "Showers, laundry, hygiene", icon: Droplets },
 ];
 
 export function TriageSheet() {
   const open = useUiStore((s) => s.triageOpen);
   const close = useUiStore((s) => s.closeTriage);
   const [step, setStep] = useState<1 | 2>(1);
-  const [need, setNeed] = useState<TriageNeed>("food");
+  const [need, setNeed] = useState<HelpGroup>("food");
 
   if (!open) return null;
 

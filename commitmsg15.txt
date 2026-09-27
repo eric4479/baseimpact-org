@@ -1,0 +1,19 @@
+Adjust partner cards and remove CPR/first-aid listings
+
+Three content changes to what Base Impact offers partners.
+
+Pantries: the card asked them to "flag when food arrives". That is not information we
+publish or need -- what a person looking for help actually needs is whether a pantry is
+open right now, so the card now asks only for hours and an honest public schedule.
+
+Removed CPR & first-aid trainers as a partner category. It was a card on /partners, an
+option in the registration form's "What you offer" list, a mention in the /join partner
+blurb, a mention in the /about partners sentence, and "first-aid training" in the home
+page referrals card. All five are gone; no trace of CPR or first aid remains in the
+built output. The partner grid is now two cards, so it drops from three columns to two
+rather than leaving a gap.
+
+Tiny teams: swapped bookkeeping for websites, matching the tech work we actually do
+(grant paperwork, email security, getting a simple site online).
+
+Build clean, validator 80/80, gate suite 7/7.

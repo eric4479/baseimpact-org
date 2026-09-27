@@ -8,10 +8,11 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && vite build --ssr src/entry-server.tsx && node scripts/prerender.mjs",
+    "build": "tsc -b && node scripts/validate-resources.mjs && vite build && vite build --ssr src/entry-server.tsx && node scripts/prerender.mjs",
     "preview": "vite preview",
     "build:client": "tsc -b && vite build",
-    "prerender": "node scripts/prerender.mjs"
+    "prerender": "node scripts/prerender.mjs",
+    "validate": "node scripts/validate-resources.mjs"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",

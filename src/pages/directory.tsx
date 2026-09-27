@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { AlertTriangle, Globe, MapPin, Navigation, Phone, Search, Users } from "lucide-react";
+import { AlertTriangle, Check, ExternalLink, Globe, Link2Off, MapPin, Navigation, Phone, Search, Users, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PageMeta } from "@/components/page-meta";
 import { JsonLd } from "@/components/json-ld";
-import { calculateDistanceMiles, PRESET_TOWNS, type Coordinates } from "@/lib/resources";
-import { ALL_RESOURCES, type Resource, type Availability, getNextAvailableInfo, telHref } from "@/lib/resources";
+import { calculateDistanceMiles, nearestTownName, PRESET_TOWNS, type Coordinates } from "@/lib/resources";
+import { ALL_RESOURCES, type Resource, type Availability, type HelpGroup, getNextAvailableInfo, telHref } from "@/lib/resources";
+import { domainOf, servicePageLabel } from "@/lib/resources";
 
 const DIRECTORY_SCHEMA = {
   "@context": "https://schema.org",
@@ -59,37 +60,58 @@ function writeSavedLocation(value: SavedLocation) {
   }
 }
 
-const NEED_CATEGORIES = [
-  { key: "food", label: "Food", icon: "🍽️", desc: "Food banks, pantries, hot meals" },
-  { key: "shelter", label: "Shelter", icon: "🏠", desc: "Shelters, housing help, cold weather" },
-  { key: "bills", label: "Bills & Help", icon: "💰", desc: "Rent, utilities, financial help" },
-  { key: "jobs", label: "Jobs & Work", icon: "💼", desc: "Job search, applications, IDs" },
-  { key: "hygiene", label: "Showers & Hygiene", icon: "🚿", desc: "Showers, laundry, hygiene kits" },
-  { key: "other", label: "Other Help", icon: "🤝", desc: "Anything else you might need" },
+/**
+ * The browse taxonomy: six plain answers to "what kind of help is this?".
+ *
+ * One word each, and no word repeats across the set, so no chip is ambiguous and the
+ * row stays scannable on a phone. `crisis` is the one entry that names a state of
+ * emergency rather than a kind of service, which is why it is styled apart from the
+ * others and sorted last - it should be easy to find and hard to hit by accident.
+ */
+const NEED_CATEGORIES: Array<{
+  key: HelpGroup;
+  label: string;
+  icon: string;
+  desc: string;
+  urgent?: boolean;
+}> = [
+  { key: "food", label: "Food", icon: "🍽️", desc: "Pantries, groceries, hot meals" },
+  { key: "shelter", label: "Shelter", icon: "🏠", desc: "Beds, cold night, housing" },
+  { key: "health", label: "Health", icon: "🩺", desc: "Clinics, insurance, WIC" },
+  { key: "money", label: "Money", icon: "💵", desc: "Rent, utilities, benefits, legal" },
+  { key: "basics", label: "Basics", icon: "🚿", desc: "Showers, laundry, hygiene, ID" },
+  { key: "crisis", label: "Crisis", icon: "🆘", desc: "988 and abuse hotlines", urgent: true },
 ];
 
-function getCategoryForResource(res: Resource): string {
-  // `triageCategory` is set deliberately on every entry, so it is the reliable signal.
-  // Matching on tag strings alone sent anything without one of the exact tags below —
-  // legal aid, veterans' services, coordinated entry — to "Other Help".
-  switch (res.triageCategory) {
-    case "food":
-      return "food";
-    case "shelter":
-      return "shelter";
-    case "id_tech":
-      return "jobs";
-    case "travel":
-      return "bills";
-  }
+/**
+ * True when an entry carries the given filter, whether it arrived as a service type
+ * (Food / Faith / Charity) or as a descriptive tag. The two lists are separate on the
+ * entry, so the check has to span both.
+ */
+/**
+ * Which service types are rendered as a badge.
+ *
+ * Charity is deliberately absent here even though 63 of the 80 entries carry it. A chip
+ * that appears on nearly every card and removes almost nothing is a label pretending to
+ * be a filter - Food (42) and Faith (26) actually narrow the list. The data stays on every
+ * entry and still matches via `matchesFilter`; this only stops it being drawn as a control.
+ */
+const BADGE_SERVICES: Array<Resource["services"][number]> = ["Food", "Faith"];
 
-  // Fallback for entries that predate the field.
-  if (res.tags.some(t => ["Groceries", "Food", "Hot Meals", "Food Pantry"].includes(t))) return "food";
-  if (res.tags.some(t => ["Shelter", "Housing", "Beds"].includes(t))) return "shelter";
-  if (res.tags.some(t => ["Rent Help", "Utilities", "Financial"].includes(t))) return "bills";
-  if (res.tags.some(t => ["Employment", "Job", "IDs", "Documents", "Tech Assistance"].includes(t))) return "jobs";
-  if (res.tags.some(t => ["Showers", "Hygiene", "Laundry"].includes(t))) return "hygiene";
-  return "other";
+function matchesFilter(res: Resource, filter: string): boolean {
+  return res.tags.includes(filter) || res.services.some((s) => s === filter);
+}
+
+/**
+ * Every entry carries exactly one group, so this is a lookup and not a guess.
+ *
+ * It previously inferred a group from tags whenever `triageCategory` was missing, which
+ * sent legal aid, veterans' services and coordinated entry to "Other Help". Worse, the
+ * single `id_tech` value had absorbed healthcare, legal aid and benefit applications
+ * and was rendered as "Jobs & Work" - a heading that held no job listings at all.
+ */
+function getCategoryForResource(res: Resource): HelpGroup {
+  return res.group;
 }
 
 export function DirectoryPage() {
@@ -99,6 +121,15 @@ export function DirectoryPage() {
   const [gpsError, setGpsError] = useState<string | null>(null);
   const [gpsBusy, setGpsBusy] = useState(false);
   const [zipBusy, setZipBusy] = useState(false);
+  /**
+   * Confirmation shown after a location is set successfully.
+   *
+   * Kept separate from gpsError so a success and a failure can never both be on screen,
+   * and so they can be styled differently - a grey line in the same colour as the helper
+   * text below it is indistinguishable from static copy, which is exactly why the button
+   * previously looked like it did nothing.
+   */
+  const [gpsNotice, setGpsNotice] = useState<string | null>(null);
   const [locationLabel, setLocationLabel] = useState("Titusville");
 
   // Current location for calculations (starts as Titusville default)
@@ -107,6 +138,15 @@ export function DirectoryPage() {
   // Filters
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedNeed, setSelectedNeed] = useState<string>("all");
+  /**
+   * A single tag the visitor tapped on a card, e.g. "Showers" or "North Brevard".
+   *
+   * Tags cut across the groups - a shower is offered by a food pantry, a shelter and a
+   * day centre alike - so this is an independent filter rather than a synonym for one
+   * of the chips above. Kept separate from `searchQuery` so tapping a tag can show its
+   * own dismissible chip instead of silently filling the search box.
+   */
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [radius, setRadius] = useState(100); // Default 100 miles
 
   const applyLocation = useCallback(
@@ -126,12 +166,59 @@ export function DirectoryPage() {
         return;
       }
       setGpsBusy(true);
-      if (!silent) setGpsError(null);
+      if (!silent) {
+        setGpsError(null);
+        setGpsNotice(null);
+      }
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           setGpsBusy(false);
           setGpsError(null);
-          applyLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }, "your location", "gps");
+          const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          void (async () => {
+            // Name the fix in terms the visitor can check against where they are standing,
+            // and put the ZIP in the box so the value they would search by is visible
+            // rather than hidden behind a button press.
+            //
+            // The ZIP table is a separate chunk. If it fails to load we lose the ZIP but
+            // must keep the fix, so the import sits inside its own guard.
+            let zip: string | null = null;
+            let zipPoint: Coordinates | null = null;
+            try {
+              // One dynamic import: the table is ~24 KB in its own chunk and must not
+              // be pulled into the main bundle for visitors who never use GPS or ZIP.
+              const { nearestZip, lookupZip } = await import("@/lib/fl-zips");
+              zip = nearestZip(coords);
+              if (zip) zipPoint = lookupZip(zip);
+            } catch {
+              /* ZIP table unavailable - the town name below still identifies the fix */
+            }
+
+            // Name the town from the ZIP we settled on, NOT from the raw fix.
+            //
+            // Deriving the two independently let the line read "Mims, FL · ZIP 32796",
+            // because Mims' town marker sits nearer the 32796 centroid than the 32754
+            // one. A line that contradicts itself reads as broken even when each half
+            // was individually defensible. Naming the town from the ZIP makes the pair
+            // consistent by construction, and the ZIP is what actually drives the search.
+            const town = nearestTownName(zipPoint ?? coords);
+            const where = [town ? `${town}, FL` : null, zip ? `ZIP ${zip}` : null]
+              .filter(Boolean)
+              .join(" · ");
+
+            applyLocation(coords, zip ?? town ?? "your location", "gps", zip ?? undefined);
+            if (zip) setZipCode(zip);
+
+            // No metre figure. The device reports its own precision, but that is not how
+            // far off the ZIP estimate can be - nearest-centroid is a boundary-blind
+            // approximation that can name a neighbouring ZIP, and quoting "22 m" next to
+            // it would claim an accuracy this cannot have.
+            setGpsNotice(
+              where
+                ? `Location set — near ${where}. Estimated from your device; edit the zip code if it looks wrong.`
+                : "Location set — using your device's current position.",
+            );
+          })();
         },
         (err) => {
           setGpsBusy(false);
@@ -206,6 +293,7 @@ export function DirectoryPage() {
 
     setZipBusy(true);
     setGpsError(null);
+    setGpsNotice(null);
     try {
       // The ZIP table is about 24 KB, so it lives in its own chunk and is fetched the
       // first time somebody actually searches by ZIP. Most visitors use their phone's
@@ -246,6 +334,10 @@ export function DirectoryPage() {
 
       const category = getCategoryForResource(res);
       if (category !== selectedNeed && selectedNeed !== "all") continue;
+      // One filter, two sources: the nature of the service (Food / Faith / Charity) and
+      // the descriptive tags. Both are tapped the same way and shown in the same chip,
+      // so a visitor does not have to know which kind of label they picked.
+      if (selectedTag && !matchesFilter(res, selectedTag)) continue;
 
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
@@ -263,7 +355,7 @@ export function DirectoryPage() {
     // Sort by distance
     results.sort((a, b) => a.distance - b.distance);
     return results;
-  }, [currentLocation, radius, selectedNeed, searchQuery]);
+  }, [currentLocation, radius, selectedNeed, selectedTag, searchQuery]);
 
   const totalResources = filteredResources.length;
 
@@ -326,6 +418,16 @@ export function DirectoryPage() {
             </Button>
           </div>
 
+          {gpsNotice && !gpsError && (
+            <p
+              role="status"
+              className="flex items-start gap-2 rounded-xl bg-tint-positive px-3 py-2 text-sm font-semibold text-positive"
+            >
+              <Check className="mt-0.5 size-4 shrink-0" aria-hidden />
+              <span>{gpsNotice}</span>
+            </p>
+          )}
+
           {gpsError && (
             <p className="text-sm text-caution">{gpsError}</p>
           )}
@@ -367,11 +469,16 @@ export function DirectoryPage() {
               key={cat.key}
               type="button"
               onClick={() => setSelectedNeed(cat.key)}
+              aria-pressed={selectedNeed === cat.key}
               className={`
                 flex flex-col items-center gap-1 rounded-xl px-4 py-3 text-center transition-all
                 ${selectedNeed === cat.key
-                  ? "bg-fill text-on-fill shadow-[var(--shadow-border)]"
-                  : "bg-inset text-body hover:bg-card"
+                  ? cat.urgent
+                    ? "bg-critical text-on-fill shadow-[var(--shadow-border)]"
+                    : "bg-fill text-on-fill shadow-[var(--shadow-border)]"
+                  : cat.urgent
+                    ? "bg-tint-critical text-critical hover:bg-card"
+                    : "bg-inset text-body hover:bg-card"
                 }
               `}
             >
@@ -382,6 +489,7 @@ export function DirectoryPage() {
           <button
             type="button"
             onClick={() => setSelectedNeed("all")}
+            aria-pressed={selectedNeed === "all"}
             className={`
               flex flex-col items-center gap-1 rounded-xl px-4 py-3 text-center transition-all
               ${selectedNeed === "all"
@@ -413,20 +521,45 @@ export function DirectoryPage() {
 
       {/* Results */}
       <div className="space-y-3">
+        {/*
+          The cards below are h3, so without this the document jumps h1 -> h3 and a
+          screen-reader user loses the shape of the page. Visually hidden: the count
+          line beneath already tells a sighted reader what they are looking at.
+        */}
+        <h2 className="sr-only">Results</h2>
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted">
-            <strong className="text-body">{totalResources}</strong> resources found
+            <strong className="text-body">{totalResources}</strong>{" "}
+            {totalResources === 1 ? "resource" : "resources"} found
           </p>
-          {selectedNeed !== "all" && (
+          {(selectedNeed !== "all" || selectedTag) && (
             <button
               type="button"
-              onClick={() => setSelectedNeed("all")}
+              onClick={() => {
+                setSelectedNeed("all");
+                setSelectedTag(null);
+              }}
               className="text-sm text-accent hover:underline"
             >
-              Show all needs
+              Show everything
             </button>
           )}
         </div>
+
+        {selectedTag && (
+          <div className="flex items-center gap-2 rounded-xl bg-inset px-3 py-2">
+            <span className="text-xs font-semibold text-muted">Filtering by</span>
+            <button
+              type="button"
+              onClick={() => setSelectedTag(null)}
+              aria-label={`Stop filtering by ${selectedTag}`}
+              className="inline-flex items-center gap-1 rounded-md bg-fill px-2 py-1 text-xs font-bold text-on-fill"
+            >
+              {selectedTag}
+              <X className="size-3" aria-hidden />
+            </button>
+          </div>
+        )}
 
         {totalResources === 0 ? (
           <div className="rounded-2xl bg-card px-5 py-10 text-center shadow-[var(--shadow-border)]">
@@ -441,6 +574,7 @@ export function DirectoryPage() {
               onClick={() => {
                 setRadius(100);
                 setSelectedNeed("all");
+                setSelectedTag(null);
                 setSearchQuery("");
               }}
             >
@@ -468,15 +602,62 @@ export function DirectoryPage() {
                       </div>
                       <p className="mt-1 text-sm text-muted">{res.description}</p>
 
+                      {/*
+                        Tags are the one control that cuts across the groups: a shower is
+                        offered by a pantry, a shelter and a day centre alike, so tapping
+                        "Showers" has to reach all three. Rendered as buttons with a real
+                        pressed state rather than clickable-looking text, so the control is
+                        reachable by keyboard and announced as a filter to a screen reader.
+                      */}
+                      {/*
+                        What kind of service this is. Sits above the descriptive tags and
+                        reads as a stronger statement - "Faith" says something about the
+                        organization itself, not just what it hands out.
+                      */}
+                      {res.services.some((s) => BADGE_SERVICES.includes(s)) && (
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+                          {res.services.filter((s) => BADGE_SERVICES.includes(s)).map((svc) => {
+                            const active = selectedTag === svc;
+                            return (
+                              <button
+                                key={svc}
+                                type="button"
+                                aria-pressed={active}
+                                onClick={() => setSelectedTag(active ? null : svc)}
+                                className={`rounded-md px-2.5 py-1.5 text-xs font-bold transition-colors ${
+                                  active
+                                    ? "bg-fill text-on-fill"
+                                    : svc === "Food"
+                                      ? "bg-tint-positive text-positive hover:bg-card"
+                                      : "bg-tint-caution text-caution hover:bg-card"
+                                }`}
+                              >
+                                {svc}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+
                       <div className="mt-2 flex flex-wrap gap-1.5">
-                        {res.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="rounded-md bg-inset px-2 py-1 text-xs font-semibold text-muted"
-                          >
-                            {tag}
-                          </span>
-                        ))}
+                        {res.tags.map((tag) => {
+                          const active = selectedTag === tag;
+                          return (
+                            <button
+                              key={tag}
+                              type="button"
+                              aria-pressed={active}
+                              onClick={() => setSelectedTag(active ? null : tag)}
+                              className={`rounded-md px-2.5 py-1.5 text-xs font-semibold transition-colors ${
+                                active
+                                  ? "bg-fill text-on-fill"
+                                  : "bg-inset text-muted hover:bg-card hover:text-body"
+                              }`}
+                            >
+                              {tag}
+                            </button>
+                          );
+                        })}
                       </div>
 
                       <p className="mt-2 text-sm font-semibold text-body">
@@ -518,15 +699,42 @@ export function DirectoryPage() {
                           Directions
                         </a>
                       )}
-                      {res.website && (
+                      {res.website ? (
                         <a
                           href={res.website}
                           target="_blank"
                           rel="noopener noreferrer"
+                          title={res.website}
                           className="inline-flex items-center gap-2 rounded-xl bg-inset px-4 py-3 text-sm font-semibold text-body hover:bg-card transition-colors"
                         >
                           <Globe className="size-4" aria-hidden />
-                          Website
+                          {domainOf(res.website)}
+                        </a>
+                      ) : (
+                        /* Say plainly that we have no site rather than showing nothing.
+                           Silence looked like the listing was broken; this tells the
+                           visitor the absence is known, and gives them a way to fix it. */
+                        <a
+                          href={`/feedback?about=${encodeURIComponent(res.name)}`}
+                          className="inline-flex items-center gap-2 rounded-xl bg-inset px-4 py-3 text-sm font-semibold text-muted hover:text-body transition-colors"
+                        >
+                          <Link2Off className="size-4" aria-hidden />
+                          No website found — know it?
+                        </a>
+                      )}
+
+                      {/* The page for THIS service, listed separately from the main
+                          site. Skipped when it is the same address as `website`. */}
+                      {res.serviceUrl && res.serviceUrl !== res.website && (
+                        <a
+                          href={res.serviceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title={res.serviceUrl}
+                          className="inline-flex items-center gap-2 rounded-xl bg-inset px-4 py-3 text-sm font-semibold text-body hover:bg-card transition-colors"
+                        >
+                          <ExternalLink className="size-4" aria-hidden />
+                          {servicePageLabel(res.serviceUrl, res.website)}
                         </a>
                       )}
                       </div>
@@ -576,7 +784,7 @@ export function DirectoryPage() {
           Base Impact Inc. is a pre-filing nonprofit in Scottsmoor, FL.{" "}
           We're building a directory to help neighbors find resources.{" "}
           If something looks wrong,{" "}
-          <a href="/feedback" className="text-accent hover:underline">
+          <a href="/feedback" className="text-accent underline underline-offset-2">
             let us know
           </a>
           .
