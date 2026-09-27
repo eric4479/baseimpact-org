@@ -117,11 +117,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
               <a href="tel:988" className="font-semibold text-on-fill underline-offset-2 hover:underline">
                 988
               </a>
-              {" "}for crisis support ·{" "}
-              <a href="tel:911" className="font-semibold text-on-fill underline-offset-2 hover:underline">
-                911
-              </a>
-              {" "}in an emergency
+              {" "}for crisis support
             </p>
           </div>
           <div className="sm:text-right">

@@ -58,12 +58,6 @@ const HELPLINES: Array<{ label: string; to: string; handles: string; detail: str
     detail: "Suicide & Crisis Lifeline. Call or text, 24/7. Free and confidential.",
   },
   {
-    label: "911",
-    to: "tel:911",
-    handles: "Immediate danger or a medical emergency",
-    detail: "Use this when someone is hurt or in danger right now.",
-  },
-  {
     label: "Base Impact",
     to: "/contact",
     handles: "Help making the calls and understanding what you're offered",

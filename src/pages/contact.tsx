@@ -25,7 +25,7 @@ export function ContactPage() {
         </h1>
         <p className="mt-4 max-w-xl text-base leading-relaxed text-faint sm:text-lg">
           We&apos;re a small, pre-filing nonprofit. We read every message. Response times vary — if
-          you need help now, call 211 or 911.
+          you need help now, call 211.
         </p>
       </section>
 
@@ -41,10 +41,6 @@ export function ContactPage() {
               <span className="mt-1 block text-xs text-muted">
                 Call or text. By appointment only — we have no public office.
               </span>
-            </li>
-            <li>
-              <strong>Emergency:</strong>{" "}
-              <a href="tel:911" className="font-semibold text-critical hover:underline">Call 911</a>
             </li>
             <li>
               <strong>24/7 local help:</strong>{" "}
@@ -96,7 +92,7 @@ export function ContactPage() {
         <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted">
           <li>
             <strong>Immediate needs</strong> (food, shelter, safety): we try same-day, but we&apos;re
-            a small team — if it&apos;s urgent, call 211 or 911 first
+            a small team — if it&apos;s urgent, call 211 first
           </li>
           <li>
             <strong>Volunteer and partnership inquiries:</strong> we aim to respond within a few days
@@ -112,9 +108,6 @@ export function ContactPage() {
         <h2 className="font-display text-2xl font-semibold sm:text-3xl">Urgent needs reminder</h2>
         <p className="text-muted">This site is not a crisis service.</p>
         <ul className="list-disc space-y-1 pl-5 text-sm text-muted">
-          <li>
-            <strong>911</strong> — immediate danger
-          </li>
           <li>
             <strong>211</strong> — 24/7 local resource helpline
           </li>

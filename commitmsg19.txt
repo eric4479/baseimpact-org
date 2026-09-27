@@ -1,0 +1,33 @@
+Remove the tap-to-dial 911 everywhere, and show it once in the Crisis group
+
+Firing a call to 911 by accident is a real risk on a phone, and there were five places
+doing it: the footer, the "Help now" sheet, the home page's emergency card, the contact
+page, and the Guide's quick-dial list. All five were live tel: links, so a pocket tap or
+a stray thumb could dial. Every one is gone; the only place 911 is offered as a number now
+is the Crisis group in the directory, and that one is plain text, so it cannot be dialled
+by a tap at all. It reads:
+
+  In immediate danger? Call 911. Shown as plain text so a pocket tap can't dial it by accident.
+
+Where 911 was removed, the surrounding help did not go with it -- the footer still carries
+211 and 988, the Guide still lists both, and the contact page's urgent-needs list still
+lists 211 and 988. On the home page dropping the emergency card left a two-card row, so
+that grid is now sm:grid-cols-2 instead of three uneven columns.
+
+911 still appears twice in the Guide and once in the Terms, but as words inside a sentence
+rather than a number to press -- "if a crash has hurt someone, use 911", and the Terms
+notice that says not to use this site to report an emergency. Neither can be dialled, and
+the Terms line is the disclaimer that keeps the site honest about what it is not. Say the
+word if you want those stripped too.
+
+Checked in Chrome against the built site, 13 routes at 412px: no route has a 911 dial
+link, the directory shows no 911 until the Crisis group is selected and exactly one once
+it is, that note contains no anchor and sits inside no anchor, and Crisis still returns
+its 4 listings. Audit: 0 axe violations across 52 route/viewport combinations, 0 horizontal
+overflow, 0 controls without a focus indicator. Build clean, validator 80/80, gate 7/7.
+
+One note on the checking itself. The first pass reported every count as zero, which looked
+like a clean result but was the opposite: the local static server had been pruned from the
+scratch directory, so Chrome was loading blank pages and "no 911 links found" meant "nothing
+was loaded". serve_dist.py replaces it, and each pass now proves it is serving real pages
+before its numbers are trusted.

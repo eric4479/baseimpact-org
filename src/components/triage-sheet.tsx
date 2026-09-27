@@ -101,13 +101,6 @@ export function TriageSheet() {
                 );
               })}
             </div>
-
-            <div className="flex items-center justify-between border-t border-line pt-4 text-sm">
-              <span className="text-muted">In immediate danger?</span>
-              <a href="tel:911" className="font-bold text-critical">
-                Call 911
-              </a>
-            </div>
           </div>
         ) : (
           <div className="space-y-5">

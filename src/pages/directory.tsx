@@ -532,6 +532,12 @@ export function DirectoryPage() {
           line beneath already tells a sighted reader what they are looking at.
         */}
         <h2 className="sr-only">Results</h2>
+        {selectedNeed === "crisis" && (
+          <p className="rounded-xl bg-tint-critical px-3 py-2.5 text-sm text-critical">
+            <strong className="font-bold">In immediate danger? Call 911.</strong>{" "}
+            Shown as plain text so a pocket tap can&apos;t dial it by accident.
+          </p>
+        )}
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted">
             <strong className="text-body">{totalResources}</strong>{" "}
