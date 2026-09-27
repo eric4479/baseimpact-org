@@ -64,7 +64,7 @@ export function PartnersPage() {
           {
             n: "1",
             title: "Pantries & shelters",
-            body: "Post your hours and keep the public schedule honest.",
+            body: "Post your hours and ask people to call first. Availability changes — a phone call beats a wasted trip.",
           },
           {
             n: "2",

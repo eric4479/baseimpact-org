@@ -1,5 +1,5 @@
 import { useEffect, type ReactNode } from "react";
-import { Building2, Compass, Heart, MessageSquare, Search, Shield, Zap } from "lucide-react";
+import { Building2, Compass, Heart, Search, Shield, Zap } from "lucide-react";
 import { Link, useNav, type Path } from "@/lib/nav";
 import { useSavedStore, useUiStore } from "@/lib/stores";
 import { cn } from "@/lib/utils";
@@ -82,18 +82,6 @@ export function SiteShell({ children }: { children: ReactNode }) {
                     </Link>
                   );
                 })}
-                <Link
-                  to="/feedback"
-                  className={cn(
-                    "flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-semibold",
-                    path === "/feedback"
-                      ? "bg-fill text-on-fill"
-                      : "text-faint hover:bg-band-deep hover:text-on-fill",
-                  )}
-                >
-                  <MessageSquare className="size-4" aria-hidden />
-                  Feedback
-                </Link>
               </nav>
 
           <div className="flex items-center gap-2">

@@ -1,0 +1,25 @@
+Move Feedback to the footer, and make the pantry card warn about availability
+
+Feedback was the eighth item in the desktop nav while the mobile tab bar carried only the
+seven main destinations, so the two navigations disagreed. It now appears only in the
+footer, where "Share feedback" already sat alongside Privacy policy and Terms -- the nav is
+the seven destinations on both, and the duplicate is gone. Removed the now-unused
+MessageSquare import.
+
+Pantries & shelters: the card asked partners to "keep the public schedule honest", which
+does not address what actually goes wrong. Pantries and shelters do not update us often,
+so a posted schedule can be stale and someone can travel there and find the doors shut.
+The card now asks partners to tell people to call first and says so explicitly: "Post your
+hours and ask people to call first. Availability changes -- a phone call beats a wasted
+trip." This matches the "Call to Confirm" tag already used across the directory listings.
+
+Also re-tested the header breakpoint. Removing Feedback cut the nav from 766px to 651px,
+which on paper brings the row inside 1024px -- and my earlier note said that was the
+alternative to the xl switch, so it was worth measuring rather than assuming. It does not
+hold up: at 1024-1032px the row fits with exactly 0px of slack, and the shrink-0 "Need help
+now" button measures 148px inside a 135px wrapper, overflowing its parent by 13px. That is
+the same failure as the original 62px overflow, just below the threshold where it becomes
+visible page overflow. Kept the nav at xl, where there is ~97px of slack.
+
+Build clean, validator 80/80, gate suite 7/7, 0 horizontal overflow across 52
+route/viewport combinations.
