@@ -18,7 +18,7 @@ export const VOLUSIA_RESOURCES: Resource[] = [
     tags: ["24/7", "Helpline", "Volusia", "Flagler", "Crisis"],
     partnerType: "Helpline",
     capacityStatus: "Open & Ready",
-    group: "money",
+    group: "crisis",
     services: [],
     county: "Volusia",
     mobileOnly: true,

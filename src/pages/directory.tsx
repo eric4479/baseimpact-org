@@ -88,6 +88,16 @@ const NEED_CATEGORIES: Array<{
  * (Food / Faith / Charity) or as a descriptive tag. The two lists are separate on the
  * entry, so the check has to span both.
  */
+/**
+ * Which service types are rendered as a badge.
+ *
+ * Charity is deliberately absent here even though 63 of the 80 entries carry it. A chip
+ * that appears on nearly every card and removes almost nothing is a label pretending to
+ * be a filter - Food (42) and Faith (26) actually narrow the list. The data stays on every
+ * entry and still matches via `matchesFilter`; this only stops it being drawn as a control.
+ */
+const BADGE_SERVICES: Array<Resource["services"][number]> = ["Food", "Faith"];
+
 function matchesFilter(res: Resource, filter: string): boolean {
   return res.tags.includes(filter) || res.services.some((s) => s === filter);
 }
@@ -604,9 +614,9 @@ export function DirectoryPage() {
                         reads as a stronger statement - "Faith" says something about the
                         organization itself, not just what it hands out.
                       */}
-                      {res.services.length > 0 && (
+                      {res.services.some((s) => BADGE_SERVICES.includes(s)) && (
                         <div className="mt-2 flex flex-wrap gap-1.5">
-                          {res.services.map((svc) => {
+                          {res.services.filter((s) => BADGE_SERVICES.includes(s)).map((svc) => {
                             const active = selectedTag === svc;
                             return (
                               <button
@@ -619,14 +629,7 @@ export function DirectoryPage() {
                                     ? "bg-fill text-on-fill"
                                     : svc === "Food"
                                       ? "bg-tint-positive text-positive hover:bg-card"
-                                      : svc === "Faith"
-                                        ? "bg-tint-caution text-caution hover:bg-card"
-                                        // Charity is carried by nearly every listing here,
-                                        // so it gets an outlined neutral rather than a third
-                                        // colour: a page of 60 green chips would drown out
-                                        // the two that actually narrow the list. The ring is
-                                        // what keeps it from reading as one of the grey tags.
-                                        : "bg-inset text-body ring-1 ring-line hover:bg-card"
+                                      : "bg-tint-caution text-caution hover:bg-card"
                                 }`}
                               >
                                 {svc}

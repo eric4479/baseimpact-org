@@ -304,7 +304,7 @@ export const ORANGE_RESOURCES: Resource[] = [
     tags: ["24/7", "Helpline", "Orange County", "Crisis"],
     partnerType: "Helpline",
     capacityStatus: "Open & Ready",
-    group: "money",
+    group: "crisis",
     services: [],
     county: "Orange",
     mobileOnly: true,
