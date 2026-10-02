@@ -90,7 +90,18 @@ export function ConnectPage() {
 
   const onLookup = (e: FormEvent) => {
     e.preventDefault();
-    if (code.length === 6) void lookup(code);
+    // Deliberately NOT gated behind a disabled button. A disabled control with no
+    // explanation is a dead end -- the person taps it, nothing happens, and there is
+    // no way to find out why. Answering the click with the reason is strictly better.
+    if (code.length !== 6) {
+      setLookupError(
+        code.length === 0
+          ? "Enter the 6-character code we gave you."
+          : `That is ${code.length} character${code.length === 1 ? "" : "s"} — the code is 6.`,
+      );
+      return;
+    }
+    void lookup(code);
   };
 
   const onSend = async (e: FormEvent) => {
@@ -152,12 +163,21 @@ export function ConnectPage() {
             <Input
               id="code"
               value={code}
-              onChange={(e) => setCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6))}
-              placeholder="M4K7QP"
+              onChange={(e) => {
+                setCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6));
+                if (lookupError) setLookupError("");
+              }}
+              // NOT a sample code. A realistic placeholder ("M4K7QP") reads as a
+              // field that is already filled in, which is exactly how it was reported:
+              // the box looked answered, the button looked broken. The hint has to be
+              // instructions, not an example.
+              placeholder="Your code"
               autoComplete="off"
               autoCapitalize="characters"
               spellCheck={false}
-              className="text-center font-display text-2xl tracking-[0.3em]"
+              // Wide letter-spacing only once there is something to space out; applied
+              // to the hint it renders as "Y o u r   c o d e".
+              className={`text-center font-display text-2xl ${code ? "tracking-[0.3em]" : "tracking-normal"}`}
               aria-describedby="code-help"
             />
             <p id="code-help" className="mt-2 text-xs text-muted">
@@ -165,7 +185,7 @@ export function ConnectPage() {
             </p>
           </div>
           {lookupError && <p className="text-sm font-semibold text-critical">{lookupError}</p>}
-          <Button type="submit" variant="pine" size="lg" className="w-full" disabled={code.length !== 6 || looking}>
+          <Button type="submit" variant="pine" size="lg" className="w-full" disabled={looking}>
             {looking ? <Loader2 className="size-4 animate-spin" aria-hidden /> : <Search className="size-4" aria-hidden />}
             Look up my referral
           </Button>

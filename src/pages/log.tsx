@@ -89,6 +89,8 @@ export function LogPage() {
    * never be matched to an outcome and quietly becomes an `unknown` forever.
    */
   const [issuedCode, setIssuedCode] = useState("");
+  /** Why "Log it" could not proceed, shown instead of silently doing nothing. */
+  const [logError, setLogError] = useState("");
 
   const load = useCallback(async () => {
     try {
@@ -125,6 +127,7 @@ export function LogPage() {
 
   const onLogin = async (e: FormEvent) => {
     e.preventDefault();
+    if (!password) { setLoginError("Enter the password."); return; }
     setBusy(true); setLoginError("");
     const r = await api("/api/referrals/login", { method: "POST", body: JSON.stringify({ password }) });
     setBusy(false);
@@ -138,7 +141,13 @@ export function LogPage() {
   };
 
   const onLog = async () => {
-    if (!picked) return;
+    // Same reasoning as the connect page: a disabled button with no explanation is a
+    // dead end. Answering the tap with the reason beats ignoring it.
+    if (!picked) {
+      setLogError("Pick who you sent them to first.");
+      return;
+    }
+    setLogError("");
     setBusy(true);
     const r = await api("/api/referrals", {
       method: "POST",
@@ -219,7 +228,7 @@ export function LogPage() {
                    value={password} onChange={(e) => setPassword(e.target.value)} />
           </div>
           {loginError && <p className="text-sm font-semibold text-critical">{loginError}</p>}
-          <Button type="submit" variant="pine" size="lg" className="w-full" disabled={busy || !password}>
+          <Button type="submit" variant="pine" size="lg" className="w-full" disabled={busy}>
             {busy ? <Loader2 className="size-4 animate-spin" aria-hidden /> : <Lock className="size-4" aria-hidden />}
             Sign in
           </Button>
@@ -307,7 +316,10 @@ export function LogPage() {
                 {suggestions.map((s) => (
                   <li key={s.id}>
                     <button type="button"
-                            onClick={() => { setPicked({ id: s.id, name: s.name, county: s.county }); setQuery(""); }}
+                            onClick={() => {
+                              setPicked({ id: s.id, name: s.name, county: s.county });
+                              setQuery(""); setLogError("");
+                            }}
                             className="w-full rounded-lg bg-inset px-3 py-2 text-left text-sm hover:bg-card">
                       <span className="block font-semibold">{s.name}</span>
                       <span className="text-xs text-muted">{s.county}</span>
@@ -340,10 +352,11 @@ export function LogPage() {
                     placeholder="Anything you'll want to remember." />
         </div>
 
-        <Button variant="pine" size="lg" className="w-full" onClick={onLog} disabled={!picked || busy}>
+        <Button variant="pine" size="lg" className="w-full" onClick={onLog} disabled={busy}>
           {busy ? <Loader2 className="size-4 animate-spin" aria-hidden /> : <CheckCircle className="size-4" aria-hidden />}
           Log it
         </Button>
+        {logError && <p className="text-sm font-semibold text-critical">{logError}</p>}
         {flash && <p className="text-sm font-semibold text-positive">{flash}</p>}
 
         {issuedCode && (
