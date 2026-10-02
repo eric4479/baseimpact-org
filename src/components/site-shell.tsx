@@ -12,7 +12,6 @@ const NAV: Array<{ to: Path; label: string; icon: typeof Heart }> = [
   { to: "/partners", label: "Partners", icon: Building2 },
   { to: "/about", label: "About", icon: Shield },
   { to: "/guide", label: "Guide", icon: Compass },
-  { to: "/give", label: "Give", icon: Heart },
   { to: "/volunteer", label: "Volunteer", icon: Zap },
 ];
 

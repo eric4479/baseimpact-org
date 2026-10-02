@@ -28,7 +28,7 @@ const ORG_SCHEMA = {
       name: "Can I donate goods or money?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. Cash donations are directed to partner organizations until our 501(c)(3) is approved. Goods can be coordinated through the give page.",
+        text: "Not yet. Base Impact is a pre-filing nonprofit and is not registered to solicit contributions in Florida, so we are not accepting donations of money or goods at this time. See the how-to-help page for what does help.",
       },
     },
   ],

@@ -121,10 +121,9 @@ export function ImpactPage() {
         <div className="space-y-2">
           <h3 className="font-display text-xl font-semibold">LifePointe Ministries</h3>
           <p className="text-muted">
-            We volunteered at a recent rummage sale and fundraising activities to help fund their
-            efforts providing clothing, food, and shelter to people in our community. Events like
-            that are how small churches keep their pantry shelves and ministry going — and they
-            always need more hands.
+            We spent a Saturday helping their team sort and hand out clothing and food at a
+            community event. Work like that is how small churches keep their pantry shelves and
+            ministry going — and they always need more hands.
           </p>
         </div>
 

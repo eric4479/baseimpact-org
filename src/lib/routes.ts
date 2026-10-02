@@ -61,10 +61,14 @@ export const ROUTE_META: RouteMeta[] = [
       "Give a few hours at a care-package day, at a community garden, or helping a small church with tech.",
   },
   {
-    path: "/give",
-    title: "Ways to give",
+    // NOT "Ways to give". Before FDACS approval under Ch. 496, F.S. this organisation
+    // must not solicit contributions, so neither the page nor its address asks for
+    // anything. The old /give path 301s here so existing links still land somewhere
+    // sensible.
+    path: "/how-to-help",
+    title: "How to help",
     description:
-      "Give directly to partners, donate goods, or give time. Pre-filing nonprofit — donations route to partners.",
+      "Ways to help Base Impact that do not involve giving money — volunteering, partnering, and keeping the directory accurate.",
   },
   {
     path: "/impact",

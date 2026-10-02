@@ -139,13 +139,22 @@ export function TermsPage() {
         </div>
 
         <div>
-          <h2 className="font-display text-xl font-semibold">9. Donations</h2>
+          <h2 className="font-display text-xl font-semibold">9. Donations and solicitation</h2>
           <p className="mt-2 text-sm leading-relaxed text-muted">
-            Base Impact Inc. is not yet recognized as tax-exempt under Section 501(c)(3).{" "}
-            <strong>Contributions are not tax-deductible at this time.</strong> Where we point you to
-            a partner organization, your donation is made to that organization, is governed by their
-            terms and policies, and any receipt or deductibility question is between you and them. We
-            do not process payments on this site and do not collect card or bank information.
+            Base Impact Inc. is not yet recognized as tax-exempt under Section 501(c)(3), and{" "}
+            <strong>we are not currently registered to solicit contributions in Florida</strong>{" "}
+            under Chapter 496, Florida Statutes. Until that registration is approved, we do not
+            solicit and cannot accept contributions of money or goods.
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-muted">
+            Anything on this site that looks like a request for money is not one — we have removed
+            those pages while we complete registration. We do not process payments on this site and
+            do not collect card or bank information. If you are ever asked for money on our behalf
+            before we announce otherwise, it is not from us.
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-muted">
+            This page will be updated when our registration is approved and our tax-exempt status
+            is recognized.
           </p>
         </div>
 

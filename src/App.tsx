@@ -4,7 +4,7 @@ import { AboutPage } from "@/pages/about";
 import { ContactPage } from "@/pages/contact";
 import { DirectoryPage } from "@/pages/directory";
 import { FeedbackPage } from "@/pages/feedback";
-import { GivePage } from "@/pages/give";
+import { HowToHelpPage } from "@/pages/how-to-help";
 import { GuidePage } from "@/pages/guide";
 import { ImpactPage } from "@/pages/impact";
 import { JoinPage } from "@/pages/join";
@@ -28,8 +28,8 @@ export default function App() {
       <AboutPage />
     ) : path === "/feedback" ? (
       <FeedbackPage />
-    ) : path === "/give" ? (
-      <GivePage />
+    ) : path === "/how-to-help" ? (
+      <HowToHelpPage />
     ) : path === "/guide" ? (
       <GuidePage />
     ) : path === "/volunteer" ? (

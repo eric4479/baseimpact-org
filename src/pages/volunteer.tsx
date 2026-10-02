@@ -83,18 +83,9 @@ export function VolunteerPage() {
               <li>Research and verify local resources for the directory</li>
               <li>Call partners and confirm their hours</li>
               <li>Help update this site and keep information current</li>
-              <li>Help with fundraising events</li>
-            </ul>
+              </ul>
           </article>
 
-          <article className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)]">
-            <h3 className="font-display text-lg font-semibold">Fundraising events</h3>
-            <p className="mt-2 text-sm text-muted">
-              Help organize and run rummage sales, food drives, and community fundraisers. We
-              recently partnered with LifePointe Ministries on a rummage sale — that model works and
-              we want to do more of it.
-            </p>
-          </article>
         </div>
       </section>
 

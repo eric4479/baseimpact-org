@@ -16,6 +16,9 @@
 # 404.html with a real 404 status, rather than the old behaviour where every junk
 # URL returned 200 with the homepage (a 'soft 404' that pollutes search results).
 
-# /donate was a thin duplicate of /give with no inbound links. A 301 consolidates the
-# two so search engines index one page instead of two competing ones.
-/donate          /give           301
+# /donate and /give both pointed at giving. Neither is appropriate while the
+# organisation is unregistered with FDACS under Ch. 496, F.S., so both now 301 to the
+# replacement page. /donate points straight at the destination rather than via /give,
+# so nobody walks a two-hop redirect chain.
+/donate          /how-to-help    301
+/give            /how-to-help    301

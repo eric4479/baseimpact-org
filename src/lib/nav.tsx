@@ -8,7 +8,7 @@ export type Path =
   | "/partners"
   | "/about"
   | "/feedback"
-  | "/give"
+  | "/how-to-help"
   | "/guide"
   | "/volunteer"
   | "/impact"
@@ -26,7 +26,7 @@ const PATHS: Path[] = [
   "/partners",
   "/about",
   "/feedback",
-  "/give",
+  "/how-to-help",
   "/guide",
   "/volunteer",
   "/impact",

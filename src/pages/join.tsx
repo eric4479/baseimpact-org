@@ -25,10 +25,10 @@ const ROUTES: Array<{ label: string; desc: string; to?: Path; cta: string; exter
     cta: "Register your organization →",
   },
   {
-    label: "I want to give",
-    desc: "Money, goods, or time — pick what you can.",
-    to: "/give",
-    cta: "Ways to give →",
+    label: "I want to help",
+    desc: "Volunteer, partner, or keep the directory accurate — no money involved.",
+    to: "/how-to-help",
+    cta: "How to help →",
   },
   {
     label: "I want to join the board",
