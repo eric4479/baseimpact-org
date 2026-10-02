@@ -41,6 +41,20 @@ export const SOCIALS: Social[] = [
     blurb: "Day-to-day updates, volunteer calls, and what we are working on.",
     icon: "x",
   },
+  {
+    name: "Facebook",
+    // The readable vanity URL, set on the Page 2026-10-02. It resolves to the same
+    // page as profile.php?id=61594451750493, which is what the URL used to be before
+    // the username existed.
+    //
+    // Worth knowing: Facebook can reclaim a Page username for inactivity. The
+    // profile.php form cannot be taken away. If this link ever stops resolving, that
+    // is the likely cause and the numeric URL is the fallback.
+    handle: "@baseimpactorg",
+    url: "https://www.facebook.com/baseimpactorg",
+    blurb: "The same updates, and where most of our neighbours already are.",
+    icon: "facebook",
+  },
 ];
 
 /**
@@ -50,4 +64,4 @@ export const SOCIALS: Social[] = [
  * would either 404 or land on a stranger's account. These render as plain text so the
  * page stays honest about what is and is not live yet.
  */
-export const PENDING: string[] = ["Facebook", "Instagram"];
+export const PENDING: string[] = ["Instagram"];

@@ -4,9 +4,30 @@
   "main": "src/index.ts",
   "compatibility_date": "2026-09-01",
   "compatibility_flags": ["nodejs_compat"],
+
+  // Pinned deliberately. This login has three Cloudflare accounts attached, and
+  // without an explicit account_id every wrangler command fails with "More than one
+  // account available but unable to select one in non-interactive mode" unless
+  // CLOUDFLARE_ACCOUNT_ID is exported first. Pinning it means `wrangler deploy` and
+  // `wrangler d1 execute` just work, and cannot be pointed at the wrong account by a
+  // stale environment variable. This is Eric@douglaspc.com's account, the one that
+  // owns the baseimpact.org zone and the baseimpact-org Pages project.
+  "account_id": "7e551880aa7a915a78c9b0887630b621",
+
   "observability": {
     "enabled": true
   },
+
+  // The referral log. This is the denominator of the connected referral rate, so it
+  // is a hard dependency of the /log page and the /api/referrals endpoints.
+  "d1_databases": [
+    {
+      "binding": "REFERRALS",
+      "database_name": "baseimpact-referrals",
+      "database_id": "b6ce687d-5e9f-4f7b-b58e-c90e56545663"
+    }
+  ],
+
   "routes": [
     { "pattern": "baseimpact.org/api/*", "zone_name": "baseimpact.org" }
   ]

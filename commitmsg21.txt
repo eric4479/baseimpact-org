@@ -1,0 +1,83 @@
+Start the referral log: D1, Worker endpoints, and a phone-first /log page
+
+This is the denominator of the connected referral rate. Nothing else in the project can
+produce it, because only Base Impact knows who it referred, and without it there is no
+rate to report -- only a count of people who happened to say something nice. So it is
+built first and it is built to be filled in fast.
+
+SCHEMA (worker-form-handler/schema/001_referrals.sql, applied to D1 baseimpact-referrals)
+
+Three decisions worth stating, because each one is a guard against a number that
+flatters us:
+
+  * No personal data. A person is an opaque `person_ref` if one is needed at all --
+    never a name, phone, or address. The people being referred are often in a bad
+    moment; a leaked log of who asked for food assistance is a real harm and this
+    table cannot cause it.
+
+  * Three outcomes, not two. `unknown` is the default and is a real state. People who
+    got help are far likelier to come back and say so than people who were turned
+    away, so folding silence into either column bends the number in whichever
+    direction we chose. Keeping unknown separate is what stops the rate being fiction.
+
+  * resource_name is denormalized, not just resource_id. Listings get renamed, merged,
+    or dropped. A log pointing only at a row that no longer exists cannot answer
+    "which referral did not connect", which is the most useful thing it produces.
+
+BUG FOUND AND FIXED IN THE SCHEMA: SUM() over zero rows is NULL, not 0, so the stats
+view returned nulls on an empty table -- and an empty table is exactly the state this
+launches in. The page would have rendered "null" on day one. Every count is now
+COALESCE(...,0), with a comment so nobody simplifies it away.
+
+BUG FOUND AND FIXED IN THE WORKER: it read `env` at module scope
+(`const TURNSTILE_SECRET = env.TURNSTILE_SECRET_KEY`). `env` only exists inside the
+fetch handler in Workers, so that is a ReferenceError at load -- the deploy would look
+fine and every request would fail. All bindings and secrets are now read inside the
+handler. The dead `logToR2` helper is gone: it referenced an R2 binding that was never
+declared, so it could only ever no-op.
+
+WORKER (deployed, route baseimpact.org/api/*)
+
+  POST /api/referrals/login   password -> HttpOnly session cookie, 90 days
+  POST /api/referrals/logout
+  GET  /api/referrals         stats + recent rows
+  POST /api/referrals         log one referral
+  PATCH /api/referrals/:id    set the outcome
+
+Auth is one shared password held as a Worker secret, compared in constant time, with
+the session cookie carrying an expiry and an HMAC of that expiry -- so the cookie
+cannot be forged without the password and the password is never stored client-side.
+Login attempts are rate limited far tighter than the forms (8 per 15 min), because it
+is the only password on the site.
+
+Until LOG_PASSWORD is set, every referral endpoint answers 503 "Logging is not
+configured yet." That is deliberate: the log fails closed, never open.
+
+PAGE (/log, noindex, absent from the sitemap)
+
+One screen. Pick the resource from the directory itself (a picker, not typing), the
+channel defaults to phone, the note is optional, then Log it. The session lasts 90 days
+so the password is a once-a-season event, not a per-referral one -- a log that takes a
+minute to fill in does not get filled in on a phone call.
+
+The rate is always printed WITH its coverage, and unknown sits next to the two decided
+states. A rate of 100% off two replies is not a success rate, and the moment that
+number can be screenshotted without its coverage it ends up in a grant application
+meaning something it does not mean.
+
+BUG FOUND AND FIXED IN THE PAGE: the first version had no error path. If the API
+failed for anything other than 401 the component stayed in its initial state and span
+forever. There is now an explicit `error` phase with a Retry that names the actual
+failure. It deliberately does NOT fall back to the password box -- inviting someone to
+type a password into a screen that cannot check it is worse than an honest error.
+
+ALSO: account_id is pinned in worker-form-handler/wrangler.jsonc. This login has three
+Cloudflare accounts attached, and without it every wrangler command fails with "More
+than one account available" unless CLOUDFLARE_ACCOUNT_ID is exported first.
+
+Verified: worker deployed and answering on the live route (/api/nope now returns the
+worker's own JSON 404 rather than falling through to Pages); the site is unaffected.
+Audit: 0 axe violations across 60 route/viewport combinations, 0 horizontal overflow,
+0 blank pages. Build clean, validator 80/80, 15 prerendered routes.
+
+Not done yet: LOG_PASSWORD is unset, so the log is live but closed.

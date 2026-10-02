@@ -102,6 +102,14 @@ export const ROUTE_META: RouteMeta[] = [
       "What Base Impact collects, how we use it, and how to request deletion.",
   },
   {
+    // Internal, password gated, and deliberately NOT in public/sitemap.xml.
+    // `noindex` also makes the prerenderer emit "noindex, nofollow" for this route.
+    path: "/log",
+    title: "Referral log",
+    description: "Internal referral log.",
+    noindex: true,
+  },
+  {
     path: "/socials",
     title: "Follow Base Impact",
     description:
