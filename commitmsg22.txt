@@ -1,0 +1,65 @@
+Add the public connect page: reference codes, outcomes, and private evidence
+
+The referral log was only half the measurement. It counts referrals made -- the
+denominator. This adds the numerator: the person who was referred says whether it
+actually worked, without Base Impact having to chase anyone.
+
+REFERENCE CODES
+
+Logging a referral now issues a 6-character code, shown large on /log so it can be read
+aloud before the call ends. The alphabet excludes 0/O, 1/I/L and U/V because these get
+read over a phone and written by hand, and a mistyped code does not surface as an error
+-- it becomes a referral that silently never gets an outcome, which later looks like a
+hole in the rate rather than a mistake.
+
+The column carries a UNIQUE index and the insert retries on collision, so "two referrals
+share a code" cannot happen quietly.
+
+WHY THIS NEEDS NO PERSONAL DATA
+
+The code identifies a referral, not a person. There is no name, phone, or email on the
+page, and the lookup returns only the three fields needed to confirm "yes, that was me":
+the resource, the county, and the date. No notes, no channel, nothing about the person.
+
+CONNECT PAGE (/connect)
+
+Unlisted on purpose -- not in the nav, not in the footer, not in the sitemap, noindex --
+because the code is the credential and the page has no business in search results. It
+accepts ?code= so a link can be handed over without retyping.
+
+Two answers, not three. A person can say it worked or it did not; they cannot answer
+"unknown", because that is already what silence means. Allowing "unknown" would let
+non-response be recorded as a considered answer. The wording says plainly that "no" is
+as useful as "yes", because that is how a closed or wrong listing gets found.
+
+PHOTOS: PRIVATE EVIDENCE, NEVER CONTENT
+
+  * Stored in a separate R2 bucket with no public URL and no custom domain. Verified:
+    the raw object path 404s and /api/evidence/<id> returns 401 without a log session.
+  * The object key is a random UUID, never the reference code, so the storage path
+    cannot be derived from anything a person might share.
+  * An explicit confirmation is required, and the upload is refused without it.
+  * Only image types, capped at 10 MB.
+  * The page asks for the place or the food and says plainly not to include faces --
+    including the person's own -- because a photo of a neighbour at a pantry identifies
+    them as needing help.
+
+/log NOW SHOWS
+
+  * The issued code, large, in its own panel -- read it out before the call ends.
+  * Each row's code, and whether the outcome was self-reported by the person or recorded
+    by you. A self-reported answer is someone's word, not something verified, and the
+    rate should never blur the two.
+  * A marker when a photo is attached.
+
+Schema: added ref_code (unique), photo_key, self_reported, submitted_at to referrals.
+
+Verified end to end against the deployed Worker: lookup by code (case-insensitive),
+wrong code and malformed code both refused, outcome submission updating the row and
+setting self_reported, 'unknown' refused from the public form, photo refused without
+consent, non-image refused, photo stored and the metric reflecting the change. Test data
+and the test R2 object were deleted afterwards; the table is back to 0 rows with the
+sequence reset.
+
+Audit: 0 axe violations, 0 horizontal overflow, 0 blank pages across 16 routes x 4
+viewports. Build clean, validator 80/80.

@@ -40,6 +40,9 @@ type Row = {
   county: string | null;
   channel: string;
   outcome: string;
+  ref_code: string | null;
+  self_reported: number;
+  has_photo: number;
 };
 
 const CHANNELS = [
@@ -79,6 +82,13 @@ export function LogPage() {
   const [channel, setChannel] = useState("phone");
   const [note, setNote] = useState("");
   const [flash, setFlash] = useState("");
+  /**
+   * The code handed out for the referral just logged. It is held here, large and
+   * separate from the toast, because its whole job is to be read aloud on the phone
+   * before the call ends -- once the person hangs up without it, that referral can
+   * never be matched to an outcome and quietly becomes an `unknown` forever.
+   */
+  const [issuedCode, setIssuedCode] = useState("");
 
   const load = useCallback(async () => {
     try {
@@ -142,9 +152,9 @@ export function LogPage() {
     });
     setBusy(false);
     if (r.ok) {
+      setIssuedCode(String(r.body?.ref_code ?? ""));
       setFlash(`Logged: ${picked.name}`);
       setPicked(null); setQuery(""); setNote(""); setChannel("phone");
-      setTimeout(() => setFlash(""), 2500);
       void load();
     }
   };
@@ -335,6 +345,27 @@ export function LogPage() {
           Log it
         </Button>
         {flash && <p className="text-sm font-semibold text-positive">{flash}</p>}
+
+        {issuedCode && (
+          <div className="rounded-xl bg-tint-positive p-4 text-center">
+            <p className="text-xs font-bold uppercase tracking-wide text-muted">
+              Read this to them before the call ends
+            </p>
+            <p className="mt-1 font-display text-3xl font-semibold tracking-[0.25em] text-body">
+              {issuedCode}
+            </p>
+            <p className="mt-2 text-xs text-muted">
+              They enter it at baseimpact.org/connect to say whether it worked.
+            </p>
+            <button
+              type="button"
+              onClick={() => setIssuedCode("")}
+              className="mt-2 text-sm font-semibold text-accent underline underline-offset-2"
+            >
+              Done
+            </button>
+          </div>
+        )}
       </section>
 
       {/* Outcomes. Three buttons, never two. */}
@@ -349,6 +380,21 @@ export function LogPage() {
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
                   <span className="font-semibold">{r.resource_name}</span>
                   <span className="text-xs text-muted">{r.referred_at} · {r.channel}</span>
+                </div>
+                <div className="mt-1 flex flex-wrap items-center gap-2 text-xs">
+                  {r.ref_code && (
+                    <span className="rounded-md bg-inset px-2 py-0.5 font-mono font-semibold tracking-wider text-body">
+                      {r.ref_code}
+                    </span>
+                  )}
+                  {/* Provenance matters: a self-reported answer is the person's word,
+                      not something we verified, and the rate should never blur the two. */}
+                  {r.self_reported ? (
+                    <span className="text-muted">they reported this</span>
+                  ) : (
+                    <span className="text-muted">you recorded this</span>
+                  )}
+                  {r.has_photo ? <span className="text-muted">· photo attached</span> : null}
                 </div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <button type="button" onClick={() => setOutcome(r.id, "connected")}

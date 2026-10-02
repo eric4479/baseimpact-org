@@ -11,6 +11,7 @@ import { JoinPage } from "@/pages/join";
 import { PrivacyPage } from "@/pages/privacy";
 import { SocialsPage } from "@/pages/socials";
 import { LogPage } from "@/pages/log";
+import { ConnectPage } from "@/pages/connect";
 import { TermsPage } from "@/pages/terms";
 import { HomePage } from "@/pages/home";
 import { PartnersPage } from "@/pages/partners";
@@ -43,6 +44,8 @@ export default function App() {
       <SocialsPage />
     ) : path === "/log" ? (
       <LogPage />
+    ) : path === "/connect" ? (
+      <ConnectPage />
     ) : path === "/privacy" ? (
       <PrivacyPage />
     ) : path === "/terms" ? (

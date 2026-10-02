@@ -28,6 +28,19 @@
     }
   ],
 
+  // Private evidence store for photos people send with an outcome.
+  //
+  // This bucket is deliberately NOT public and has no custom domain. Objects are
+  // written by the Worker and read only through an authenticated /log request. The
+  // whole point of the "private evidence" decision is that a photo of a neighbour
+  // at a food pantry is never a URL anyone can guess or share.
+  "r2_buckets": [
+    {
+      "binding": "EVIDENCE",
+      "bucket_name": "baseimpact-referral-evidence"
+    }
+  ],
+
   "routes": [
     { "pattern": "baseimpact.org/api/*", "zone_name": "baseimpact.org" }
   ]

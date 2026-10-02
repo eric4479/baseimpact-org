@@ -102,6 +102,16 @@ export const ROUTE_META: RouteMeta[] = [
       "What Base Impact collects, how we use it, and how to request deletion.",
   },
   {
+    // Reached only by a link handed to someone who was referred. Unlisted on purpose:
+    // not in the nav, not in the footer, not in the sitemap, and noindex here. The code
+    // is the credential, so this page should stay out of search results and out of
+    // casual traffic rather than being treated as a normal site page.
+    path: "/connect",
+    title: "How did it go?",
+    description: "Tell us whether the referral worked.",
+    noindex: true,
+  },
+  {
     // Internal, password gated, and deliberately NOT in public/sitemap.xml.
     // `noindex` also makes the prerenderer emit "noindex, nofollow" for this route.
     path: "/log",
