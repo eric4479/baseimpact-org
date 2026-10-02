@@ -77,6 +77,15 @@ export const ROUTE_META: RouteMeta[] = [
       "Real stories from Base Impact: travelers, veterans, new residents, and church partnerships.",
   },
   {
+    // Indexable on purpose. This is the clause the IRS, FDACS, and any funder will want
+    // to read, and a purpose statement that cannot be found by searching for it is not
+    // doing its job.
+    path: "/purpose",
+    title: "Corporate purpose",
+    description:
+      "The full purpose clause from the Articles of Incorporation of Base Impact Inc., a pre-filing Florida nonprofit.",
+  },
+  {
     path: "/about",
     title: "About Base Impact",
     description:

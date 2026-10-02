@@ -5,6 +5,7 @@ import { ContactPage } from "@/pages/contact";
 import { DirectoryPage } from "@/pages/directory";
 import { FeedbackPage } from "@/pages/feedback";
 import { HowToHelpPage } from "@/pages/how-to-help";
+import { PurposePage } from "@/pages/purpose";
 import { GuidePage } from "@/pages/guide";
 import { ImpactPage } from "@/pages/impact";
 import { JoinPage } from "@/pages/join";
@@ -30,6 +31,8 @@ export default function App() {
       <FeedbackPage />
     ) : path === "/how-to-help" ? (
       <HowToHelpPage />
+    ) : path === "/purpose" ? (
+      <PurposePage />
     ) : path === "/guide" ? (
       <GuidePage />
     ) : path === "/volunteer" ? (

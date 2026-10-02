@@ -136,21 +136,23 @@ export function AboutPage() {
         </div>
       </section>
 
+      {/*
+        This section used to hold a "Draft IRS purpose clause" with different wording from
+        the clause actually filed. Two purpose statements on one site, saying different
+        things, is exactly the kind of inconsistency a funder or a regulator notices — so
+        the draft is gone and this points at the one canonical statement instead.
+      */}
       <section className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)] sm:p-6">
-        <h2 className="font-display text-xl font-semibold">Draft IRS purpose clause</h2>
-        <p className="mt-3 rounded-xl bg-inset p-4 font-mono text-sm leading-relaxed text-body">
-          Base Impact Inc. is organized exclusively for charitable and educational purposes under
-          Section 501(c)(3) of the Internal Revenue Code. Specifically, the organization delivers
-          technical literacy instruction, digital navigation assistance for housing and employment,
-          direct resource referrals for under-resourced populations, environmental stewardship
-          support for community gardens, and free technology assistance to grassroots charitable and
-          faith-based entities.
+        <h2 className="font-display text-xl font-semibold">Corporate purpose</h2>
+        <p className="mt-3 text-sm text-muted">
+          The full purpose clause from our Articles of Incorporation is published word for
+          word, so anyone can read exactly what this corporation was organized to do.
         </p>
-        <p className="mt-2 text-xs text-muted">
-          Note: &quot;scientific purposes&quot; was removed from an earlier draft — it doesn&apos;t fit
-          what we do and could complicate the filing. Have a tax professional or attorney review
-          this before you submit.
-        </p>
+        <div className="mt-4">
+          <Button asChild variant="outline">
+            <Link to="/purpose">Read the full purpose statement →</Link>
+          </Button>
+        </div>
       </section>
 
       <p className="text-muted">
