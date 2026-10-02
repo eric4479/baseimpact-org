@@ -1,0 +1,36 @@
+Add a /socials page, and fix the footer links that ran together
+
+New /socials page, reachable from a "Follow us" link in the footer. It lists the accounts
+Base Impact actually owns, states the handle standard, and warns that other organisations
+use the name.
+
+What is on it now is one account, because one account exists. x.com/baseimpactorg is ours.
+The other platforms are listed as plain text with no links, under "Not set up yet" -- a
+profile URL for an account that has not been claimed would either 404 or land on a
+stranger, which is exactly the failure mode this site is built to avoid.
+
+Handle standard is baseimpactorg, and the shorter baseimpact is NOT available:
+
+  x.com/baseimpactorg        ours
+  x.com/baseimpact           TAKEN by ImpactBase, a pre-seed incubator
+  instagram.com/baseimpact   TAKEN by baseimpact, UK sports science, 6 followers
+  instagram.com/baseimpactorg  free -- "Profile isn't available"
+  tiktok, youtube, linkedin, github, bluesky  free on both handles
+  facebook, threads           could not be determined from outside (login wall)
+
+Facebook and Threads could not be checked past their login walls. They are left out of the
+page entirely rather than guessed at.
+
+The account list lives in src/lib/socials.ts, one line per account, and feeds the page, the
+footer link, and the Organization schema's sameAs. Claiming a platform is a one-line change
+there; a comment in that file states the rule that only accounts we control belong in it.
+
+ALSO FIXED, a pre-existing bug this work surfaced. The four footer links were inline-block
+with mt-1, and margin-top cannot break an inline flow, so they rendered as one run-on line:
+"Privacy policyTerms & disclaimerFollow usShare feedback". They are block now and each sits
+on its own line, 24px apart -- which also clears WCAG 2.2 SC 2.5.8, since adjacent targets
+with no gap and no spacing fail it. This was already broken with three links before "Follow
+us" was added; the fourth just made it longer.
+
+Audit: 0 axe violations across 56 route/viewport combinations, 0 horizontal overflow, 0
+blank pages. Build clean, validator 80/80, 14 prerendered routes.

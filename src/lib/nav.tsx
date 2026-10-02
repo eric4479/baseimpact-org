@@ -15,7 +15,8 @@ export type Path =
   | "/join"
   | "/contact"
   | "/privacy"
-  | "/terms";
+  | "/terms"
+  | "/socials";
 
 const PATHS: Path[] = [
   "/",
@@ -31,6 +32,7 @@ const PATHS: Path[] = [
   "/contact",
   "/privacy",
   "/terms",
+  "/socials",
 ];
 
 function readPath(): Path {

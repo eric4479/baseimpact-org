@@ -122,13 +122,16 @@ export function SiteShell({ children }: { children: ReactNode }) {
           </div>
           <div className="sm:text-right">
             <p>© {new Date().getFullYear()} Base Impact Inc.</p>
-            <Link to="/privacy" className="mt-1 inline-block text-on-fill underline-offset-2 hover:underline">
+            <Link to="/privacy" className="mt-1 block text-on-fill underline-offset-2 hover:underline">
               Privacy policy
             </Link>
-            <Link to="/terms" className="mt-1 inline-block text-on-fill underline-offset-2 hover:underline">
+            <Link to="/terms" className="mt-1 block text-on-fill underline-offset-2 hover:underline">
               Terms &amp; disclaimer
             </Link>
-            <Link to="/feedback" className="mt-1 inline-block text-on-fill underline-offset-2 hover:underline">
+            <Link to="/socials" className="mt-1 block text-on-fill underline-offset-2 hover:underline">
+              Follow us
+            </Link>
+            <Link to="/feedback" className="mt-1 block text-on-fill underline-offset-2 hover:underline">
               Share feedback
             </Link>
           </div>

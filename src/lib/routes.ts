@@ -102,6 +102,12 @@ export const ROUTE_META: RouteMeta[] = [
       "What Base Impact collects, how we use it, and how to request deletion.",
   },
   {
+    path: "/socials",
+    title: "Follow Base Impact",
+    description:
+      "Where to find Base Impact online. Our handle is baseimpactorg on every platform.",
+  },
+  {
     path: "/terms",
     title: "Terms of Use & Directory Disclaimer",
     description:

@@ -9,6 +9,7 @@ import { GuidePage } from "@/pages/guide";
 import { ImpactPage } from "@/pages/impact";
 import { JoinPage } from "@/pages/join";
 import { PrivacyPage } from "@/pages/privacy";
+import { SocialsPage } from "@/pages/socials";
 import { TermsPage } from "@/pages/terms";
 import { HomePage } from "@/pages/home";
 import { PartnersPage } from "@/pages/partners";
@@ -37,6 +38,8 @@ export default function App() {
       <JoinPage />
     ) : path === "/contact" ? (
       <ContactPage />
+    ) : path === "/socials" ? (
+      <SocialsPage />
     ) : path === "/privacy" ? (
       <PrivacyPage />
     ) : path === "/terms" ? (
