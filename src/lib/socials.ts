@@ -43,12 +43,15 @@ export const SOCIALS: Social[] = [
   },
   {
     name: "Facebook",
-    // The profile.php form is the address Facebook actually serves today. A readable
-    // vanity URL (facebook.com/baseimpactorg) can be set once the Page has a username,
-    // and when it is, this line changes and nothing else does. Until then this is the
-    // link that works, and a link that works beats a pretty one that 404s.
-    handle: "Base Impact",
-    url: "https://www.facebook.com/profile.php?id=61594451750493",
+    // The readable vanity URL, set on the Page 2026-10-02. It resolves to the same
+    // page as profile.php?id=61594451750493, which is what the URL used to be before
+    // the username existed.
+    //
+    // Worth knowing: Facebook can reclaim a Page username for inactivity. The
+    // profile.php form cannot be taken away. If this link ever stops resolving, that
+    // is the likely cause and the numeric URL is the fallback.
+    handle: "@baseimpactorg",
+    url: "https://www.facebook.com/baseimpactorg",
     blurb: "The same updates, and where most of our neighbours already are.",
     icon: "facebook",
   },
