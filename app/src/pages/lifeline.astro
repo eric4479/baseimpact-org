@@ -1,0 +1,226 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config/region';
+
+export const prerender = true;
+---
+
+<Base
+  title={`Lifeline & the "free government phone" question — ${SITE.name}`}
+  description="The Affordable Connectivity Program ended in 2024. Lifeline is the real program. Here's what's true, what's a scam, and how to actually apply."
+>
+  <article class="mx-auto max-w-4xl px-4 py-16">
+    <nav class="mb-8 text-sm text-slate-500" aria-label="Breadcrumb">
+      <a href="/" class="underline hover:text-emerald-700">← Back to Find Help</a>
+    </nav>
+
+    <h1 class="mb-6 text-4xl font-bold text-slate-900 md:text-5xl">
+      Lifeline &amp; the "free government phone" question
+    </h1>
+
+    <p class="mb-8 text-lg leading-relaxed text-slate-600">
+      You've probably seen ads for a "free government phone" or a "$30 internet discount." Some of
+      that is real, some of it ended, and some of it is a scam. Here's the honest version.
+    </p>
+
+    <!-- The two programs -->
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Two programs. One is over.</h2>
+
+      <div class="grid gap-6 md:grid-cols-2">
+        <div class="rounded-2xl border-2 border-emerald-200 bg-emerald-50 p-6">
+          <div class="mb-2 inline-block rounded-full bg-emerald-600 px-3 py-1 text-xs font-bold text-white uppercase">
+            Active
+          </div>
+          <h3 class="mb-2 text-xl font-bold text-slate-900">Lifeline</h3>
+          <p class="mb-3 text-sm leading-relaxed text-slate-700">
+            A federal program that gives <strong>$9.25/month</strong> off your phone or internet bill
+            — <strong>$34.25/month</strong> if you live on qualifying Tribal lands.
+          </p>
+          <ul class="space-y-1 text-sm text-slate-700">
+            <li>• Run by the FCC and USAC</li>
+            <li>• You apply through a participating carrier</li>
+            <li>• You can check eligibility at lifelinesupport.org</li>
+            <li>• <strong>It is free to apply. Always.</strong></li>
+          </ul>
+        </div>
+
+        <div class="rounded-2xl border-2 border-slate-200 bg-slate-50 p-6">
+          <div class="mb-2 inline-block rounded-full bg-slate-400 px-3 py-1 text-xs font-bold text-white uppercase">
+            Ended June 1, 2024
+          </div>
+          <h3 class="mb-2 text-xl font-bold text-slate-900">ACP <span class="text-base font-normal text-slate-500">(Affordable Connectivity Program)</span></h3>
+          <p class="mb-3 text-sm leading-relaxed text-slate-700">
+            This was a <strong>$30/month</strong> internet discount plus a one-time device credit.
+            <strong>It ran out of funding and ended on June 1, 2024.</strong> 23 million households
+            lost the benefit.
+          </p>
+          <ul class="space-y-1 text-sm text-slate-700">
+            <li>• The FCC has warned about sites still advertising it</li>
+            <li>• If a site says you can "sign up for ACP," it is outdated or misleading</li>
+            <li>• There is no current replacement program</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- The scam warning -->
+    <section class="mb-12 rounded-2xl border-2 border-red-200 bg-red-50 p-6">
+      <h2 class="mb-3 text-2xl font-bold text-red-900">⚠️ How to spot a scam</h2>
+      <p class="mb-4 text-sm leading-relaxed text-red-900">
+        There are many websites that look official but exist to collect your information or charge
+        you for something that should be free. The FCC has issued a consumer advisory about this.
+      </p>
+      <div class="grid gap-4 md:grid-cols-2">
+        <div>
+          <h3 class="mb-2 font-bold text-red-900">🚩 Red flags</h3>
+          <ul class="space-y-2 text-sm text-red-900">
+            <li>• Asks you to <strong>pay a fee</strong> to apply — Lifeline is free</li>
+            <li>• Asks for your <strong>full Social Security number</strong> on a website</li>
+            <li>• Promises a "free phone" with no eligibility check</li>
+            <li>• Uses a URL that looks government-ish but isn't .gov</li>
+            <li>• Pressures you to "act now" or "claim your benefit"</li>
+            <li>• Advertises the ACP as if it's still available</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="mb-2 font-bold text-red-900">✅ What's legitimate</h3>
+          <ul class="space-y-2 text-sm text-red-900">
+            <li>• <strong>lifelinesupport.org</strong> — the official USAC site</li>
+            <li>• A <strong>known carrier's</strong> own Lifeline page (Verizon, T-Mobile, etc.)</li>
+            <li>• A <strong>local nonprofit</strong> that helps you apply for free</li>
+            <li>• <strong>211</strong> — they can connect you to a local enrollment helper</li>
+            <li>• Any service that never asks for money or your SSN</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- How to actually apply -->
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">How to apply for Lifeline</h2>
+      <ol class="space-y-4">
+        <li class="flex gap-4">
+          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-600 font-bold text-white">1</span>
+          <div>
+            <p class="font-semibold text-slate-800">Check if you qualify</p>
+            <p class="text-sm text-slate-600">
+              You qualify if your income is at or below 135% of the federal poverty guidelines, or if
+              you participate in SNAP, Medicaid, SSI, Federal Public Housing Assistance, or the
+              Veterans Pension and Survivors Benefit.
+            </p>
+          </div>
+        </li>
+        <li class="flex gap-4">
+          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-600 font-bold text-white">2</span>
+          <div>
+            <p class="font-semibold text-slate-800">Choose a carrier</p>
+            <p class="text-sm text-slate-600">
+              Lifeline is offered by many phone and internet companies. You can find participating
+              carriers in your area at <a href="https://www.lifelinesupport.org" target="_blank" rel="noopener noreferrer" class="text-emerald-700 underline">lifelinesupport.org</a>.
+            </p>
+          </div>
+        </li>
+        <li class="flex gap-4">
+          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-600 font-bold text-white">3</span>
+          <div>
+            <p class="font-semibold text-slate-800">Apply through the carrier</p>
+            <p class="text-sm text-slate-600">
+              The carrier will verify your eligibility and enroll you. You'll need to provide proof
+              of eligibility (like a benefits letter) and a form of ID. <strong>This is free.</strong>
+            </p>
+          </div>
+        </li>
+        <li class="flex gap-4">
+          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-600 font-bold text-white">4</span>
+          <div>
+            <p class="font-semibold text-slate-800">Use it every month</p>
+            <p class="text-sm text-slate-600">
+              To keep your Lifeline benefit, you must use your service at least once every 30 days.
+            </p>
+          </div>
+        </li>
+      </ol>
+
+      <div class="mt-6 rounded-xl bg-slate-100 p-4 text-sm text-slate-700">
+        <p class="font-semibold">Need help applying?</p>
+        <p>
+          Call the Lifeline Support Center at
+          <a href="tel:18002349473" class="font-semibold text-emerald-700 underline">1-800-234-9473</a>
+          (press 1 for English). You can also dial
+          <a href="tel:211" class="font-semibold text-emerald-700 underline">211</a>
+          and ask for a local organization that helps with Lifeline enrollment.
+        </p>
+      </div>
+    </section>
+
+    <!-- What Base Impact does -->
+    <section class="mb-12 rounded-2xl border border-slate-200 bg-white p-6">
+      <h2 class="mb-3 text-2xl font-bold text-slate-900">What we do — and don't do</h2>
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <h3 class="mb-2 font-bold text-emerald-800">✅ We do</h3>
+          <ul class="space-y-1 text-sm text-slate-700">
+            <li>• Tell you the truth about what programs exist</li>
+            <li>• Link you to the official, legitimate resources</li>
+            <li>• Help you understand the eligibility rules</li>
+            <li>• Connect you with local organizations that can help</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="mb-2 font-bold text-red-800">❌ We don't</h3>
+          <ul class="space-y-1 text-sm text-slate-700">
+            <li>• Enroll you in Lifeline or any program</li>
+            <li>• Charge you any fee for anything</li>
+            <li>• Take your Social Security number or documents</li>
+            <li>• Accept money from carriers or providers</li>
+            <li>• Recommend one company over another</li>
+          </ul>
+        </div>
+      </div>
+      <p class="mt-4 text-sm text-slate-600">
+        If someone asks you to pay for help applying for Lifeline, that's a scam. Walk away.
+      </p>
+    </section>
+
+    <!-- Other help -->
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Other ways to get help with phone &amp; internet</h2>
+      <ul class="space-y-3">
+        <li class="flex gap-3">
+          <span class="text-emerald-600" aria-hidden="true">✔</span>
+          <span><strong>211</strong> — dial <a href="tel:211" class="text-emerald-700 underline">211</a> for local help with phone, internet, and other needs</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="text-emerald-600" aria-hidden="true">✔</span>
+          <span><strong>Your local library</strong> — many libraries help people apply for Lifeline and other benefits</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="text-emerald-600" aria-hidden="true">✔</span>
+          <span><strong>Community action agencies</strong> — they often have staff who help with benefit enrollment</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="text-emerald-600" aria-hidden="true">✔</span>
+          <span><strong>Your carrier's own website</strong> — search for "[carrier name] Lifeline" to find their official page</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Sources -->
+    <section class="border-t border-slate-200 pt-8">
+      <h2 class="mb-3 text-lg font-bold text-slate-900">Sources</h2>
+      <ul class="space-y-1 text-sm text-slate-600">
+        <li>
+          <a href="https://www.fcc.gov/lifeline-consumers" target="_blank" rel="noopener noreferrer" class="underline">FCC — Lifeline Support for Affordable Communications</a>
+        </li>
+        <li>
+          <a href="https://www.fcc.gov/acp" target="_blank" rel="noopener noreferrer" class="underline">FCC — Affordable Connectivity Program (ended)</a>
+        </li>
+        <li>
+          <a href="https://www.lifelinesupport.org" target="_blank" rel="noopener noreferrer" class="underline">USAC — Lifeline Support</a>
+        </li>
+      </ul>
+      <p class="mt-6 text-xs text-slate-500">{SITE.legalNotice}</p>
+    </section>
+  </article>
+</Base>

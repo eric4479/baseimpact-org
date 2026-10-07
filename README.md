@@ -67,12 +67,12 @@ and sober homes must be FL-certified (F.S. § 397.487) before they appear.
 
 ## Status
 
-- ✅ Astro project scaffolded, builds clean, verified end-to-end
-- ✅ 5 of 19 listings are real, verified partners (No One Hungry, LifePointe Ministries,
-  Under The Bridge Ministries, The Rock Church FL, First Christian Church Titusville)
+- ✅ Astro project scaffolded, builds clean, **27/27 DOM tests passing**
+- ✅ **28 verified listings** across 6 categories — 0 placeholders remaining
+- ✅ **Listing Policy** + **Lifeline debunk page** written and linked in the nav
+- ✅ **Distance sorting** (ZIP-first, in-browser, privacy-safe) + population filters
 - ✅ Form endpoint validated: 200 on success, 400 on bad input, 405 on wrong method, honeypot works
 - ✅ Donation page with Zeffy integration live
 - ✅ Grants page with fiscal sponsor info live
 - ✅ FDACS registration #CH85670 displayed
-- ⬜ Replace the 10 `[SAMPLE]` placeholders with verified local organizations
 - ⬜ Wire the submission endpoint to storage (D1 / KV / email forwarding)

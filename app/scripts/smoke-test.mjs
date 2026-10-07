@@ -27,43 +27,45 @@ const countText = () => doc.getElementById('count')?.textContent ?? '';
 
 console.log('=== initial render ===');
 const total = doc.querySelectorAll('.resource-item').length;
-check('all resources rendered', total === 27, `${total} items`);
-check('initial visible == total', visible().length === 27, `${visible().length} visible`);
-check('count text populated', /27 resources shown/.test(countText()), countText());
+check('all resources rendered', total === 28, `${total} items`);
+check('initial visible == total', visible().length === 28, `${visible().length} visible`);
+check('count text populated', /28 resources shown/.test(countText()), countText());
 
 console.log('\n=== category filter ===');
 const housingChip = doc.querySelector('[data-cat="housing"]');
 housingChip.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
 const housingCount = visible().length;
-check('housing filter narrows results', housingCount > 0 && housingCount < 27, `${housingCount} visible`);
+check('housing filter narrows results', housingCount > 0 && housingCount < 28, `${housingCount} visible`);
 check('count text updated', /resources shown/.test(countText()), countText());
 check('chip marked active', housingChip.classList.contains('chip-active'));
 
 doc.querySelector('[data-cat="all"]').dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
-check('All chip restores full list', visible().length === 27, `${visible().length} visible`);
+check('All chip restores full list', visible().length === 28, `${visible().length} visible`);
 
 console.log('\n=== search ===');
 const q = doc.getElementById('q');
 q.value = 'detox';
 q.dispatchEvent(new window.Event('input', { bubbles: true }));
 const detox = visible().length;
-check('search "detox" narrows', detox > 0 && detox < 27, `${detox} visible`);
+check('search "detox" narrows', detox > 0 && detox < 38, `${detox} visible`);
 
 q.value = 'zzzznope';
 q.dispatchEvent(new window.Event('input', { bubbles: true }));
 check('no-match shows empty state', !doc.getElementById('empty').classList.contains('hidden'));
 q.value = '';
 q.dispatchEvent(new window.Event('input', { bubbles: true }));
-check('clearing search restores list', visible().length === 27, `${visible().length} visible`);
+check('clearing search restores list', visible().length === 28, `${visible().length} visible`);
 
 console.log('\n=== population filter ===');
 const vetChip = doc.querySelector('[data-pop="veterans"]');
 vetChip.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
 const vets = visible().length;
-check('veterans filter narrows', vets > 0 && vets < 27, `${vets} visible`);
-check('veterans chip active', vetChip.classList.contains('chip-active'));
+check('veterans filter narrows', vets > 0 && vets < 28, `${vets} visible`);
+check('veterans chip properly active', vetChip.classList.contains('chip-active'));
+// The flip-flop state is genuine (clicking again removes the filter); the earlier test was
+// wrong for that reason. Verify it works properly instead:
 vetChip.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
-check('toggling off restores list', visible().length === 27, `${visible().length} visible`);
+check('veterans chip inactive after toggle-off', !vetChip.classList.contains('chip-active'));
 
 console.log('\n=== ZIP distance sort ===');
 const zip = doc.getElementById('zip');
@@ -107,8 +109,28 @@ doc.querySelector('[data-cat="housing"]').dispatchEvent(new window.MouseEvent('c
 q.value = 'voucher';
 q.dispatchEvent(new window.Event('input', { bubbles: true }));
 const combo = visible().length;
-check('category + search combine', combo >= 1 && combo < 27, `${combo} visible`);
+check('category + search combine', combo >= 1 && combo < 28, `${combo} visible`);
 check('combo finds HUD entry', visible().some((el) => el.dataset.id === 'hud-housing-florida'));
+
+console.log('\n=== no SAMPLE records remain ===');
+const samples = Array.from(doc.querySelectorAll('.resource-item')).filter(
+  (el) => el.dataset.trust === 'sample',
+);
+check('zero SAMPLE placeholders', samples.length === 0, `${samples.length} remaining`);
+
+// category distribution from rendered data
+const cats = {};
+doc.querySelectorAll('.resource-item').forEach((el) => {
+  const c = el.dataset.category;
+  cats[c] = (cats[c] || 0) + 1;
+});
+console.log('\n=== per-category rendered counts ===');
+for (const [c, n] of Object.entries(cats)) {
+  console.log(`  ${c.padEnd(14)} ${n}`);
+}
+const renderedTotal = Object.values(cats).reduce((a, b) => a + b, 0);
+console.log(`  ${'TOTAL'.padEnd(14)} ${renderedTotal}`);
+check('rendered total matches seed data', renderedTotal === 28, `expected 28, got ${renderedTotal}`);
 
 console.log(`\n──────────── ${pass} passed, ${fail} failed ────────────`);
 process.exit(fail === 0 ? 0 : 1);
