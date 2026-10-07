@@ -1,0 +1,169 @@
+---
+import Base from '../layouts/Base.astro';
+import { CATEGORY_META, CATEGORIES } from '../data/schema';
+import { REGION, SITE } from '../config/region';
+
+export const prerender = true;
+
+const inputCls =
+  'w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-800 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none';
+const labelCls = 'mb-1.5 block text-sm font-semibold text-slate-700';
+---
+
+<Base
+  title={`Suggest a resource — ${SITE.name}`}
+  description="Suggest a local resource or report a correction. Base Impact verifies every submission before it appears."
+>
+  <div class="mx-auto max-w-3xl px-4 py-16">
+    <h1 class="mb-3 text-4xl font-bold text-slate-900">Suggest a resource</h1>
+    <p class="mb-8 leading-relaxed text-slate-600">
+      Help us keep this accurate. Suggest a local organization, or report something that has changed
+      or closed. A volunteer reviews every submission before it appears — nothing is published
+      automatically.
+    </p>
+
+    <form id="suggest-form" class="space-y-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <!-- honeypot: real users never see or fill this -->
+      <div class="hidden" aria-hidden="true">
+        <label for="_gotcha">Leave this empty</label>
+        <input id="_gotcha" name="_gotcha" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <div>
+        <label class={labelCls} for="intent">What are you telling us?</label>
+        <select id="intent" name="intent" class={inputCls} required>
+          <option value="new">A resource we're missing</option>
+          <option value="correction">A correction to an existing listing</option>
+          <option value="closed">A listing that is closed or no longer works</option>
+        </select>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label class={labelCls} for="resourceName">Organization name *</label>
+          <input id="resourceName" name="resourceName" type="text" class={inputCls} required />
+        </div>
+        <div>
+          <label class={labelCls} for="category">Category *</label>
+          <select id="category" name="category" class={inputCls} required>
+            <option value="">Choose…</option>
+            {
+              CATEGORIES.map((c) => (
+                <option value={c}>{CATEGORY_META[c].label}</option>
+              ))
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label class={labelCls} for="county">County</label>
+          <select id="county" name="county" class={inputCls}>
+            <option value="">Choose…</option>
+            {REGION.counties.map((c) => <option value={c}>{c}</option>)}
+          </select>
+        </div>
+        <div>
+          <label class={labelCls} for="city">City</label>
+          <input id="city" name="city" type="text" class={inputCls} />
+        </div>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label class={labelCls} for="phone">Phone</label>
+          <input id="phone" name="phone" type="tel" class={inputCls} placeholder="(321) 555-0100" />
+        </div>
+        <div>
+          <label class={labelCls} for="website">Website</label>
+          <input id="website" name="website" type="url" class={inputCls} placeholder="https://" />
+        </div>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label class={labelCls} for="hours">Hours</label>
+          <input id="hours" name="hours" type="text" class={inputCls} placeholder="Tuesdays 10am–12pm" />
+        </div>
+        <div>
+          <label class={labelCls} for="cost">Cost</label>
+          <input id="cost" name="cost" type="text" class={inputCls} placeholder="Free, sliding scale, insurance…" />
+        </div>
+      </div>
+
+      <div>
+        <label class={labelCls} for="notes">Anything else we should know?</label>
+        <textarea id="notes" name="notes" rows="4" class={inputCls}
+          placeholder="Who it serves, how to get in, what to bring…"></textarea>
+      </div>
+
+      <fieldset class="grid gap-4 border-t border-slate-200 pt-6 sm:grid-cols-2">
+        <legend class="sr-only">Your details (optional)</legend>
+        <div>
+          <label class={labelCls} for="submitterName">Your name (optional)</label>
+          <input id="submitterName" name="submitterName" type="text" class={inputCls} />
+        </div>
+        <div>
+          <label class={labelCls} for="submitterEmail">Your email (optional)</label>
+          <input id="submitterEmail" name="submitterEmail" type="email" class={inputCls} />
+        </div>
+      </fieldset>
+
+      <p class="text-xs text-slate-500">
+        We only use your contact details to follow up about this submission. We never sell or share
+        them.
+      </p>
+
+      <div class="flex flex-wrap items-center gap-4">
+        <button
+          type="submit"
+          class="rounded-full bg-emerald-600 px-8 py-3 font-bold text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          Submit
+        </button>
+        <p id="form-status" class="text-sm" role="status" aria-live="polite"></p>
+      </div>
+    </form>
+  </div>
+</Base>
+
+<script>
+  const form = document.getElementById('suggest-form') as HTMLFormElement | null;
+  const status = document.getElementById('form-status');
+  const submitBtn = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form || !status) return;
+
+    const data = Object.fromEntries(new FormData(form).entries());
+    submitBtn && (submitBtn.disabled = true);
+    status.textContent = 'Sending…';
+    status.className = 'text-sm text-slate-500';
+
+    try {
+      const res = await fetch('/api/suggest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const json = (await res.json()) as { ok: boolean; message?: string; errors?: Record<string, string> };
+
+      if (json.ok) {
+        form.reset();
+        status.textContent = json.message ?? 'Thanks — a volunteer will review this.';
+        status.className = 'text-sm font-semibold text-emerald-700';
+      } else {
+        const first = json.errors ? Object.values(json.errors)[0] : undefined;
+        status.textContent = first ?? 'Something was missing — please check the form.';
+        status.className = 'text-sm font-semibold text-red-700';
+      }
+    } catch {
+      status.textContent = 'Could not reach the server. Please try again, or email us directly.';
+      status.className = 'text-sm font-semibold text-red-700';
+    } finally {
+      submitBtn && (submitBtn.disabled = false);
+    }
+  });
+</script>

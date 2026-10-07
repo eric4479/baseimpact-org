@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://baseimpact.org/sitemap-index.xml

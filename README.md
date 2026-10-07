@@ -1,59 +1,78 @@
-# Base Impact
+# Base Impact — Find Help
 
-Mobile-first community resource directory for Scottsmoor, Titusville, and Brevard County, Florida.
+Crisis-first, verified resource locator for **Brevard · Volusia · Indian River · Orange · Flagler**
+counties in Florida.
 
-Live site: [baseimpact.org](https://baseimpact.org)
+Base Impact, Inc. is a Florida non-profit corporation in formation (501(c)(3) pending).
+We connect people to recovery, housing, employment, and basic-needs resources, help grassroots
+nonprofits modernize, and **partner with 211 rather than replacing it**.
 
-## Local development
+---
 
-```bash
-npm install
-npm run dev
-```
+## What's in here
 
-## Production build
-
-```bash
-npm run build
-```
-
-Output is static files in `dist/`.
-
-## Cloudflare Pages
-
-This repo is set up so a push to `main` can deploy to Cloudflare Pages.
-
-**Build settings** (Cloudflare dashboard → Pages project → Settings):
-
-| Setting | Value |
+| Path | What it is |
 |---|---|
-| Framework preset | Vite |
-| Build command | `npm run build` |
-| Build output directory | `dist` |
-| Node version | `22` (also in `NODE_VERSION` and `.nvmrc`) |
-| Production branch | `main` |
+| **`app/`** | The real site — Astro 6.4.4 + Cloudflare Workers + Tailwind v4 |
+| `site/find-help.html` | The original single-file prototype (kept for reference) |
+| `FIND_HELP_PLAN.md` | Plan, taxonomy, legal guardrails, verification cadence |
 
-SPA routes are handled by `public/_redirects` (`/* → /index.html`).
+---
 
-### If Git integration is already connected
+## Quick start
 
-A successful `npm run build` on `main` is enough. The previous deploy failed because:
+```sh
+cd app
+npm install
+npm run dev        # → http://localhost:4321
+```
 
-1. `tsc -b` ran as part of `build` and TypeScript errors aborted the job (`build-error.txt`).
-2. Tailwind was never installed, so utility classes in the UI did not generate CSS.
-3. `#root { width: 1126px }` in the Vite template CSS broke phones.
+```sh
+npm run build      # → dist/client (assets) + dist/server (worker)
+npm run preview    # serve the build locally
+npm run deploy     # build + wrangler deploy  (needs Cloudflare auth)
+```
 
-Those are fixed in this tree.
+`npm run deploy` uses the wrangler config the adapter emits at
+`dist/server/wrangler.json`. It has been validated with `--dry-run`
+(551.9 KiB worker / 136.9 KiB gzip).
 
-### Optional GitHub Action deploy
+---
 
-[`.github/workflows/cloudflare-pages.yml`](.github/workflows/cloudflare-pages.yml) builds on every push. To also deploy from Actions, add repository secrets:
+## Where to edit things
 
-- `CLOUDFLARE_API_TOKEN` — token with **Cloudflare Pages: Edit**
-- `CLOUDFLARE_ACCOUNT_ID` — from the Cloudflare dashboard URL / Workers & Pages overview
+| I want to… | Edit |
+|---|---|
+| Add / fix a resource listing | `app/src/data/resources.ts` |
+| Change the counties we cover | `app/src/config/region.ts` → `REGION.counties` |
+| Change crisis numbers | `app/src/config/region.ts` → `CRISIS_LINES` |
+| Change categories | `app/src/data/schema.ts` → `CATEGORIES` + `CATEGORY_META` |
+| Change the legal disclaimer | `app/src/config/region.ts` → `LISTING_DISCLAIMER` |
 
-If those secrets are missing, the Action still **builds** (so you can see a red X if the site would fail to compile) and skips deploy. Native Cloudflare Git integration can remain the deployer.
+---
 
-## Stack
+## ⚠️ The one rule that governs this project
 
-Vite + React + TypeScript + Tailwind CSS v4. No server required at runtime.
+**F.S. § 817.505 — Florida Patient Brokering Act.** Third-degree felony ($50K fine; escalating to
+first-degree + $500K at volume) to give *or receive* anything of value to induce a referral to a
+substance-abuse or mental-health provider — and it explicitly reaches information/referral services.
+
+> **Base Impact accepts ZERO compensation for any listing or referral.**
+> No ads · no "featured" · no sponsorships · no affiliate links · no data sales.
+
+Also: listings are neutral (501(c)(3) private-benefit rule), listed ≠ endorsed, no clinical advice,
+and sober homes must be FL-certified (F.S. § 397.487) before they appear.
+
+---
+
+## Status
+
+- ✅ Astro project scaffolded, builds clean, verified end-to-end
+- ✅ 5 of 19 listings are real, verified partners (No One Hungry, LifePointe Ministries,
+  Under The Bridge Ministries, The Rock Church FL, First Christian Church Titusville)
+- ✅ Form endpoint validated: 200 on success, 400 on bad input, 405 on wrong method, honeypot works
+- ✅ Donation page with Zeffy integration live
+- ✅ Grants page with fiscal sponsor info live
+- ✅ FDACS registration #CH85670 displayed
+- ⬜ Replace the 10 `[SAMPLE]` placeholders with verified local organizations
+- ⬜ Wire the submission endpoint to storage (D1 / KV / email forwarding)

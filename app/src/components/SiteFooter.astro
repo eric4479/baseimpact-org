@@ -1,0 +1,28 @@
+---
+import { REGION, SITE } from '../config/region';
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-slate-950 py-12 text-center text-sm text-slate-500">
+  <div class="mx-auto max-w-7xl space-y-4 px-4">
+    <p class="font-bold text-slate-300">{SITE.name} &bull; {SITE.domain}</p>
+
+    <p class="mx-auto max-w-2xl text-xs leading-relaxed">
+      Serving {REGION.counties.join(' · ')} counties — {REGION.label}.
+    </p>
+
+    <p class="mx-auto max-w-3xl text-xs leading-relaxed">
+      Listings are informational only and are <strong class="text-slate-400">not endorsements</strong
+      >. Base Impact is a navigator, not a provider, and accepts
+      <strong class="text-slate-400">no compensation</strong> for any listing or referral — including
+      any treatment provider or recovery residence (Fla. Stat. § 817.505).
+    </p>
+
+    <p class="mx-auto max-w-2xl text-xs text-slate-500">{SITE.legalNotice}</p>
+
+    <p class="text-xs text-slate-600">
+      &copy; {year} {SITE.name} All rights reserved. &bull;
+      <a href={`mailto:${SITE.email}`} class="underline hover:text-slate-400">{SITE.email}</a>
+    </p>
+  </div>
+</footer>

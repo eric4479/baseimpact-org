@@ -1,0 +1,109 @@
+---
+import { CATEGORY_META, type Resource } from '../data/schema';
+import { fmtDate, isStale } from '../lib/resources';
+
+interface Props {
+  resource: Resource;
+}
+const { resource: r } = Astro.props;
+
+const meta = CATEGORY_META[r.category];
+const status = r.verification.status;
+const stale = isStale(r.verification.lastVerified);
+const tel = r.phone ? r.phone.replace(/[^0-9+]/g, '') : undefined;
+
+// One badge per record, in priority order.
+let badge: { cls: string; text: string };
+if (status === 'sample') {
+  badge = { cls: 'bg-amber-100 text-amber-900 border-amber-300', text: 'SAMPLE — replace' };
+} else if (status === 'closed') {
+  badge = { cls: 'bg-slate-200 text-slate-700 border-slate-300', text: 'Closed' };
+} else if (status === 'pending') {
+  badge = { cls: 'bg-slate-100 text-slate-600 border-slate-300', text: 'Pending verification' };
+} else if (stale) {
+  badge = {
+    cls: 'bg-amber-50 text-amber-800 border-amber-200',
+    text: `⚠ Call ahead — verified ${fmtDate(r.verification.lastVerified)}`,
+  };
+} else if (r.verification.lastVerified) {
+  badge = {
+    cls: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    text: `✔ Verified ${fmtDate(r.verification.lastVerified)}`,
+  };
+} else {
+  badge = { cls: 'bg-teal-50 text-teal-700 border-teal-200', text: 'Partner' };
+}
+
+const rows: Array<{ icon: string; label: string; value: string }> = [];
+if (r.city) rows.push({ icon: '📍', label: 'Location', value: r.address ?? r.city });
+else if (r.address) rows.push({ icon: '📍', label: 'Location', value: r.address });
+if (r.hours) rows.push({ icon: '🕑', label: 'Hours', value: r.hours });
+if (r.cost?.length) rows.push({ icon: '💲', label: 'Cost', value: r.cost.join(' · ') });
+if (r.eligibility) rows.push({ icon: '👤', label: 'Who qualifies', value: r.eligibility });
+---
+
+<article
+  id={r.id}
+  class="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+>
+  <div class="mb-3 flex items-start justify-between gap-3">
+    <span
+      class={`rounded-full px-2.5 py-1 text-[11px] font-bold tracking-wider uppercase ${meta.badge}`}
+      >{meta.label}</span
+    >
+    <span class={`rounded-full border px-2 py-0.5 text-[11px] font-semibold ${badge.cls}`}>
+      {badge.text}
+    </span>
+  </div>
+
+  <h3 class="mb-1 text-lg leading-snug font-bold text-slate-900">{r.name}</h3>
+  <p class="mb-3 text-sm font-medium text-emerald-700">{r.orgType}</p>
+
+  <dl class="mb-4 flex-1 space-y-1.5 text-sm text-slate-600">
+    {
+      rows.map((row) => (
+        <div class="flex gap-2">
+          <dt class="sr-only">{row.label}</dt>
+          <span aria-hidden="true">{row.icon}</span>
+          <dd>{row.value}</dd>
+        </div>
+      ))
+    }
+    {
+      rows.length === 0 && (
+        <div class="flex gap-2">
+          <span aria-hidden="true">📍</span>
+          <dd class="text-slate-400">Details pending verification</dd>
+        </div>
+      )
+    }
+  </dl>
+
+  {
+    tel ? (
+      <a
+        href={`tel:${tel}`}
+        class="mt-auto inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 font-semibold text-white transition hover:bg-emerald-700"
+      >
+        <span aria-hidden="true">📞</span> {r.phone}
+      </a>
+    ) : (
+      <p class="mt-auto rounded-xl bg-slate-50 px-4 py-2.5 text-center text-sm text-slate-500">
+        Contact info pending verification
+      </p>
+    )
+  }
+
+  {
+    r.website && (
+      <a
+        href={r.website}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-2 text-center text-xs text-slate-500 underline hover:text-emerald-700"
+      >
+        {r.website.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+      </a>
+    )
+  }
+</article>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find Help Near You | Base Impact, Inc.</title>
+<meta name="description" content="Find verified recovery, housing, employment, and basic-needs resources in your community. Base Impact connects you to help — free, confidential, no cost to you.">
+<!-- Tailwind Play CDN publishes no stable SRI hash, so integrity can't be pinned.
+     Fine for a prototype; for production compile Tailwind to a local stylesheet. -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Inter', sans-serif; background-color: #FAF9F6; color: #334155; }
+  h1, h2, h3 { font-family: 'Playfair Display', serif; }
+  .card { transition: transform .2s cubic-bezier(.4,0,.2,1), box-shadow .2s; }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px -5px rgba(0,0,0,.10); }
+  .chip.active { background-color:#047857; color:#fff; border-color:#047857; }
+  :focus-visible { outline: 3px solid #059669; outline-offset: 2px; border-radius: 6px; }
+  @media print {
+    .no-print { display:none !important; }
+    .card { break-inside: avoid; box-shadow:none; border:1px solid #cbd5e1; }
+    body { background:#fff; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ⚠️ CRISIS BAR — pinned above everything, on every page -->
+<div class="bg-red-700 text-white text-sm no-print">
+  <div class="max-w-7xl mx-auto px-4 py-2 flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-center">
+    <span class="font-bold tracking-wide">In crisis right now?</span>
+    <a href="tel:988" class="font-semibold underline hover:no-underline">Call or text <strong>988</strong> <span class="font-normal opacity-90">(Suicide &amp; Crisis Lifeline)</span></a>
+    <span class="opacity-40 hidden sm:inline">•</span>
+    <a href="tel:18006624357" class="font-semibold underline hover:no-underline"><strong>1-800-662-HELP</strong> <span class="font-normal opacity-90">(SAMHSA, 24/7)</span></a>
+    <span class="opacity-40 hidden sm:inline">•</span>
+    <a href="tel:211" class="font-semibold underline hover:no-underline">Dial <strong>211</strong></a>
+    <span class="opacity-40 hidden sm:inline">•</span>
+    <a href="tel:911" class="font-semibold underline hover:no-underline">Emergency: <strong>911</strong></a>
+  </div>
+</div>
+
+<!-- Pre-launch disclaimer -->
+<div class="bg-emerald-900 text-emerald-100 text-xs py-2 px-4 text-center font-medium">
+  <strong>Base Impact, Inc.</strong> is a Florida non-profit corporation in formation. Federal 501(c)(3) status pending.
+  <span class="opacity-90">All listings below are <strong>SAMPLE data</strong> — verify before launch.</span>
+</div>
+
+<!-- Nav -->
+<nav class="sticky top-0 w-full bg-white/85 backdrop-blur-md z-50 border-b border-slate-200 no-print">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16 items-center">
+      <a href="/" class="flex items-center space-x-3">
+        <div class="w-9 h-9 bg-emerald-600 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-sm">B</div>
+        <div class="flex flex-col">
+          <span class="text-xl font-bold text-slate-800 tracking-tight leading-none">Base Impact, Inc.</span>
+          <span class="text-[10px] text-emerald-600 font-semibold tracking-wider uppercase mt-1">BaseImpact.org</span>
+        </div>
+      </a>
+      <div class="hidden md:flex items-center space-x-7 text-sm font-medium">
+        <a href="#results" class="text-emerald-700 border-b-2 border-emerald-600 pb-0.5">Find Help</a>
+        <a href="#how" class="text-slate-600 hover:text-emerald-600 transition">How It Works</a>
+        <a href="#suggest" class="text-slate-600 hover:text-emerald-600 transition">Suggest a Resource</a>
+        <a href="mailto:info@baseimpact.org" class="bg-emerald-600 text-white px-4 py-2 rounded-full hover:bg-emerald-700 transition">Get Involved</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="pt-12 pb-8 px-4">
+  <div class="max-w-4xl mx-auto text-center">
+    <span class="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold uppercase tracking-widest mb-5">Free · Confidential · No cost to you</span>
+    <h1 class="text-4xl md:text-6xl font-bold text-slate-900 leading-tight mb-5">Find Help Near You</h1>
+    <p class="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+      Recovery, housing, jobs, food, and support — verified and organized so you can actually use it.
+      You don't need an appointment, an account, or to explain yourself. Start with a phone call.
+    </p>
+  </div>
+</header>
+
+<!-- Search + filters -->
+<section class="px-4 pb-6 no-print" id="results">
+  <div class="max-w-6xl mx-auto">
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-5">
+      <label for="q" class="sr-only">Search resources</label>
+      <div class="relative">
+        <input id="q" type="search" autocomplete="off"
+          placeholder="Search by need, service, or city — e.g. &quot;detox&quot;, &quot;shelter&quot;, &quot;resume&quot;"
+          class="w-full rounded-xl border border-slate-300 px-4 py-3 pr-11 text-slate-800 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200">
+        <svg class="w-5 h-5 text-slate-400 absolute right-4 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/></svg>
+      </div>
+
+      <div class="flex flex-wrap gap-2 mt-4" role="group" aria-label="Filter by category">
+        <button class="chip active text-sm font-semibold px-4 py-2 rounded-full border border-slate-300 text-slate-700 hover:border-emerald-600 transition" data-cat="all">All</button>
+        <button class="chip text-sm font-semibold px-4 py-2 rounded-full border border-slate-300 text-slate-700 hover:border-emerald-600 transition" data-cat="recovery">Recovery</button>
+        <button class="chip text-sm font-semibold px-4 py-2 rounded-full border border-slate-300 text-slate-700 hover:border-emerald-600 transition" data-cat="housing">Housing</button>
+        <button class="chip text-sm font-semibold px-4 py-2 rounded-full border border-slate-300 text-slate-700 hover:border-emerald-600 transition" data-cat="employment">Jobs &amp; Income</button>
+        <button class="chip text-sm font-semibold px-4 py-2 rounded-full border border-slate-300 text-slate-700 hover:border-emerald-600 transition" data-cat="basic">Basic Needs</button>
+        <button class="chip text-sm font-semibold px-4 py-2 rounded-full border border-slate-300 text-slate-700 hover:border-emerald-600 transition" data-cat="stability">Stability</button>
+        <button class="chip text-sm font-semibold px-4 py-2 rounded-full border border-slate-300 text-slate-700 hover:border-emerald-600 transition" data-cat="community">Community</button>
+      </div>
+
+      <p id="count" class="mt-4 text-sm text-slate-500" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<!-- Results grid -->
+<main class="px-4 pb-16">
+  <div id="grid" class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+  <p id="empty" class="hidden max-w-6xl mx-auto text-center text-slate-500 py-16">
+    No matches. Try a broader word — or call <a href="tel:211" class="text-emerald-700 font-semibold underline">211</a>,
+    which can search the whole county with a live person.
+  </p>
+</main>
+
+<!-- How it works -->
+<section id="how" class="py-16 bg-white border-t border-slate-200">
+  <div class="max-w-5xl mx-auto px-4">
+    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-3 text-center">How we verify — and what we promise</h2>
+    <p class="text-slate-600 text-center max-w-2xl mx-auto mb-10">Every listing is checked by a human and stamped with the date it was last confirmed.</p>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200">
+        <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-lg flex items-center justify-center mb-4 font-bold">1</div>
+        <h3 class="font-bold text-slate-800 mb-2">We call before we list</h3>
+        <p class="text-sm text-slate-600">A person confirms the phone number, hours, cost, and intake process. No record goes live unverified.</p>
+      </div>
+      <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200">
+        <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-lg flex items-center justify-center mb-4 font-bold">2</div>
+        <h3 class="font-bold text-slate-800 mb-2">We stamp the date</h3>
+        <p class="text-sm text-slate-600">Each card shows when it was last verified. Anything older than 120 days is flagged &ldquo;call ahead.&rdquo;</p>
+      </div>
+      <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200">
+        <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-lg flex items-center justify-center mb-4 font-bold">3</div>
+        <h3 class="font-bold text-slate-800 mb-2">We never take money to list</h3>
+        <p class="text-sm text-slate-600">No provider pays to appear or to rank higher. Listed does not mean endorsed — you decide what fits.</p>
+      </div>
+    </div>
+
+    <div class="mt-10 p-6 rounded-2xl bg-amber-50 border border-amber-200 text-sm text-amber-900 leading-relaxed">
+      <p class="font-bold mb-1">Please read</p>
+      <p>Base Impact is a <strong>navigator, not a provider</strong>. We do not give medical or legal advice and we do not recommend a particular level of care.
+      A listing is <strong>not an endorsement or a guarantee</strong>. Base Impact accepts <strong>no compensation</strong> for any listing or referral —
+      including any treatment provider or recovery residence (Fla. Stat. § 817.505). If a resource has changed or closed, please
+      <a href="#suggest" class="underline font-semibold">tell us</a> so we can fix it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Suggest a resource -->
+<section id="suggest" class="py-16 bg-slate-900 text-white">
+  <div class="max-w-3xl mx-auto px-4 text-center">
+    <h2 class="text-3xl font-bold mb-4">Know a resource we're missing?</h2>
+    <p class="text-slate-300 mb-8 leading-relaxed">Help us keep this accurate. Suggest a local organization, or report a number that no longer works.</p>
+    <a href="mailto:info@baseimpact.org?subject=Resource%20suggestion%20for%20Find%20Help"
+       class="inline-block bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-8 py-3 rounded-full transition shadow-lg">Suggest a resource</a>
+    <p class="text-xs text-slate-500 mt-6">We never sell or share the information you give us here.</p>
+  </div>
+</section>
+
+<footer class="bg-slate-950 py-10 text-center text-slate-500 text-sm">
+  <div class="max-w-7xl mx-auto px-4 space-y-3">
+    <p class="font-bold text-slate-300">Base Impact, Inc. &bull; BaseImpact.org</p>
+    <p class="text-xs max-w-2xl mx-auto">Base Impact, Inc. is a Florida non-profit corporation in formation. Federal 501(c)(3) tax-exempt status application pending.
+      Listings are informational only and are not endorsements. Base Impact accepts no compensation for listings or referrals.</p>
+    <p class="text-xs text-slate-600">&copy; 2026 Base Impact, Inc. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+/* ------------------------------------------------------------------
+   SAMPLE DATA — replace with verified local partners before launch.
+   Every record must carry a real `verified` date and `verifiedBy`.
+------------------------------------------------------------------ */
+const CAT = {
+  recovery:   { label: 'Recovery',      cls: 'bg-emerald-100 text-emerald-800' },
+  housing:    { label: 'Housing',       cls: 'bg-sky-100 text-sky-800' },
+  employment: { label: 'Jobs & Income', cls: 'bg-amber-100 text-amber-800' },
+  basic:      { label: 'Basic Needs',   cls: 'bg-rose-100 text-rose-800' },
+  stability:  { label: 'Stability',     cls: 'bg-violet-100 text-violet-800' },
+  community:  { label: 'Community',     cls: 'bg-teal-100 text-teal-800' }
+};
+
+const RESOURCES = [
+  { n:'Celebrate Recovery — Grace Community Church (sample)', c:'recovery', t:'Faith-based recovery group',
+    a:'123 Main St, Your City', p:'(321) 555-0101', cost:'Free', hours:'Mondays 6:30–8:30pm',
+    elig:'Open to all; no sign-up', tags:'church faith addiction group', v:'2026-09-18' },
+  { n:'Sunrise Recovery Center — Detox & Residential (sample)', c:'recovery', t:'Detox / inpatient treatment',
+    a:'450 Recovery Way, Your City', p:'(321) 555-0102', cost:'Insurance · Sliding scale', hours:'24/7 intake',
+    elig:'Adults 18+', tags:'detox treatment inpatient rehab', v:'2026-09-20' },
+  { n:'Harbor House Recovery Residence (sample)', c:'recovery', t:'Sober living (FL-certified)',
+    a:'88 Harbor Rd, Your City', p:'(321) 555-0103', cost:'Weekly fee · some scholarships', hours:'Tour by appointment',
+    elig:'Must be in recovery; certified staff', tags:'sober living residence transitional', v:'2026-09-12' },
+  { n:'AA / NA Meetings — Local Intergroup (sample)', c:'recovery', t:'Peer support meetings',
+    a:'Multiple locations', p:'(321) 555-0104', cost:'Free', hours:'Daily, various times',
+    elig:'Open & closed meetings', tags:'aa na 12 step meetings support', v:'2026-09-25' },
+  { n:'Cold Weather Shelter (sample)', c:'housing', t:'Emergency shelter',
+    a:'700 Warmth Ave, Your City', p:'(321) 555-0201', cost:'Free', hours:'Nights below 45°F · intake 5pm',
+    elig:'Adults; pets on case basis', tags:'shelter emergency cold overnight', v:'2026-09-15' },
+  { n:'Rapid Rehousing Program (sample)', c:'housing', t:'Transitional / rapid rehousing',
+    a:'210 Hope St, Your City', p:'(321) 555-0202', cost:'Free', hours:'Mon–Fri 9–4',
+    elig:'Referral from 211 or agency', tags:'rehousing transitional housing assistance', v:'2026-09-10' },
+  { n:'Housing Authority — Section 8 Waitlist (sample)', c:'housing', t:'Subsidized housing',
+    a:'5 Government Ctr, Your City', p:'(321) 555-0203', cost:'Income-based', hours:'Waitlist status online',
+    elig:'Income limits apply', tags:'section 8 hud voucher subsidized rent', v:'2026-09-22' },
+  { n:'Rent & Utility Assistance — Catholic Charities (sample)', c:'housing', t:'Emergency financial aid',
+    a:'310 Charity Ln, Your City', p:'(321) 555-0204', cost:'Free', hours:'By appointment',
+    elig:'Proof of hardship required', tags:'rent utility eviction assistance money', v:'2026-09-08' },
+  { n:'CareerSource — Local Workforce Board (sample)', c:'employment', t:'Workforce center',
+    a:'900 Jobs Blvd, Your City', p:'(321) 555-0301', cost:'Free', hours:'Mon–Fri 8–5',
+    elig:'All job seekers', tags:'job training wioa career workforce resume', v:'2026-09-24' },
+  { n:'Second-Chance Employer Network (sample)', c:'employment', t:'Fair-chance hiring',
+    a:'Various employers', p:'(321) 555-0302', cost:'Free', hours:'Varies',
+    elig:'Open to people with records', tags:'second chance fair chance record felony job', v:'2026-09-19' },
+  { n:'Day Labor / Temp Agency (sample)', c:'employment', t:'Day labor · daily pay',
+    a:'140 Work St, Your City', p:'(321) 555-0303', cost:'Free to apply', hours:'Arrive by 5:30am',
+    elig:'18+; ID helpful', tags:'day labor temp immediate work cash', v:'2026-09-11' },
+  { n:'Community Food Pantry (sample)', c:'basic', t:'Food assistance',
+    a:'22 Harvest Rd, Your City', p:'(321) 555-0401', cost:'Free', hours:'Tue & Thu 10–2',
+    elig:'No ID required', tags:'food pantry groceries hungry meals', v:'2026-09-23' },
+  { n:'SNAP / WIC Enrollment Help (sample)', c:'basic', t:'Benefits enrollment',
+    a:'55 Benefits Way, Your City', p:'(321) 555-0402', cost:'Free', hours:'Mon–Fri 9–4',
+    elig:'Income guidelines', tags:'snap wic food stamps benefits ebt', v:'2026-09-17' },
+  { n:'Legal Aid — Tenant Rights Clinic (sample)', c:'stability', t:'Legal aid',
+    a:'18 Justice Ct, Your City', p:'(321) 555-0501', cost:'Free', hours:'Wed 1–4',
+    elig:'Income-based', tags:'legal aid eviction tenant rights lawyer', v:'2026-09-14' },
+  { n:'ID & Documents Recovery Clinic (sample)', c:'stability', t:'ID / vital records',
+    a:'33 Records Rd, Your City', p:'(321) 555-0502', cost:'Free', hours:'1st & 3rd Fri',
+    elig:'Anyone without ID', tags:'id birth certificate documents license ssn', v:'2026-09-21' },
+  { n:'Community Meal Night (sample)', c:'community', t:'Community meal',
+    a:'600 Fellowship Dr, Your City', p:'(321) 555-0601', cost:'Free', hours:'Fridays 5:30pm',
+    elig:'Everyone welcome', tags:'meal dinner community fellowship social', v:'2026-09-26' }
+];
+
+/* ---------------- render + filter ---------------- */
+const grid  = document.getElementById('grid');
+const q     = document.getElementById('q');
+const count = document.getElementById('count');
+const empty = document.getElementById('empty');
+let active  = 'all';
+
+function daysSince(d){ return Math.floor((Date.now() - new Date(d).getTime()) / 86400000); }
+function fmt(d){ return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+
+/* Escape any value before it enters innerHTML. SAMPLE data is trusted today,
+   but partner-submitted listings are not — this keeps the template safe once
+   the data source becomes an API/DB or a submission form. */
+function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function card(r){
+  const cat = CAT[r.c];
+  const age = daysSince(r.v);
+  const stale = age > 120;
+  const verifyBadge = stale
+    ? `<span class="text-[11px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">⚠ Call ahead — verified ${esc(fmt(r.v))}</span>`
+    : `<span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">✔ Verified ${esc(fmt(r.v))}</span>`;
+  return `
+  <article class="card bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col">
+    <div class="flex items-start justify-between gap-3 mb-3">
+      <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${esc(cat.cls)}">${esc(cat.label)}</span>
+      ${verifyBadge}
+    </div>
+    <h3 class="text-lg font-bold text-slate-900 leading-snug mb-1">${esc(r.n)}</h3>
+    <p class="text-sm text-emerald-700 font-medium mb-3">${esc(r.t)}</p>
+    <dl class="text-sm text-slate-600 space-y-1.5 mb-4 flex-1">
+      <div class="flex gap-2"><dt class="sr-only">Address</dt><span aria-hidden="true">📍</span><dd>${esc(r.a)}</dd></div>
+      <div class="flex gap-2"><dt class="sr-only">Hours</dt><span aria-hidden="true">🕑</span><dd>${esc(r.hours)}</dd></div>
+      <div class="flex gap-2"><dt class="sr-only">Cost</dt><span aria-hidden="true">💲</span><dd>${esc(r.cost)}</dd></div>
+      <div class="flex gap-2"><dt class="sr-only">Who qualifies</dt><span aria-hidden="true">👤</span><dd>${esc(r.elig)}</dd></div>
+    </dl>
+    <a href="tel:${esc(r.p.replace(/[^0-9+]/g,''))}"
+       class="mt-auto inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2.5 rounded-xl transition">
+      <span aria-hidden="true">📞</span> ${esc(r.p)}
+    </a>
+  </article>`;
+}
+
+function render(){
+  const term = q.value.trim().toLowerCase();
+  const rows = RESOURCES.filter(r => {
+    const okCat = active === 'all' || r.c === active;
+    const hay = (r.n+' '+r.t+' '+r.a+' '+r.cost+' '+r.elig+' '+r.tags).toLowerCase();
+    return okCat && (!term || hay.includes(term));
+  });
+  grid.innerHTML = rows.map(card).join('');
+  count.textContent = `${rows.length} resource${rows.length===1?'':'s'} shown`;
+  empty.classList.toggle('hidden', rows.length !== 0);
+}
+
+document.querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  active = b.dataset.cat;
+  render();
+}));
+q.addEventListener('input', render);
+render();
+</script>
+</body>
+</html>

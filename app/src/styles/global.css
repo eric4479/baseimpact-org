@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif: 'Playfair Display', ui-serif, Georgia, serif;
+  --color-cream: #FAF9F6;
+}
+
+@layer base {
+  h1, h2, h3 {
+    font-family: var(--font-serif);
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-emerald-600);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  /* Hide content visually but keep it for screen readers */
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0);
+    white-space: nowrap; border-width: 0;
+  }
+}
+
+/* Active state for the category filter chips (toggled from ResourceExplorer) */
+.chip-active {
+  background-color: var(--color-emerald-700);
+  border-color: var(--color-emerald-700);
+  color: #fff;
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; }
+  .resource-item { break-inside: avoid; }
+}

@@ -1,0 +1,123 @@
+---
+import ResourceCard from './ResourceCard.astro';
+import { CATEGORY_META, CATEGORIES } from '../data/schema';
+import { searchIndex, sortedResources } from '../lib/resources';
+
+const items = sortedResources();
+---
+
+<section id="resources" class="px-4 pb-16">
+  <div class="mx-auto max-w-6xl">
+    <!-- Controls -->
+    <div class="no-print rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <label for="q" class="sr-only">Search resources</label>
+      <div class="relative">
+        <input
+          id="q"
+          type="search"
+          autocomplete="off"
+          placeholder="Search by need or service — e.g. &quot;detox&quot;, &quot;shelter&quot;, &quot;resume&quot;"
+          class="w-full rounded-xl border border-slate-300 py-3 pr-11 pl-4 text-slate-800 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none"
+        />
+        <svg
+          class="pointer-events-none absolute top-3.5 right-4 h-5 w-5 text-slate-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"></path>
+        </svg>
+      </div>
+
+      <div class="mt-4 flex flex-wrap gap-2" role="group" aria-label="Filter by category">
+        <button
+          type="button"
+          data-cat="all"
+          class="chip-active rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-emerald-600"
+        >
+          All
+        </button>
+        {
+          CATEGORIES.map((cat) => (
+            <button
+              type="button"
+              data-cat={cat}
+              class="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-emerald-600"
+            >
+              {CATEGORY_META[cat].label}
+            </button>
+          ))
+        }
+      </div>
+
+      <p id="count" class="mt-4 text-sm text-slate-500" aria-live="polite"></p>
+    </div>
+
+    <!-- Results (server-rendered, filtered client-side) -->
+    <div id="grid" class="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {
+        items.map((r) => (
+          <div
+            class="resource-item"
+            data-category={r.category}
+            data-search={searchIndex(r)}
+            data-trust={r.verification.status === 'sample' ? 'sample' : 'trusted'}
+          >
+            <ResourceCard resource={r} />
+          </div>
+        ))
+      }
+    </div>
+
+    <p id="empty" class="hidden py-16 text-center text-slate-500">
+      No matches. Try a broader word — or call
+      <a href="tel:211" class="font-semibold text-emerald-700 underline">211</a>, which can search
+      the whole region with a live person.
+    </p>
+  </div>
+</section>
+
+<script>
+  const q = document.getElementById('q') as HTMLInputElement | null;
+  const items = Array.from(document.querySelectorAll<HTMLElement>('.resource-item'));
+  const count = document.getElementById('count');
+  const empty = document.getElementById('empty');
+  const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-cat]'));
+
+  let active = 'all';
+
+  function render() {
+    const term = (q?.value ?? '').trim().toLowerCase();
+    let shown = 0;
+
+    for (const el of items) {
+      const okCat = active === 'all' || el.dataset.category === active;
+      const okTerm = term === '' || (el.dataset.search ?? '').includes(term);
+      const ok = okCat && okTerm;
+      el.classList.toggle('hidden', !ok);
+      if (ok) shown++;
+    }
+
+    if (count) {
+      count.textContent = `${shown} resource${shown === 1 ? '' : 's'} shown`;
+    }
+    empty?.classList.toggle('hidden', shown !== 0);
+  }
+
+  for (const chip of chips) {
+    chip.addEventListener('click', () => {
+      for (const c of chips) c.classList.remove('chip-active');
+      chip.classList.add('chip-active');
+      active = chip.dataset.cat ?? 'all';
+      render();
+    });
+  }
+
+  q?.addEventListener('input', render);
+  render();
+</script>
