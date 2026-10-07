@@ -635,7 +635,7 @@ export function DirectoryPage() {
                                 type="button"
                                 aria-pressed={active}
                                 onClick={() => setSelectedTag(active ? null : svc)}
-                                className={`rounded-md px-2.5 py-1.5 text-xs font-bold transition-colors ${
+                                className={`min-h-11 rounded-md px-3 py-2 text-xs font-bold transition-colors ${
                                   active
                                     ? "bg-fill text-on-fill"
                                     : svc === "Food"
@@ -659,7 +659,7 @@ export function DirectoryPage() {
                               type="button"
                               aria-pressed={active}
                               onClick={() => setSelectedTag(active ? null : tag)}
-                              className={`rounded-md px-2.5 py-1.5 text-xs font-semibold transition-colors ${
+                              className={`min-h-11 rounded-md px-3 py-2 text-xs font-semibold transition-colors ${
                                 active
                                   ? "bg-fill text-on-fill"
                                   : "bg-inset text-muted hover:bg-card hover:text-body"

@@ -47,7 +47,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
 
       <header className="sticky top-0 z-40 border-b border-line/80 bg-band text-on-fill">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4">
-          <Link to="/" className="flex min-w-0 items-center gap-3">
+          <Link to="/" className="flex min-h-11 min-w-0 items-center gap-3">
             <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-fill text-on-fill">
               <Shield className="size-5" aria-hidden />
             </span>
@@ -103,34 +103,50 @@ export function SiteShell({ children }: { children: ReactNode }) {
             <p className="font-display text-lg font-semibold text-on-fill">Base Impact Inc.</p>
             <p className="mt-1">Scottsmoor, FL 32775 · Brevard County</p>
             <p className="mt-1">
-              <a href="tel:+13213230999" className="font-semibold text-on-fill underline-offset-2 hover:underline">
+              <a
+                href="tel:+13213230999"
+                className="inline-flex min-h-11 min-w-11 items-center justify-center px-2 py-1 font-semibold text-on-fill underline-offset-2 hover:underline"
+              >
                 (321) 323-0999
               </a>
               {" "}· call or text · by appointment only
             </p>
             <p className="mt-2">
-              <a href="tel:211" className="font-semibold text-on-fill underline-offset-2 hover:underline">
+              <a
+                href="tel:211"
+                className="inline-flex min-h-11 min-w-11 items-center justify-center px-2 py-1 font-semibold text-on-fill underline-offset-2 hover:underline"
+              >
                 Call 211
               </a>
               {" "}for 24/7 local help ·{" "}
-              <a href="tel:988" className="font-semibold text-on-fill underline-offset-2 hover:underline">
+              <a
+                href="tel:988"
+                className="inline-flex min-h-11 min-w-11 items-center justify-center px-2 py-1 font-semibold text-on-fill underline-offset-2 hover:underline"
+              >
                 988
               </a>
-              {" "}for crisis support
+              {" "}for crisis support ·{" "}
+              <a
+                href="tel:911"
+                className="inline-flex min-h-11 min-w-11 items-center justify-center px-2 py-1 font-semibold text-on-fill underline-offset-2 hover:underline"
+              >
+                911
+              </a>
+              {" "}for immediate danger
             </p>
           </div>
           <div className="sm:text-right">
             <p>© {new Date().getFullYear()} Base Impact Inc.</p>
-            <Link to="/privacy" className="mt-1 block text-on-fill underline-offset-2 hover:underline">
+            <Link to="/privacy" className="mt-1 inline-flex min-h-11 items-center text-on-fill underline-offset-2 hover:underline">
               Privacy policy
             </Link>
-            <Link to="/terms" className="mt-1 block text-on-fill underline-offset-2 hover:underline">
+            <Link to="/terms" className="mt-1 inline-flex min-h-11 items-center text-on-fill underline-offset-2 hover:underline">
               Terms &amp; disclaimer
             </Link>
-            <Link to="/socials" className="mt-1 block text-on-fill underline-offset-2 hover:underline">
+            <Link to="/socials" className="mt-1 inline-flex min-h-11 items-center text-on-fill underline-offset-2 hover:underline">
               Follow us
             </Link>
-            <Link to="/feedback" className="mt-1 block text-on-fill underline-offset-2 hover:underline">
+            <Link to="/feedback" className="mt-1 inline-flex min-h-11 items-center text-on-fill underline-offset-2 hover:underline">
               Share feedback
             </Link>
           </div>
