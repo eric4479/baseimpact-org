@@ -1,5 +1,5 @@
 ---
-import { CATEGORY_META, type Resource } from '../data/schema';
+import { CATEGORY_META, POPULATION_LABELS, type Resource } from '../data/schema';
 import { fmtDate, isStale } from '../lib/resources';
 
 interface Props {
@@ -48,6 +48,16 @@ if (r.licenseNumber) {
     label: 'License',
     value: `${r.licenseNumber}${r.licensingAuthority ? ` (${r.licensingAuthority})` : ''}`,
   });
+}
+if (r.population?.length) {
+  rows.push({
+    icon: '👥',
+    label: 'Serves',
+    value: r.population.map((p) => POPULATION_LABELS[p] ?? p).join(' · '),
+  });
+}
+if (r.address) {
+  rows.push({ icon: '🚌', label: 'Transit', value: 'Check bus route before traveling' });
 }
 ---
 
@@ -115,4 +125,5 @@ if (r.licenseNumber) {
       </a>
     )
   }
+  <p class="mt-3 text-xs text-slate-400">Listed does not mean endorsed.</p>
 </article>

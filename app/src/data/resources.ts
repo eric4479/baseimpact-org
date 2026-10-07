@@ -9,7 +9,7 @@ import type { Resource } from './schema';
  * status: 'sample'   → PLACEHOLDER. Renders a SAMPLE badge. Replace with a real,
  *                      verified local organization before launch.
  *
- * Contact details below were taken from public sources on 2026-10-06 and are
+ * Contact details below were taken from public sources on 2026-10-07 and are
  * recorded in `verification.source`. Anything not confirmed is left undefined on
  * purpose — the card renders "pending verification" rather than a wrong number.
  */

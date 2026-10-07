@@ -20,9 +20,13 @@ const year = new Date().getFullYear();
 
     <p class="mx-auto max-w-2xl text-xs text-slate-500">{SITE.legalNotice}</p>
 
-    <p class="text-xs text-slate-600">
-      &copy; {year} {SITE.name} All rights reserved. &bull;
+    <nav class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-slate-600">
+      <a href="/terms" class="underline hover:text-slate-400">Terms &amp; Disclaimer</a>
       <a href={`mailto:${SITE.email}`} class="underline hover:text-slate-400">{SITE.email}</a>
+    </nav>
+
+    <p class="text-xs text-slate-600">
+      &copy; {year} {SITE.name} All rights reserved.
     </p>
   </div>
 </footer>

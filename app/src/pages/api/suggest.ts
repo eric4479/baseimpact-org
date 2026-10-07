@@ -6,12 +6,16 @@ import { REGION } from '../../config/region';
 export const prerender = false;
 
 const MAX = 2000;
+const ADMIN_EMAIL = 'info@baseimpact.org';
 
 function json(body: unknown, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { 'Content-Type': 'application/json' },
-  });
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  if (ADMIN_EMAIL) {
+    headers['X-Admin-Email'] = ADMIN_EMAIL;
+  }
+  return new Response(JSON.stringify(body), { status, headers });
 }
 
 function clean(v: unknown): string {
@@ -75,12 +79,30 @@ export const POST: APIRoute = async ({ request }) => {
   };
 
   // ─────────────────────────────────────────────────────────────────────────
-  // TODO(storage): persist this submission. Options, in order of effort:
-  //   1. Cloudflare D1  — add a `submissions` table, write via env.DB
-  //   2. Cloudflare KV  — env.SUBMISSIONS.put(`sub:${crypto.randomUUID()}`, ...)
-  //   3. Email          — forward via a Cloudflare Email binding to info@baseimpact.org
-  // Until one is wired, submissions are logged and dropped.
+  // Email forwarding (simplest storage option — no D1/KV required):
+  //   Cloudflare has an Email Send API. The easiest zero-config option is a
+  //   Cloudflare Email Worker binding. Until that is wired, we keep the log
+  //   and add a comment so the next deploy catches it.
+  //
+  //   To wire: add `send_email` binding in wrangler.toml, then uncomment
+  //   the block below and replace `env.EMAIL_RECIPIENT`.
   // ─────────────────────────────────────────────────────────────────────────
+  // const EMAIL_RECIPIENT = env.EMAIL_RECIPIENT || ADMIN_EMAIL;
+  // try {
+  //   await fetch('https://api.cloudflare.com/client/v4/accounts/<account>/email/send', {
+  //     method: 'POST',
+  //     headers: { 'Content-Type': 'application/json' },
+  //     body: JSON.stringify({
+  //       from: 'noreply@baseimpact.org',
+  //       to: EMAIL_RECIPIENT,
+  //       subject: `New suggestion: ${resourceName}`,
+  //       text: Object.entries(submission).map(([k, v]) => `${k}: ${v}`).join('\n'),
+  //     }),
+  //   });
+  // } catch {
+  //   // Email is a best-effort delivery — never block the response on it.
+  // }
+
   console.log('[suggest]', JSON.stringify(submission));
 
   return json({
