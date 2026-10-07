@@ -1,0 +1,97 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config/region';
+---
+
+<Base
+  title={`Terms & Disclaimer — ${SITE.name}`}
+  description="Base Impact is a navigator, not a provider. These terms explain what we do, what we don't do, and your responsibilities when using this site."
+>
+  <article class="mx-auto max-w-3xl px-4 py-16">
+    <h1 class="mb-6 text-4xl font-bold text-slate-900">Terms &amp; Disclaimer</h1>
+    <p class="mb-8 text-sm text-slate-500">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+
+    <section class="mb-10 space-y-6 text-slate-700 leading-relaxed">
+      <h2 class="text-xl font-bold text-slate-900">Who we are</h2>
+      <p>
+        Base Impact, Inc. is a Florida non-profit corporation in formation, seeking
+        501(c)(3) tax-exempt status. Until that status is granted, donations are
+        <strong>not tax-deductible</strong>. We operate a free resource locator for
+        Florida's Space Coast and Central Florida (Brevard, Volusia, Indian River,
+        Orange, Flagler counties).
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900">We are a navigator, not a provider</h2>
+      <p>
+        Base Impact does not provide medical, mental health, legal, housing, or
+        employment services. We do not operate, manage, own, or endorse any
+        provider listed on this site. We route people to licensed gatekeepers —
+        government agencies, 211, SAMHSA, AHCA, HUD, SSA, and verified local
+        organizations. A listing is not an endorsement, and listing does not mean
+        we recommend a particular level of care.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900">No compensation — ever</h2>
+      <p>
+        Base Impact accepts <strong>zero compensation</strong> for any listing or
+        referral — in any form: money, gifts, services, or anything of value.
+        This includes treatment providers, sober homes, recovery residences,
+        insurance carriers, and government programs. This is required by Florida
+        law (Fla. Stat. § 817.505 — Patient Brokering Act) and is a condition of
+        every listing on this site.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900">What you are responsible for</h2>
+      <ul class="list-disc space-y-1 pl-5">
+        <li>Verify every listing yourself before relying on it — phone numbers,
+          hours, eligibility, and availability change.</li>
+        <li>Call ahead. Nothing on this site replaces a direct conversation with
+          the organization.</li>
+        <li>Do not use this site to make medical, legal, or housing decisions
+          without consulting a licensed professional.</li>
+      </ul>
+
+      <h2 class="text-xl font-bold text-slate-900">No warranties</h2>
+      <p>
+        All listings are provided &ldquo;as is.&rdquo; We do not warrant that
+        listings are accurate, complete, current, or available. We make no
+        representation about the quality of care, safety, or legitimacy of any
+        provider. In no event will Base Impact, its officers, volunteers, or
+        contributors be liable for any claim arising from your use of this site.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900">Your data</h2>
+      <p>
+        We do not track, store, or sell your location, search terms, or
+        submission data on help pages. The submission form collects only what
+        you choose to give us, and we use it only to verify and improve listings.
+        See our <a href="/privacy" class="underline">privacy note</a> for details.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900">Changes</h2>
+      <p>
+        We may update these terms at any time. Continued use of the site after
+        changes means you accept them.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900">Contact</h2>
+      <p>
+        Questions, corrections, or concerns?{' '}
+        <a href={`mailto:${SITE.email}`} class="font-semibold text-emerald-700 underline">
+          {SITE.email}
+        </a>
+        .
+      </p>
+    </section>
+
+    <div class="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-sm leading-relaxed text-amber-900">
+      <p class="mb-1 font-bold">Important</p>
+      <p>
+        If you are in crisis, this site is not the right place. Call{' '}
+        <a href="tel:988" class="font-semibold underline">988</a> (Suicide &amp; Crisis
+        Lifeline), <a href="tel:18006624357" class="font-semibold underline">1-800-662-HELP</a>{' '}
+        (SAMHSA), or <a href="tel:211" class="font-semibold underline">211</a> (United Way).
+      </p>
+    </div>
+  </article>
+</Base>
