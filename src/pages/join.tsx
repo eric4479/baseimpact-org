@@ -88,14 +88,14 @@ export function JoinPage() {
                   href={r.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-accent hover:underline"
+                  className="mt-3 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent hover:underline"
                 >
                   {r.cta}
                 </a>
               ) : (
                 <Link
                   to={r.to as Path}
-                  className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-accent hover:underline"
+                  className="mt-3 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent hover:underline"
                 >
                   {r.cta}
                 </Link>

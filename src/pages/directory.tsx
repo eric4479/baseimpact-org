@@ -550,7 +550,7 @@ export function DirectoryPage() {
                 setSelectedNeed("all");
                 setSelectedTag(null);
               }}
-              className="text-sm text-accent hover:underline"
+              className="inline-flex min-h-11 items-center text-sm text-accent hover:underline"
             >
               Show everything
             </button>

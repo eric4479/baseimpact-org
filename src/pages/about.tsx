@@ -129,7 +129,7 @@ export function AboutPage() {
           </Button>
           <Link
             to="/feedback"
-            className="text-sm text-accent hover:underline"
+            className="inline-flex min-h-11 items-center text-sm text-accent hover:underline"
           >
             Or send general feedback →
           </Link>
