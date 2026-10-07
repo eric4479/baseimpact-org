@@ -1,5 +1,7 @@
 import { resources } from '../data/resources';
 import { CATEGORIES, CATEGORY_META, type Category, type Resource } from '../data/schema';
+import { lookupZip } from './geo';
+import { REGION_CITIES } from '../data/region-cities';
 
 const DAY_MS = 86_400_000;
 /** Records older than this render a "call ahead" warning. */
@@ -30,10 +32,57 @@ export function isTrusted(r: Resource): boolean {
 
 /** Everything the client-side search should look at, lower-cased and joined. */
 export function searchIndex(r: Resource): string {
-  return [r.name, r.orgType, r.city, r.address, r.eligibility, ...(r.cost ?? []), ...r.tags]
+  return [
+    r.name,
+    r.orgType,
+    r.city,
+    r.address,
+    r.eligibility,
+    ...(r.cost ?? []),
+    ...(r.population ?? []),
+    ...r.tags,
+  ]
     .filter(Boolean)
     .join(' ')
     .toLowerCase();
+}
+
+export interface ResolvedGeo {
+  lat: number;
+  lng: number;
+  /** 'address' = from a street ZIP. 'city' = approximate city centroid. */
+  precision: 'address' | 'city';
+}
+
+/**
+ * Coordinates for distance sorting.
+ *
+ * Resolution order:
+ *   1. An explicit `geo` pair (hand-verified street coordinates).
+ *   2. The ZIP embedded in `address` → ZIP centroid. Street-level.
+ *   3. `city` → city centroid. APPROXIMATE — surfaced to the user as such.
+ *
+ * Returns null for statewide/national resources with no physical location. Distance is
+ * meaningless for a helpline, and inventing a pin would mislead someone who then
+ * tries to walk there.
+ */
+export function resolveGeo(r: Resource): ResolvedGeo | null {
+  if (r.geo) return { lat: r.geo[0], lng: r.geo[1], precision: 'address' };
+
+  if (r.address) {
+    const match = r.address.match(/\b(\d{5})\b/);
+    if (match) {
+      const zip = lookupZip(match[1]);
+      if (zip) return { lat: zip.lat, lng: zip.lng, precision: 'address' };
+    }
+  }
+
+  if (r.city) {
+    const c = REGION_CITIES[r.city.trim()];
+    if (c) return { lat: c[0], lng: c[1], precision: 'city' };
+  }
+
+  return null;
 }
 
 export interface Coverage {

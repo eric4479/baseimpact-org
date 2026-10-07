@@ -79,6 +79,40 @@ export interface Verification {
   note?: string;
 }
 
+/**
+ * Who a resource is specifically set up to serve. Lets people filter for
+ * "housing for all types of people" without inventing a new category per population.
+ */
+export const POPULATIONS = [
+  'recovery', // people in or seeking recovery from substance use
+  'disability', // intellectual, developmental, or physical disability
+  'mental-health', // mental health condition / psychosocial support needs
+  'reentry', // returning from incarceration, or with a criminal record
+  'veterans',
+  'seniors',
+  'youth', // under 18 or transitional-age
+  'families',
+  'immigrants', // including mixed-status households
+  'unhoused', // currently or recently experiencing homelessness
+  'lgbtq',
+] as const;
+
+export type Population = (typeof POPULATIONS)[number];
+
+export const POPULATION_LABELS: Record<Population, string> = {
+  recovery: 'Recovery',
+  disability: 'Disability',
+  'mental-health': 'Mental health',
+  reentry: 'Reentry / record',
+  veterans: 'Veterans',
+  seniors: 'Seniors',
+  youth: 'Youth',
+  families: 'Families',
+  immigrants: 'Immigrants',
+  unhoused: 'Experiencing homelessness',
+  lgbtq: 'LGBTQ+',
+};
+
 export interface Resource {
   /** Stable slug. Used as the DOM id and for de-duplication. */
   id: string;
@@ -98,6 +132,24 @@ export interface Resource {
   eligibility?: string;
   languages?: string[];
   walkIn?: boolean;
+  /**
+   * Who this is specifically set up to serve. Drives the "who it's for" filter.
+   * Omit when the resource is genuinely open to everyone.
+   */
+  population?: Population[];
+  /**
+   * Optional coordinates for distance sorting. Prefer letting the visitor's ZIP drive
+   * distance — only set these when you have verified them, and never geocode a
+   * person's location server-side (see RISKS_AND_RECOMMENDATIONS.md R3).
+   */
+  geo?: [lat: number, lng: number];
+  /**
+   * Licensing. REQUIRED if you ever list a residential or clinical facility —
+   * see RISKS_AND_RECOMMENDATIONS.md R1. The v1 seed data deliberately lists licensed
+   * *gateways* instead of facilities, so these are unset.
+   */
+  licenseNumber?: string;
+  licensingAuthority?: string;
   /** Free-text keywords used by the client-side search. */
   tags: string[];
   verification: Verification;

@@ -40,6 +40,15 @@ else if (r.address) rows.push({ icon: '📍', label: 'Location', value: r.addres
 if (r.hours) rows.push({ icon: '🕑', label: 'Hours', value: r.hours });
 if (r.cost?.length) rows.push({ icon: '💲', label: 'Cost', value: r.cost.join(' · ') });
 if (r.eligibility) rows.push({ icon: '👤', label: 'Who qualifies', value: r.eligibility });
+if (r.walkIn) rows.push({ icon: '🚪', label: 'Walk-in', value: 'Walk-ins welcome' });
+if (r.languages?.length) rows.push({ icon: '🗣', label: 'Languages', value: r.languages.join(' · ') });
+if (r.licenseNumber) {
+  rows.push({
+    icon: '📋',
+    label: 'License',
+    value: `${r.licenseNumber}${r.licensingAuthority ? ` (${r.licensingAuthority})` : ''}`,
+  });
+}
 ---
 
 <article

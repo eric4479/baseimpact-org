@@ -10,6 +10,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "test": "npm run build && node scripts/smoke-test.mjs",
+    "gen:zips": "node scripts/gen-zips.mjs",
     "deploy": "npm run build && wrangler deploy --config dist/server/wrangler.json",
     "astro": "astro"
   },
@@ -19,5 +21,9 @@
     "astro": "^6.4.4",
     "tailwindcss": "^4.3.0",
     "wrangler": "^4.98.0"
+  },
+  "devDependencies": {
+    "jsdom": "^30.1.2",
+    "zipcodes": "^8.0.0"
   }
 }

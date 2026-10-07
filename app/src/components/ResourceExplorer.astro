@@ -1,9 +1,17 @@
 ---
 import ResourceCard from './ResourceCard.astro';
-import { CATEGORY_META, CATEGORIES } from '../data/schema';
-import { searchIndex, sortedResources } from '../lib/resources';
+import { CATEGORY_META, CATEGORIES, POPULATION_LABELS, POPULATIONS } from '../data/schema';
+import { resolveGeo, searchIndex, sortedResources } from '../lib/resources';
+import { REGION_ZIPS } from '../data/region-zips';
 
 const items = sortedResources();
+
+// Precompute resource coordinates at build time so the browser never parses an address.
+// `precision` travels with the coordinate so the UI can be honest about approximations.
+const geoById: Record<string, { lat: number; lng: number; precision: string } | null> = {};
+for (const r of items) {
+  geoById[r.id] = resolveGeo(r);
+}
 ---
 
 <section id="resources" class="px-4 pb-16">
@@ -34,6 +42,44 @@ const items = sortedResources();
         </svg>
       </div>
 
+      <!--
+        Distance. ZIP-first on purpose (RISKS_AND_RECOMMENDATIONS.md R3):
+        the ZIP is typed by the visitor, resolved to a centroid IN THE BROWSER, and never
+        transmitted or stored. Device location is strictly opt-in and also stays local.
+      -->
+      <div class="mt-3 flex flex-wrap items-center gap-2">
+        <label for="zip" class="text-sm font-semibold text-slate-700">Near</label>
+        <input
+          id="zip"
+          type="text"
+          inputmode="numeric"
+          maxlength="5"
+          autocomplete="postal-code"
+          placeholder="ZIP code"
+          aria-describedby="zip-help"
+          class="w-28 rounded-xl border border-slate-300 px-3 py-2 text-slate-800 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none"
+        />
+        <button
+          id="use-location"
+          type="button"
+          class="rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-emerald-600"
+        >
+          Use my location
+        </button>
+        <button
+          id="clear-loc"
+          type="button"
+          class="hidden rounded-xl px-3 py-2 text-sm font-semibold text-slate-500 underline hover:text-slate-700"
+        >
+          Clear
+        </button>
+        <span id="loc-status" class="text-sm text-slate-500" role="status" aria-live="polite"></span>
+      </div>
+      <p id="zip-help" class="mt-2 text-xs text-slate-500">
+        Your ZIP and location stay in your browser — we don't send or store them. Distance is a rough
+        guide: check whether there's a bus route before you travel.
+      </p>
+
       <div class="mt-4 flex flex-wrap gap-2" role="group" aria-label="Filter by category">
         <button
           type="button"
@@ -55,6 +101,26 @@ const items = sortedResources();
         }
       </div>
 
+      <!-- Who it's for -->
+      <details class="mt-4 rounded-xl border border-slate-200 bg-slate-50">
+        <summary class="cursor-pointer px-4 py-2.5 text-sm font-semibold text-slate-700">
+          Who it's for (veterans, disability, reentry, seniors…)
+        </summary>
+        <div class="flex flex-wrap gap-2 px-4 pb-4" role="group" aria-label="Filter by population">
+          {
+            POPULATIONS.map((p) => (
+              <button
+                type="button"
+                data-pop={p}
+                class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-emerald-600"
+              >
+                {POPULATION_LABELS[p]}
+              </button>
+            ))
+          }
+        </div>
+      </details>
+
       <p id="count" class="mt-4 text-sm text-slate-500" aria-live="polite"></p>
     </div>
 
@@ -64,8 +130,10 @@ const items = sortedResources();
         items.map((r) => (
           <div
             class="resource-item"
+            data-id={r.id}
             data-category={r.category}
             data-search={searchIndex(r)}
+            data-pop={(r.population ?? []).join(' ')}
             data-trust={r.verification.status === 'sample' ? 'sample' : 'trusted'}
           >
             <ResourceCard resource={r} />
@@ -82,42 +150,199 @@ const items = sortedResources();
   </div>
 </section>
 
-<script>
-  const q = document.getElementById('q') as HTMLInputElement | null;
-  const items = Array.from(document.querySelectorAll<HTMLElement>('.resource-item'));
+<script is:inline define:vars={{ geoById, REGION_ZIPS }}>
+  const GEO = geoById;
+  const ZIPS = REGION_ZIPS;
+
+  const q = document.getElementById('q');
+  const zipInput = document.getElementById('zip');
+  const useLoc = document.getElementById('use-location');
+  const clearLoc = document.getElementById('clear-loc');
+  const locStatus = document.getElementById('loc-status');
+  const grid = document.getElementById('grid');
+  const items = Array.from(document.querySelectorAll('.resource-item'));
   const count = document.getElementById('count');
   const empty = document.getElementById('empty');
-  const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-cat]'));
+  const catChips = Array.from(document.querySelectorAll('[data-cat]'));
+  const popChips = Array.from(document.querySelectorAll('[data-pop]'));
 
-  let active = 'all';
+  let activeCat = 'all';
+  const activePops = new Set();
+  let origin = null; // { lat, lng } — lives only in this tab, never sent anywhere
 
-  function render() {
-    const term = (q?.value ?? '').trim().toLowerCase();
-    let shown = 0;
-
-    for (const el of items) {
-      const okCat = active === 'all' || el.dataset.category === active;
-      const okTerm = term === '' || (el.dataset.search ?? '').includes(term);
-      const ok = okCat && okTerm;
-      el.classList.toggle('hidden', !ok);
-      if (ok) shown++;
-    }
-
-    if (count) {
-      count.textContent = `${shown} resource${shown === 1 ? '' : 's'} shown`;
-    }
-    empty?.classList.toggle('hidden', shown !== 0);
+  /* ── distance ─────────────────────────────────────────────────────────── */
+  function haversine(a, b) {
+    const R = 3958.7613;
+    const toRad = (d) => (d * Math.PI) / 180;
+    const dLat = toRad(b.lat - a.lat);
+    const dLng = toRad(b.lng - a.lng);
+    const h =
+      Math.sin(dLat / 2) ** 2 +
+      Math.sin(dLng / 2) ** 2 * Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat));
+    return 2 * R * Math.asin(Math.min(1, Math.sqrt(h)));
   }
 
-  for (const chip of chips) {
+  function fmtMi(mi) {
+    if (mi < 0.1) return 'less than 0.1 mi';
+    if (mi < 10) return mi.toFixed(1) + ' mi';
+    return Math.round(mi) + ' mi';
+  }
+
+  function tier(mi) {
+    if (mi <= 5) return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+    if (mi <= 15) return 'bg-sky-50 text-sky-700 border-sky-200';
+    return 'bg-slate-100 text-slate-600 border-slate-200';
+  }
+
+  function setDistanceBadge(el, mi, precision) {
+    let badge = el.querySelector('.js-distance');
+    if (!badge) {
+      badge = document.createElement('span');
+      const host = el.querySelector('article > div');
+      if (host) host.appendChild(badge);
+      else el.appendChild(badge);
+    }
+    badge.className =
+      'js-distance mb-2 inline-block rounded-full border px-2 py-0.5 text-[11px] font-semibold ' +
+      tier(mi);
+    // A city centroid is not a street address — say so rather than implying precision.
+    badge.textContent =
+      fmtMi(mi) + ' away' + (precision === 'city' ? ' (approx. — city center)' : '');
+    badge.title =
+      precision === 'city'
+        ? 'Approximate: based on the city center, not a verified street address.'
+        : 'Based on the ZIP code of the listed address.';
+  }
+
+  function clearDistanceBadges() {
+    document.querySelectorAll('.js-distance').forEach((b) => b.remove());
+  }
+
+  /* ── render ───────────────────────────────────────────────────────────── */
+  function render() {
+    const term = (q && q.value ? q.value : '').trim().toLowerCase();
+    let shown = 0;
+    const visible = [];
+
+    for (const el of items) {
+      const okCat = activeCat === 'all' || el.dataset.category === activeCat;
+      const okTerm = term === '' || (el.dataset.search || '').includes(term);
+      const pops = (el.dataset.pop || '').split(' ').filter(Boolean);
+      const okPop = activePops.size === 0 || Array.from(activePops).every((p) => pops.includes(p));
+      const ok = okCat && okTerm && okPop;
+      el.classList.toggle('hidden', !ok);
+      if (ok) {
+        shown++;
+        visible.push(el);
+      }
+    }
+
+    clearDistanceBadges();
+
+    if (origin && grid) {
+      const withDist = [];
+      const noGeo = [];
+      for (const el of visible) {
+        const g = GEO[el.dataset.id];
+        if (!g) {
+          noGeo.push(el);
+          continue;
+        }
+        const mi = haversine(origin, { lat: g.lat, lng: g.lng });
+        setDistanceBadge(el, mi, g.precision);
+        withDist.push({ el, mi });
+      }
+      withDist.sort((a, b) => a.mi - b.mi);
+      // Nearest first; resources with no fixed location (helplines) sink to the bottom.
+      for (const w of withDist) grid.appendChild(w.el);
+      for (const el of noGeo) grid.appendChild(el);
+    }
+
+    if (count) count.textContent = shown + ' resource' + (shown === 1 ? '' : 's') + ' shown';
+    if (empty) empty.classList.toggle('hidden', shown !== 0);
+  }
+
+  /* ── events ───────────────────────────────────────────────────────────── */
+  for (const chip of catChips) {
     chip.addEventListener('click', () => {
-      for (const c of chips) c.classList.remove('chip-active');
+      for (const c of catChips) c.classList.remove('chip-active');
       chip.classList.add('chip-active');
-      active = chip.dataset.cat ?? 'all';
+      activeCat = chip.dataset.cat || 'all';
       render();
     });
   }
 
-  q?.addEventListener('input', render);
+  for (const chip of popChips) {
+    chip.addEventListener('click', () => {
+      const p = chip.dataset.pop;
+      if (!p) return;
+      if (activePops.has(p)) {
+        activePops.delete(p);
+        chip.classList.remove('chip-active');
+      } else {
+        activePops.add(p);
+        chip.classList.add('chip-active');
+      }
+      render();
+    });
+  }
+
+  if (zipInput) {
+    zipInput.addEventListener('input', () => {
+      const z = (zipInput.value || '').replace(/\D/g, '').slice(0, 5);
+      if (z.length === 5) {
+        const c = ZIPS[z];
+        if (c) {
+          origin = { lat: c[0], lng: c[1] };
+          if (locStatus) locStatus.textContent = 'Sorting by distance from ' + z + '.';
+          if (clearLoc) clearLoc.classList.remove('hidden');
+          render();
+        } else if (locStatus) {
+          locStatus.textContent = "We don't recognize that ZIP — try another in our area.";
+        }
+      } else if (z.length === 0) {
+        origin = null;
+        if (locStatus) locStatus.textContent = '';
+        if (clearLoc) clearLoc.classList.add('hidden');
+        render();
+      }
+    });
+  }
+
+  if (useLoc) {
+    useLoc.addEventListener('click', () => {
+      if (!navigator.geolocation) {
+        if (locStatus)
+          locStatus.textContent = "Your browser can't share location — enter a ZIP instead.";
+        return;
+      }
+      if (locStatus) locStatus.textContent = 'Getting your location…';
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          // Coordinates never leave this tab.
+          origin = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          if (locStatus) locStatus.textContent = 'Sorting by distance from your location.';
+          if (clearLoc) clearLoc.classList.remove('hidden');
+          render();
+        },
+        () => {
+          if (locStatus) locStatus.textContent = 'Location unavailable — enter a ZIP instead.';
+        },
+        { enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 },
+      );
+    });
+  }
+
+  if (clearLoc) {
+    clearLoc.addEventListener('click', () => {
+      origin = null;
+      if (zipInput) zipInput.value = '';
+      if (locStatus) locStatus.textContent = '';
+      clearLoc.classList.add('hidden');
+      render();
+    });
+  }
+
+  if (q) q.addEventListener('input', render);
   render();
 </script>
