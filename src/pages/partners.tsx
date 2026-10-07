@@ -1,9 +1,15 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FieldLabel, Input, SelectField, Textarea } from "@/components/ui/input";
 import { PageMeta } from "@/components/page-meta";
 import { JsonLd } from "@/components/json-ld";
+import TurnstileWidget from "@/components/turnstile-widget";
+import {
+  useFormSubmit,
+  turnstileToken,
+  turnstileConfigured as turnstileIsConfigured,
+} from "@/components/use-form-submit";
 
 const PARTNERS_SCHEMA = {
   "@context": "https://schema.org",
@@ -13,7 +19,10 @@ const PARTNERS_SCHEMA = {
 };
 
 export function PartnersPage() {
-  const [submitted, setSubmitted] = useState(false);
+  const [hp, setHp] = useState("");
+  const [verifyHint, setVerifyHint] = useState(false);
+  const [turnstileConfigured, setTurnstileConfigured] = useState(false);
+  useEffect(() => setTurnstileConfigured(turnstileIsConfigured()), []);
   const [form, setForm] = useState({
     orgName: "",
     contactPerson: "",
@@ -22,25 +31,39 @@ export function PartnersPage() {
     serviceType: "Food Pantry / Meal Provider",
     needs: "",
   });
+  const { status, message, storedButNotEmailed, submit, reset } = useFormSubmit("partners");
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const token = (window as unknown as { turnstile?: { getResponse: () => string } }).turnstile
-      ?.getResponse?.() || "";
 
-    const turnstileConfigured = !!(window as unknown as { __TURNSTILE_SITE_KEY?: string }).__TURNSTILE_SITE_KEY;
-    if (turnstileConfigured && !token) {
-      alert("Please complete the verification step.");
+    if (turnstileConfigured && !turnstileToken()) {
+      setVerifyHint(true);
       return;
     }
+    setVerifyHint(false);
 
-    const subject = encodeURIComponent(`Partner request: ${form.orgName}`);
-    const body = encodeURIComponent(
-      `Organization: ${form.orgName}\nContact: ${form.contactPerson}\nEmail: ${form.email}\nPhone: ${form.phone}\nType: ${form.serviceType}\n\n${form.needs}`,
-    );
-    window.location.href = `mailto:hello@baseimpact.org?subject=${subject}&body=${body}`;
-    setSubmitted(true);
+    await submit({
+      // identity = who is writing, topic = what kind of org. The Worker stores both
+      // verbatim, so these labels are what we will see in the inbox.
+      identity: `Organization — ${form.contactPerson || "contact person not given"}`,
+      topic: form.serviceType,
+      note: [
+        `Organization: ${form.orgName}`,
+        `Phone: ${form.phone || "(not given)"}`,
+        "",
+        form.needs || "(no details given)",
+      ].join("\n"),
+      name: form.contactPerson,
+      email: form.email,
+      hp,
+    });
   };
+
+  const mailtoHref = `mailto:hello@baseimpact.org?subject=${encodeURIComponent(
+    `Partner request: ${form.orgName}`,
+  )}&body=${encodeURIComponent(
+    `Organization: ${form.orgName}\nContact: ${form.contactPerson}\nEmail: ${form.email}\nPhone: ${form.phone}\nType: ${form.serviceType}\n\n${form.needs}`,
+  )}`;
 
   return (
     <div className="space-y-8">
@@ -85,20 +108,36 @@ export function PartnersPage() {
       <section className="rounded-3xl bg-band p-5 text-on-fill sm:p-8">
         <h2 className="font-display text-2xl font-semibold">Register your organization</h2>
         <p className="mt-2 text-faint">
-          Join the Brevard referral network. This opens your email app so the note actually reaches
-          us.
+          Join the Brevard referral network. This goes straight to our inbox — no need to have an
+          email app set up.
         </p>
 
-        {submitted ? (
-          <div className="mt-6 rounded-2xl bg-band-deep p-5">
+        {status === "sent" ? (
+          <div className="mt-6 rounded-2xl bg-band-deep p-5" role="status" aria-live="polite">
             <Check className="size-8 text-faint" aria-hidden />
-            <h3 className="mt-2 font-display text-xl font-semibold text-on-fill">Email draft opened</h3>
-            <p className="mt-1 text-faint">
-              Send it when you’re ready. If nothing opened, write us at hello@baseimpact.org.
-            </p>
-            <Button className="mt-4" variant="outline" onClick={() => setSubmitted(false)}>
-              Edit and try again
-            </Button>
+            <h3 className="mt-2 font-display text-xl font-semibold text-on-fill">Registration received</h3>
+            <p className="mt-1 text-faint">{message}</p>
+            {storedButNotEmailed && (
+              <p className="mt-2 text-sm text-caution">
+                Your registration was saved, but our email notification did not send. If we don’t
+                reply within a few days, write us at hello@baseimpact.org.
+              </p>
+            )}
+            <div className="mt-4 flex flex-wrap gap-3">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  reset();
+                  setHp("");
+                  setVerifyHint(false);
+                }}
+              >
+                Edit and try again
+              </Button>
+              <Button variant="outline" onClick={() => (window.location.href = mailtoHref)}>
+                Also email it directly
+              </Button>
+            </div>
           </div>
         ) : (
           <form onSubmit={onSubmit} className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -180,6 +219,8 @@ export function PartnersPage() {
             <input
               type="text"
               name="_hp"
+              value={hp}
+              onChange={(e) => setHp(e.target.value)}
               autoComplete="off"
               tabIndex={-1}
               style={{
@@ -192,12 +233,44 @@ export function PartnersPage() {
               aria-hidden="true"
             />
 
+            <div className="sm:col-span-2">
+              <TurnstileWidget fallbackHref="mailto:hello@baseimpact.org" />
+
+              {verifyHint && (
+                <p className="text-sm text-caution" role="alert">
+                  Please complete the verification step above before submitting.
+                </p>
+              )}
+
+              {status === "error" && message && (
+                <div className="rounded-xl bg-band-deep px-4 py-3" role="alert">
+                  <p className="text-sm text-faint">{message}</p>
+                  <a
+                    href={mailtoHref}
+                    className="mt-1 inline-block text-sm font-semibold text-on-fill underline"
+                  >
+                    Send it by email instead
+                  </a>
+                </div>
+              )}
+            </div>
+
             <p className="sm:col-span-2 text-xs text-faint">
-              This form opens your email app with a pre-filled message. If nothing opens, write hello@baseimpact.org directly.
+              Sent straight to our inbox. Prefer your own email app?{" "}
+              <a href={mailtoHref} className="font-semibold text-on-fill underline">
+                Write to hello@baseimpact.org
+              </a>
+              .
             </p>
 
-            <Button type="submit" variant="primary" size="lg" className="sm:col-span-2">
-              Submit registration
+            <Button
+              type="submit"
+              variant="primary"
+              size="lg"
+              className="sm:col-span-2"
+              disabled={status === "submitting"}
+            >
+              {status === "submitting" ? "Submitting…" : "Submit registration"}
             </Button>
           </form>
         )}
