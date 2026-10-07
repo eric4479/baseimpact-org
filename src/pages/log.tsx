@@ -45,6 +45,26 @@ type Row = {
   has_photo: number;
 };
 
+type FormSubmission = {
+  id: number;
+  created_at: string;
+  endpoint: string;
+  identity: string | null;
+  topic: string | null;
+  name: string | null;
+  email: string | null;
+  email_sent: number;
+  email_error: string | null;
+  notified_at: string | null;
+  note: string | null;
+};
+
+type FormInbox = {
+  counts: { total: number; emailed: number; unsent: number } | null;
+  unnotified: number;
+  submissions: FormSubmission[];
+};
+
 const CHANNELS = [
   { key: "phone", label: "Phone" },
   { key: "text", label: "Text" },
@@ -91,6 +111,11 @@ export function LogPage() {
   const [issuedCode, setIssuedCode] = useState("");
   /** Why "Log it" could not proceed, shown instead of silently doing nothing. */
   const [logError, setLogError] = useState("");
+  // Referral log vs. form inbox. The inbox exists because form submissions are stored
+  // in D1 first and emailed second -- if the send fails, the message still exists and
+  // someone has to be able to read it.
+  const [view, setView] = useState<"referrals" | "messages">("referrals");
+  const [inbox, setInbox] = useState<FormInbox | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -115,7 +140,26 @@ export function LogPage() {
     }
   }, []);
 
+  const loadInbox = useCallback(async () => {
+    try {
+      const r = await api("/api/forms");
+      if (!r.ok) {
+        setInbox({ counts: { total: 0, emailed: 0, unsent: 0 }, unnotified: 0, submissions: [] });
+        return;
+      }
+      setInbox(r.body as FormInbox);
+    } catch {
+      setInbox({ counts: { total: 0, emailed: 0, unsent: 0 }, unnotified: 0, submissions: [] });
+    }
+  }, []);
+
   useEffect(() => { void load(); }, [load]);
+
+  // Load the message count up front so the tab shows a badge before it is opened.
+  useEffect(() => {
+    if (phase !== "ready") return;
+    void loadInbox();
+  }, [phase, loadInbox]);
 
   const suggestions = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -243,16 +287,132 @@ export function LogPage() {
 
       <header className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl font-semibold">Referral log</h1>
-          <p className="text-sm text-muted">Every referral you make is one row.</p>
+          <h1 className="font-display text-3xl font-semibold">
+            {view === "referrals" ? "Referral log" : "Messages"}
+          </h1>
+          <p className="text-sm text-muted">
+            {view === "referrals"
+              ? "Every referral you make is one row."
+              : "Feedback, partner registrations, and contact messages."}
+          </p>
         </div>
         <Button variant="outline" size="sm" onClick={onLogout}>
           <LogOut className="size-4" aria-hidden /> Sign out
         </Button>
       </header>
 
-      {/* The number, always with its coverage. */}
-      {stats && (
+      {/* Two views behind one password: the referral log and the form inbox. */}
+      <div className="flex gap-2" role="tablist" aria-label="Log sections">
+        <Button
+          role="tab"
+          aria-selected={view === "referrals"}
+          variant={view === "referrals" ? "pine" : "outline"}
+          size="sm"
+          onClick={() => setView("referrals")}
+        >
+          Referrals
+        </Button>
+        <Button
+          role="tab"
+          aria-selected={view === "messages"}
+          variant={view === "messages" ? "pine" : "outline"}
+          size="sm"
+          onClick={() => {
+            setView("messages");
+            void loadInbox();
+          }}
+        >
+          Messages
+          {inbox && inbox.counts && inbox.counts.total > 0 && (
+            <span className="ml-2 text-xs opacity-80">({inbox.counts.total})</span>
+          )}
+        </Button>
+      </div>
+
+      {view === "messages" && (
+        <section className="space-y-3" role="tabpanel" aria-label="Messages">
+          {inbox?.counts && (
+            <div className="flex flex-wrap items-baseline gap-x-6 gap-y-1 rounded-2xl bg-card p-4 shadow-[var(--shadow-border)]">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wide text-muted">Messages</p>
+                <p className="font-display text-2xl font-semibold">{inbox.counts.total}</p>
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wide text-muted">Email sent</p>
+                <p className="font-display text-2xl font-semibold text-positive">{inbox.counts.emailed}</p>
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wide text-muted">Read here only</p>
+                <p className="font-display text-2xl font-semibold text-caution">{inbox.counts.unsent}</p>
+              </div>
+            </div>
+          )}
+          {!inbox && (
+            <p className="text-sm text-muted" role="status">
+              <Loader2 className="mr-2 inline size-4 animate-spin" aria-hidden /> Loading messages…
+            </p>
+          )}
+          {inbox && inbox.submissions.length === 0 && (
+            <p className="rounded-2xl bg-card p-5 text-sm text-muted shadow-[var(--shadow-border)]">
+              No messages yet. Feedback and partner registrations from the site will appear here.
+            </p>
+          )}
+          {inbox?.submissions.map((s) => (
+            <article
+              key={s.id}
+              className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)]"
+            >
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <h2 className="font-display text-lg font-semibold">
+                  {s.topic || "No subject"}
+                </h2>
+                <time className="text-xs text-muted" dateTime={s.created_at}>
+                  {s.created_at?.replace("T", " ").slice(0, 16)}
+                </time>
+              </div>
+              <p className="mt-1 text-xs font-bold uppercase tracking-wide text-accent">
+                {s.endpoint}
+              </p>
+              <dl className="mt-2 space-y-0.5 text-sm">
+                {s.identity && (
+                  <div className="flex gap-2">
+                    <dt className="text-muted">From</dt>
+                    <dd>{s.identity}</dd>
+                  </div>
+                )}
+                {(s.name || s.email) && (
+                  <div className="flex gap-2">
+                    <dt className="text-muted">Contact</dt>
+                    <dd>
+                      {[s.name, s.email].filter(Boolean).join(" · ")}
+                    </dd>
+                  </div>
+                )}
+              </dl>
+              {s.note && (
+                <p className="mt-3 whitespace-pre-wrap rounded-xl bg-inset p-3 text-sm">{s.note}</p>
+              )}
+              {/* Shown when the notification email did not go out -- the message is
+                  here, but nobody was told. That is a different problem from no message. */}
+              {!s.email_sent && (
+                <p className="mt-3 text-xs text-caution">
+                  Notification email did not send
+                  {s.email_error ? `: ${s.email_error}` : "."} This message is saved and readable
+                  here.
+                </p>
+              )}
+              {s.email_sent && (
+                <p className="mt-3 text-xs text-muted">Notification email sent.</p>
+              )}
+            </article>
+          ))}
+          <p className="text-xs text-muted">
+            Messages are deleted automatically 90 days after they arrive.
+          </p>
+        </section>
+      )}
+
+      {view === "referrals" && stats && (
         <section className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)]">
           <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2">
             <div>
@@ -289,6 +449,7 @@ export function LogPage() {
       )}
 
       {/* Log one. Three taps: pick, (channel is pre-set), Log it. */}
+      {view === "referrals" && (
       <section className="space-y-3 rounded-2xl bg-card p-5 shadow-[var(--shadow-border)]">
         <h2 className="font-display text-xl font-semibold">Log a referral</h2>
 
@@ -380,8 +541,10 @@ export function LogPage() {
           </div>
         )}
       </section>
+      )}
 
       {/* Outcomes. Three buttons, never two. */}
+      {view === "referrals" && (
       <section className="space-y-3">
         <h2 className="font-display text-xl font-semibold">Recent referrals</h2>
         {rows.length === 0 ? (
@@ -434,6 +597,7 @@ export function LogPage() {
           </ul>
         )}
       </section>
+      )}
     </div>
   );
 }
