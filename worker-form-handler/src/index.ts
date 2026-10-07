@@ -39,6 +39,22 @@ type Env = {
   FORM_TO_EMAIL?: string;
   CF_RATE_LIMIT_MAX?: string;
   CF_RATE_LIMIT_WINDOW?: string;
+  /**
+   * Cloudflare Email Sending Worker binding. Takes a structured builder object (the
+   * recommended form) or an EmailMessage; it does NOT take a raw MIME string.
+   */
+  EMAIL?: {
+    send(message: {
+      to: string;
+      from: string;
+      subject: string;
+      text?: string;
+      html?: string;
+      replyTo?: string;
+    }): Promise<{ messageId: string }>;
+  };
+  /** From address must sit on a verified sending domain. */
+  EMAIL_FROM?: string;
 };
 
 type FormPayload = {
@@ -279,6 +295,93 @@ async function handleListReferrals(url: URL, env: Env): Promise<Response> {
   return json({ stats: stats.results[0] ?? null, recent: recent.results ?? [] });
 }
 
+/**
+ * The form inbox, readable only with a valid /log session.
+ *
+ * This is the point of storing submissions in D1 rather than only emailing them: when
+ * a send fails there is still somewhere to read the message. Notes come back in full
+ * because this is the authenticated operator view; the public endpoints never expose
+ * another person's submission.
+ */
+async function handleFormInbox(url: URL, env: Env): Promise<Response> {
+  const limit = Math.min(Math.max(Number(url.searchParams.get("limit") ?? 50), 1), 200);
+  const [rows, counts, unread] = await Promise.all([
+    env.REFERRALS.prepare(
+      `SELECT id, created_at, endpoint, identity, topic, name, email,
+              email_sent, email_error, notified_at, note
+         FROM form_submissions
+        ORDER BY (notified_at IS NULL) DESC, created_at DESC
+        LIMIT ?`,
+    ).bind(limit).all(),
+    env.REFERRALS.prepare(
+      `SELECT COUNT(*) AS total,
+              COALESCE(SUM(email_sent), 0) AS emailed,
+              COALESCE(SUM(CASE WHEN email_sent = 0 THEN 1 ELSE 0 END), 0) AS unsent
+         FROM form_submissions`,
+    ).all(),
+    env.REFERRALS.prepare(
+      `SELECT COUNT(*) AS n FROM form_submissions WHERE notified_at IS NULL`,
+    ).all(),
+  ]);
+  return json({
+    counts: counts.results[0] ?? null,
+    unnotified: (unread.results[0] as { n: number } | undefined)?.n ?? 0,
+    submissions: rows.results ?? [],
+  });
+}
+
+/**
+ * Scheduled cleanup: enforce the retention window promised in
+ * migrations/0002_form_submissions.sql and retry any notification that never landed.
+ *
+ * Runs on a cron trigger rather than per request, so an org that gets a burst of spam
+ * ages rows out without every visitor request paying for a DELETE.
+ */
+async function handleScheduled(env: Env): Promise<Response> {
+  const RETENTION_DAYS = 90;
+  let deleted = 0;
+  try {
+    const res = await env.REFERRALS.prepare(
+      `DELETE FROM form_submissions WHERE created_at < datetime('now', ?)`,
+    ).bind(`-${RETENTION_DAYS} days`).run();
+    deleted = res.meta.changes ?? 0;
+  } catch (err) {
+    console.error("retention sweep failed", err instanceof Error ? err.message : err);
+    return json({ ok: false }, 500);
+  }
+
+  // Re-attempt notification for anything stored but never emailed, so a binding that
+  // gets fixed later still delivers the messages that arrived while it was broken.
+  const pending = await env.REFERRALS.prepare(
+    `SELECT id, endpoint, name, email, identity, topic, note
+       FROM form_submissions
+      WHERE notified_at IS NULL
+      ORDER BY created_at ASC LIMIT 25`,
+  ).all<{ id: number; endpoint: string; name: string | null; email: string | null;
+          identity: string; topic: string; note: string }>();
+
+  let resent = 0;
+  for (const row of pending.results ?? []) {
+    const mail = await sendEmail(env, `[Base Impact] ${row.endpoint} – ${row.topic}`, [
+      `Endpoint:  ${row.endpoint}`,
+      `From:      ${row.name || "(not provided)"} <${row.email || "(no email)"}>`,
+      `Identity:  ${row.identity}`,
+      `Topic:     ${row.topic}`,
+      ``,
+      `Note:`,
+      row.note,
+      ``,
+      `(re-sent by the scheduled sweep; an earlier attempt failed)`,
+    ].join("\n"));
+    await env.REFERRALS.prepare(
+      `UPDATE form_submissions SET email_sent = ?, email_error = ?, notified_at = ? WHERE id = ?`,
+    ).bind(mail.sent ? 1 : 0, mail.error ?? null, new Date().toISOString(), row.id).run();
+    if (mail.sent) resent++;
+  }
+
+  return json({ ok: true, deleted, resent, remaining: (pending.results ?? []).length - resent });
+}
+
 /** Evidence photos, readable only with a valid /log session. */
 async function handleGetEvidence(env: Env, id: string): Promise<Response> {
   const row = await env.REFERRALS.prepare(
@@ -435,17 +538,48 @@ async function verifyTurnstile(token: string, secret: string | undefined, ip?: s
   }
 }
 
-async function sendEmail(to: string | undefined, subject: string, body: string): Promise<boolean> {
-  if (!to) return false;
+/** Strip CR/LF from a header value: a newline in a header ends the header. */
+function headerSafe(v: string): string {
+  return v.replace(/[\r\n]+/g, " ").trim();
+}
+
+/**
+ * Send through the Cloudflare Email Sending binding.
+ *
+ * Replaces the MailChannels fetch that had been failing silently: that API returns
+ * 404 now, and the old code returned the visitor a success page regardless.
+ *
+ * Two details that are not obvious and cost a real bug to find:
+ *
+ *   * The binding takes a structured object, NOT a MIME string. Passing a raw MIME
+ *     string fails at runtime with "parameter 1 is not of type 'EmailMessage or
+ *     EmailMessageBuilder'" -- and it fails per message, so the form still 200s.
+ *   * Every failure is returned rather than thrown, so handleForm can record it and
+ *     the submission is still durable in D1.
+ */
+async function sendEmail(env: Env, subject: string, body: string): Promise<{ sent: boolean; error?: string }> {
+  const to = env.FORM_TO_EMAIL?.trim();
+  if (!to) return { sent: false, error: "FORM_TO_EMAIL secret is not set" };
+  if (!env.EMAIL) return { sent: false, error: "EMAIL binding not present" };
+  const from = env.EMAIL_FROM?.trim() || "Base Impact <noreply@baseimpact.org>";
+
   try {
-    const resp = await fetch("https://api.mailchannels.net/v1/send", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ to: [to], from: "Base Impact <noreply@baseimpact.org>", subject, text: body }),
+    await env.EMAIL.send({
+      to: headerSafe(to),
+      from: headerSafe(from),
+      subject: headerSafe(subject),
+      text: body,
     });
-    return resp.ok;
-  } catch {
-    return false;
+    return { sent: true };
+  } catch (err) {
+    // Errors carry a .code (e.g. 8500 send failed, 8504 not a verified domain).
+    // Store code+message for the operator; never echo it to the visitor.
+    const e = err as { code?: number | string; message?: string };
+    const reason = [e.code, e.message ?? "unknown send error"]
+      .filter(Boolean)
+      .join(": ")
+      .slice(0, 200);
+    return { sent: false, error: reason };
   }
 }
 
@@ -482,24 +616,77 @@ async function handleForm(req: Request, env: Env, endpoint: string, subjectPrefi
   if (data.email && !isValidEmail(data.email)) {
     return json({ error: "Please provide a valid email address." }, 400);
   }
+  if (!data.note) return json({ error: "Please add a message before sending." }, 400);
 
-  const emailed = await sendEmail(
-    env.FORM_TO_EMAIL,
-    `[Base Impact] ${subjectPrefix} – ${data.topic}`,
-    [
-      `Endpoint:  ${endpoint}`,
-      `From:      ${data.name || "(not provided)"} <${data.email || "(no email)"}>`,
-      `Identity:  ${data.identity}`,
-      `Topic:     ${data.topic}`,
-      `Note:`,
-      data.note || "(empty)",
-    ].join("\n"),
-  );
+  const subject = `[Base Impact] ${subjectPrefix} – ${data.topic}`;
+  const body = [
+    `Endpoint:  ${endpoint}`,
+    `From:      ${data.name || "(not provided)"} <${data.email || "(no email)"}>`,
+    `Identity:  ${data.identity}`,
+    `Topic:     ${data.topic}`,
+    `Received:  ${new Date().toISOString()}`,
+    ``,
+    `Note:`,
+    data.note,
+  ].join("\n");
+
+  /*
+   * Store FIRST, then notify.
+   *
+   * Order matters. Email can fail for reasons we do not control (no binding, domain
+   * not verified, a transient SMTP error) and the old version told the visitor
+   * "we'll be in touch" while the message went nowhere. Writing the row first means
+   * the submission survives any send failure, and notified_at tells us afterwards
+   * which messages a human never saw.
+   */
+  let storedId: number | null = null;
+  let storeError: string | null = null;
+  try {
+    const res = await env.REFERRALS.prepare(
+      `INSERT INTO form_submissions
+         (endpoint, name, email, identity, topic, note, email_sent, email_error, notified_at)
+       VALUES (?, ?, ?, ?, ?, ?, 0, NULL, NULL)`,
+    ).bind(
+      endpoint,
+      data.name || null,
+      data.email || null,
+      data.identity,
+      data.topic,
+      data.note,
+    ).run();
+    storedId = res.meta.last_row_id ?? null;
+  } catch (err) {
+    storeError = err instanceof Error ? err.message.slice(0, 200) : "insert failed";
+  }
+
+  const mail = await sendEmail(env, subject, body);
+
+  if (storedId !== null) {
+    try {
+      await env.REFERRALS.prepare(
+        `UPDATE form_submissions SET email_sent = ?, email_error = ?, notified_at = ? WHERE id = ?`,
+      ).bind(mail.sent ? 1 : 0, mail.error ?? null, new Date().toISOString(), storedId).run();
+    } catch {
+      // The row exists even if the status update did not land; the retry sweep in
+      // handleFormCleanup picks up anything still marked unread.
+    }
+  }
+
+  // A storage failure is the only case we refuse to call a success: if the message
+  // exists nowhere, a friendly "we'll be in touch" would be a lie. The reason goes to
+  // the log for the operator; it is never echoed to the visitor.
+  if (storedId === null) {
+    console.error("form store failed", { endpoint, error: storeError });
+    return json({ error: "We could not save your message. Please email hello@baseimpact.org." }, 500);
+  }
 
   return json({
     ok: true,
     message: "Thank you — we'll be in touch.",
-    fallbackNote: emailed ? undefined : "Your message was received. If you don't hear from us within a few days, email us directly.",
+    // Only surfaced when the send failed; the message IS stored either way.
+    fallbackNote: mail.sent
+      ? undefined
+      : "Your message was received and saved. If you don't hear from us within a few days, email hello@baseimpact.org.",
   });
 }
 
@@ -509,6 +696,17 @@ export default {
     const path = url.pathname.toLowerCase().replace(/\/+$/, "") || "/";
 
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders() });
+
+    /* ---- scheduled retention + notification retry ---- */
+    if (path === "/api/cron/forms") {
+      // Only a Cloudflare cron trigger sets this header, and the public route pattern
+      // is baseimpact.org/api/*, so a visitor can reach this path but cannot satisfy
+      // the check. No password of its own is needed or wanted here.
+      if (req.headers.get("CF-Workers-Scheduled-Event") !== "true") {
+        return json({ error: "Not found." }, 404);
+      }
+      return handleScheduled(env);
+    }
 
     /* ---- public connect (no auth; the code is the credential) ---- */
     const cm = path.match(/^\/api\/connect\/([a-z0-9]+)$/i);
@@ -522,11 +720,15 @@ export default {
     if (path === "/api/referrals/login" && req.method === "POST") return handleReferralLogin(req, env);
     if (path === "/api/referrals/logout" && req.method === "POST") return handleReferralLogout();
 
-    if (path.startsWith("/api/referrals") || path.startsWith("/api/evidence")) {
+    if (path.startsWith("/api/referrals") || path.startsWith("/api/evidence") || path === "/api/forms") {
       if (!env.LOG_PASSWORD) return json({ error: "Logging is not configured yet." }, 503);
       if (!(await sessionValid(req.headers.get("Cookie"), env.LOG_PASSWORD))) {
         return json({ error: "Not signed in." }, 401);
       }
+
+      // The form inbox shares the /log session: same operator, same password, and it
+      // must never be readable without one because it holds what people wrote to us.
+      if (path === "/api/forms" && req.method === "GET") return handleFormInbox(url, env);
 
       const em = path.match(/^\/api\/evidence\/(\d+)$/);
       if (em && req.method === "GET") return handleGetEvidence(env, em[1]);

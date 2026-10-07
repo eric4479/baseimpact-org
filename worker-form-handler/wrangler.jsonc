@@ -41,6 +41,28 @@
     }
   ],
 
+  // Cloudflare Email Sending binding.
+  //
+  // This REPLACES the MailChannels fetch that used to live in the Worker. That API
+  // (api.mailchannels.net/v1/send) now returns 404, so every form notification had
+  // been failing while the site still told visitors "we'll be in touch".
+  //
+  // Requires Email Sending to be enabled on the account and the From domain to be a
+  // verified sending domain. Until that is done the binding is absent at runtime,
+  // sendEmail() returns { sent: false }, and the submission is still written to D1 --
+  // the message is never lost, and /api/forms shows it as unread.
+  //
+  // Set with:  wrangler email sending enable baseimpact.org
+  "send_email": [
+    { "name": "EMAIL" }
+  ],
+
+  // Retention sweep + retry of any notification that failed to send. Daily at 06:00 UTC.
+  // Also enforces the 90-day promise made in migrations/0002_form_submissions.sql.
+  "triggers": {
+    "crons": ["0 6 * * *"]
+  },
+
   "routes": [
     { "pattern": "baseimpact.org/api/*", "zone_name": "baseimpact.org" }
   ]
