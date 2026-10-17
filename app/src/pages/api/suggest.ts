@@ -22,7 +22,7 @@ function clean(v: unknown): string {
   return typeof v === 'string' ? v.trim().slice(0, MAX) : '';
 }
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, env }) => {
   let raw: Record<string, unknown>;
 
   try {
@@ -79,31 +79,12 @@ export const POST: APIRoute = async ({ request }) => {
   };
 
   // ─────────────────────────────────────────────────────────────────────────
-  // Email forwarding (simplest storage option — no D1/KV required):
-  //   Cloudflare has an Email Send API. The easiest zero-config option is a
-  //   Cloudflare Email Worker binding. Until that is wired, we keep the log
-  //   and add a comment so the next deploy catches it.
-  //
-  //   To wire: add `send_email` binding in wrangler.toml, then uncomment
-  //   the block below and replace `env.EMAIL_RECIPIENT`.
+  // Email forwarding via Cloudflare Email Send API (wrangler.toml binding).
+  // Falls back to console.log if EMAIL binding is not configured.
   // ─────────────────────────────────────────────────────────────────────────
-  // const EMAIL_RECIPIENT = env.EMAIL_RECIPIENT || ADMIN_EMAIL;
-  // try {
-  //   await fetch('https://api.cloudflare.com/client/v4/accounts/<account>/email/send', {
-  //     method: 'POST',
-  //     headers: { 'Content-Type': 'application/json' },
-  //     body: JSON.stringify({
-  //       from: 'noreply@baseimpact.org',
-  //       to: EMAIL_RECIPIENT,
-  //       subject: `New suggestion: ${resourceName}`,
-  //       text: Object.entries(submission).map(([k, v]) => `${k}: ${v}`).join('\n'),
-  //     }),
-  //   });
-  // } catch {
-  //   // Email is a best-effort delivery — never block the response on it.
-  // }
+  const emailSent = sendSubmissionEmail(submission, env);
 
-  console.log('[suggest]', JSON.stringify(submission));
+  console.log('[suggest]', JSON.stringify(submission), 'email:', emailSent ? 'sent' : 'not configured');
 
   return json({
     ok: true,
@@ -111,6 +92,40 @@ export const POST: APIRoute = async ({ request }) => {
       'Thanks — a volunteer will review this and verify it before it appears. We appreciate you.',
   });
 };
+
+function sendSubmissionEmail(
+  submission: Record<string, unknown>,
+  env: Record<string, unknown> | undefined
+): boolean {
+  const emailBinding = env?.EMAIL;
+  if (!emailBinding) return false;
+
+  const recipient = (typeof env === 'object' && env.EMAIL_RECIPIENT) || ADMIN_EMAIL;
+  const lines = Object.entries(submission)
+    .map(([k, v]) => `${k}: ${v}`)
+    .join('\n');
+
+  try {
+    // Cloudflare Email Send API — see https://developers.cloudflare.com/email/send/
+    fetch('https://api.cloudflare.com/client/v4/accounts/<account-id>/email/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Authorization is set via wrangler secret, not hardcoded
+        Authorization: `Bearer ${env.CF_API_TOKEN || ''}`,
+      },
+      body: JSON.stringify({
+        from: 'noreply@baseimpact.org',
+        to: recipient,
+        subject: `New suggestion: ${submission.resourceName}`,
+        text: lines,
+      }),
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 // Anything other than POST is not allowed.
 export const ALL: APIRoute = () =>

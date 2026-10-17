@@ -1,0 +1,124 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config/region';
+
+export const prerender = true;
+---
+
+<Base
+  title={`Grants & Funding — ${SITE.name}`}
+  description="Base Impact is fiscally sponsored by LifePointe Ministries, enabling grant applications under their tax-exempt status while we complete our own 501(c)(3) application."
+>
+  <article class="mx-auto max-w-4xl px-4 py-16">
+    <h1 class="mb-6 text-4xl font-bold text-slate-900 md:text-5xl">Grant Funding &amp; Partnerships</h1>
+
+    <!-- Fiscal Sponsorship -->
+    <section class="mb-12 rounded-2xl border border-blue-200 bg-blue-50 p-6">
+      <h2 class="mb-3 text-2xl font-bold text-slate-900">Fiscal Sponsorship</h2>
+      <p class="leading-relaxed text-slate-700">
+        Base Impact, Inc. is fiscally sponsored by
+        <strong>LifePointe Ministries, Inc.</strong>, a Florida Not For Profit Corporation
+        (EIN: 45-1198607, Sunbiz Document #N11000003091). This partnership allows us to apply for
+        grants and receive tax-deductible funding under LifePointe Ministries' existing tax-exempt
+        status while we complete our own 501(c)(3) application with the IRS.
+      </p>
+    </section>
+
+    <!-- Current Status -->
+    <section class="mb-12">
+      <h2 class="mb-3 text-2xl font-bold text-slate-900">Current Status</h2>
+      <ul class="space-y-3 text-slate-700">
+        <li class="flex gap-3">
+          <span class="text-emerald-600" aria-hidden="true">✔</span>
+          <span><strong>501(c)(3) Application:</strong> Form 1023-EZ filed with IRS — pending approval</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="text-emerald-600" aria-hidden="true">✔</span>
+          <span><strong>Florida Registration:</strong> Active (CH85670, expires 10/16/2027)</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="text-emerald-600" aria-hidden="true">✔</span>
+          <span><strong>Fiscal Sponsor:</strong> LifePointe Ministries, Inc. (active)</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- What We're Building -->
+    <section class="mb-12">
+      <h2 class="mb-3 text-2xl font-bold text-slate-900">What We're Building</h2>
+      <p class="mb-4 text-slate-700">
+        Base Impact is a verified resource locator for Florida's Space Coast. We connect neighbors
+        with food pantries, shelters, recovery services, employment resources, and more — then
+        verify each listing by phone and in person.
+      </p>
+      <ul class="space-y-3 text-slate-700">
+        <li class="flex gap-3">
+          <span class="text-emerald-600" aria-hidden="true">✔</span>
+          <span><strong>Find help.</strong> We locate recovery, housing, employment, and basic-needs resources.</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="text-emerald-600" aria-hidden="true">✔</span>
+          <span><strong>Verify what we find.</strong> Volunteers confirm details by phone and in person.</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="text-emerald-600" aria-hidden="true">✔</span>
+          <span><strong>Fill the gaps.</strong> When a service doesn't exist, we work with partners to stand one up.</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="text-emerald-600" aria-hidden="true">✔</span>
+          <span><strong>Modernize local nonprofits.</strong> We provide technology and fee-free fundraising infrastructure.</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Grant Inquiries -->
+    <section class="mb-12">
+      <h2 class="mb-3 text-2xl font-bold text-slate-900">Grant Inquiries</h2>
+      <p class="mb-4 text-slate-700">
+        For grant applications, partnership proposals, or funding inquiries, please contact:
+      </p>
+      <div class="rounded-xl border border-slate-200 bg-white p-6">
+        <p class="font-semibold text-slate-800">Base Impact, Inc.</p>
+        <p class="text-slate-700">Scottsmoor, FL 32775 · Brevard County</p>
+        <p class="text-slate-700">(321) 323-0999 · call or text · by appointment only</p>
+        <p class="mt-2">
+          <a href={`mailto:${SITE.email}`} class="font-semibold text-emerald-700 underline">
+            {SITE.email}
+          </a>
+        </p>
+      </div>
+    </section>
+
+    <!-- Legal Info -->
+    <section>
+      <h2 class="mb-3 text-2xl font-bold text-slate-900">Legal Information</h2>
+      <div class="rounded-xl border border-slate-200 bg-white p-6">
+        <dl class="space-y-3 text-sm">
+          <div class="flex flex-wrap gap-x-2">
+            <dt class="font-semibold text-slate-800">Organization:</dt>
+            <dd class="text-slate-700">Base Impact, Inc.</dd>
+          </div>
+          <div class="flex flex-wrap gap-x-2">
+            <dt class="font-semibold text-slate-800">EIN:</dt>
+            <dd class="text-slate-700 font-mono">43-2200667</dd>
+          </div>
+          <div class="flex flex-wrap gap-x-2">
+            <dt class="font-semibold text-slate-800">Florida Registration #:</dt>
+            <dd class="text-slate-700 font-mono">CH85670</dd>
+          </div>
+          <div class="flex flex-wrap gap-x-2">
+            <dt class="font-semibold text-slate-800">Fiscal Sponsor:</dt>
+            <dd class="text-slate-700">LifePointe Ministries, Inc. (EIN: 45-1198607)</dd>
+          </div>
+          <div class="flex flex-wrap gap-x-2">
+            <dt class="font-semibold text-slate-800">501(c)(3) Status:</dt>
+            <dd class="text-slate-700">Application pending (Form 1023-EZ)</dd>
+          </div>
+        </dl>
+      </div>
+      <p class="mt-6 text-xs text-slate-500">
+        {SITE.legalNotice}
+      </p>
+    </section>
+  </article>
+</Base>

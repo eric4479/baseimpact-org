@@ -1,0 +1,20 @@
+name = "baseimpact-find-help"
+compatibility_date = "2026-04-15"
+
+[assets]
+directory = "./dist/client"
+binding = "ASSETS"
+
+# Email binding: submissions from /api/suggest land in info@baseimpact.org.
+# Requires a verified sending domain on Cloudflare Email Service.
+[[send_email]]
+name = "EMAIL"
+destination_address = "info@baseimpact.org"
+
+# Placeholder for Astro's session KV. Create the real namespace before launch:
+#   npx wrangler kv namespace create SESSION
+[[kv_namespaces]]
+binding = "SESSION"
+
+[observability]
+  enabled = true

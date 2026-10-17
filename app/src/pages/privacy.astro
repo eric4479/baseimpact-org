@@ -1,0 +1,83 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config/region';
+
+export const prerender = true;
+---
+
+<Base
+  title={`Privacy Policy — ${SITE.name}`}
+  description="Base Impact collects only the information you voluntarily provide. We do not sell, rent, or share your personal information."
+>
+  <article class="mx-auto max-w-3xl px-4 py-16">
+    <h1 class="mb-6 text-4xl font-bold text-slate-900">Privacy Policy</h1>
+    <p class="mb-8 text-sm text-slate-500">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+
+    <section class="mb-10 space-y-6 text-slate-700 leading-relaxed">
+      <h2 class="text-xl font-bold text-slate-900">What we collect</h2>
+      <p>
+        Base Impact, Inc. collects only the information you voluntarily provide through our contact
+        and feedback forms — typically your name, email address, and the message you send. We do
+        not use tracking cookies, analytics scripts, or advertising pixels.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900">How we use it</h2>
+      <p>
+        We use your information solely to respond to your message. We do not sell, rent, or share
+        your personal information with third parties for marketing purposes.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900">Data storage</h2>
+      <p>
+        Form submissions are sent directly to our email inbox. We do not maintain a separate
+        customer database or CRM. Messages are retained only as long as needed to complete the
+        requested response.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900">Third-party services</h2>
+      <p>
+        This site loads fonts from Google Fonts and uses Cloudflare for hosting and security. Those
+        services may collect standard server logs (IP address, browser type, timestamps) as part of
+        their normal operations. We do not control their data practices.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900">Donations</h2>
+      <p>
+        Donations are processed by <strong>Zeffy</strong>, a third-party payment processor. Zeffy
+        handles all payment information on their secure servers. Base Impact does not see or store
+        your payment card information. Donor names and contact details are used solely to send
+        receipts and acknowledgments. We never sell, rent, or share donor information with third
+        parties for marketing purposes.
+      </p>
+      <p>
+        Zeffy's own privacy policy governs how they process payment information. You can review it
+        at <a href="https://www.zeffy.com/en/legal/privacy-policy" target="_blank" rel="noopener noreferrer" class="underline">zeffy.com/en/legal/privacy-policy</a>.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900">Children's privacy</h2>
+      <p>
+        We do not knowingly collect information from children under 13. If you believe a child has
+        provided us with personal information, contact us and we will remove it.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900">Your rights</h2>
+      <p>
+        You can request that we delete any information you have submitted by emailing{' '}
+        <a href={`mailto:${SITE.email}`} class="font-semibold text-emerald-700 underline">{SITE.email}</a>.
+        We will comply within a reasonable timeframe.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900">Changes</h2>
+      <p>
+        We may update this policy as our organization grows. Changes will be posted on this page
+        with an updated date.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900">Contact</h2>
+      <p>
+        Questions about this policy:{' '}
+        <a href={`mailto:${SITE.email}`} class="font-semibold text-emerald-700 underline">{SITE.email}</a>.
+      </p>
+    </section>
+  </article>
+</Base>

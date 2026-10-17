@@ -12,7 +12,7 @@
     "preview": "astro preview",
     "test": "npm run build && node scripts/smoke-test.mjs",
     "gen:zips": "node scripts/gen-zips.mjs",
-    "deploy": "npm run build && wrangler deploy --config dist/server/wrangler.json",
+    "deploy": "npm run build && wrangler pages deploy dist/client --project-name=baseimpact-find-help --commit-dirty=true",
     "astro": "astro"
   },
   "dependencies": {
