@@ -11,7 +11,9 @@ interface Props {
 }
 
 const {
-  title = `${SITE.shortName} — Find Help on Florida's Space Coast`,
+  // Keyword-first: lead with the services people actually search for, then the
+  // county, then the brand. ~57 chars so Google does not truncate it.
+  title = `Food, Shelter & Help in Brevard County, FL | ${SITE.shortName}`,
   description = SITE.description,
 } = Astro.props;
 

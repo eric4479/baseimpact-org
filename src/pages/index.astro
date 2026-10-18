@@ -16,19 +16,19 @@ const cov = coverage();
   <header class="px-4 pt-12 pb-10">
     <div class="mx-auto max-w-4xl text-center">
       <span
-        class="mb-5 inline-block rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold tracking-widest text-emerald-800 uppercase"
+        class="mb-5 inline-block rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold tracking-widest text-emerald-800 uppercase dark:text-emerald-300 dark:bg-emerald-900/50"
       >
         Free · Confidential · No cost to you
       </span>
-      <h1 class="mb-5 text-4xl leading-tight font-bold text-slate-900 md:text-6xl">
-        Find Help on {REGION.label}
+      <h1 class="mb-5 text-4xl leading-tight font-bold text-slate-900 md:text-6xl dark:text-slate-100">
+        Find food, shelter, and real help in Brevard County
       </h1>
-      <p class="mx-auto max-w-2xl text-lg leading-relaxed text-slate-600">
+      <p class="mx-auto max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
         Recovery, housing, jobs, food, and support — verified and organized so you can actually use
         it. No appointment, no account, no explaining yourself. Start with a phone call.
       </p>
-      <p class="mt-4 text-sm text-slate-500">
-        Serving {REGION.counties.join(' · ')} counties
+      <p class="mt-4 text-sm text-slate-500 dark:text-slate-400">
+        Serving {REGION.label} — {REGION.counties.join(' · ')} counties
       </p>
     </div>
   </header>
@@ -37,60 +37,60 @@ const cov = coverage();
   <ResourceExplorer />
 
   <!-- How it works -->
-  <section id="how" class="border-t border-slate-200 bg-white py-16">
+  <section id="how" class="border-t border-slate-200 bg-white py-16 dark:border-slate-700 dark:bg-slate-800">
     <div class="mx-auto max-w-5xl px-4">
-      <h2 class="mb-3 text-center text-3xl font-bold text-slate-900 md:text-4xl">
+      <h2 class="mb-3 text-center text-3xl font-bold text-slate-900 md:text-4xl dark:text-slate-100">
         How we verify — and what we promise
       </h2>
-      <p class="mx-auto mb-10 max-w-2xl text-center text-slate-600">
+      <p class="mx-auto mb-10 max-w-2xl text-center text-slate-600 dark:text-slate-300">
         Every listing is checked by a human and stamped with the date it was last confirmed.
       </p>
 
       <div class="grid gap-6 md:grid-cols-3">
-        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-700 dark:bg-slate-800">
           <div
-            class="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 font-bold text-emerald-700"
+            class="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 font-bold text-emerald-700 dark:text-emerald-400 dark:bg-emerald-900/50"
           >
             1
           </div>
-          <h3 class="mb-2 font-bold text-slate-800">We call before we list</h3>
-          <p class="text-sm text-slate-600">
+          <h3 class="mb-2 font-bold text-slate-800 dark:text-slate-200">We call before we list</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300">
             A volunteer confirms the phone number, hours, cost, and intake process.
             No record goes live unverified.
           </p>
         </div>
-        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-700 dark:bg-slate-800">
           <div
-            class="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 font-bold text-emerald-700"
+            class="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 font-bold text-emerald-700 dark:text-emerald-400 dark:bg-emerald-900/50"
           >
             2
           </div>
-          <h3 class="mb-2 font-bold text-slate-800">We stamp the date</h3>
-          <p class="text-sm text-slate-600">
+          <h3 class="mb-2 font-bold text-slate-800 dark:text-slate-200">We stamp the date</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300">
             Each card shows when it was last verified. Anything older than 120 days is
             flagged &ldquo;call ahead.&rdquo;
           </p>
         </div>
-        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-700 dark:bg-slate-800">
           <div
-            class="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 font-bold text-emerald-700"
+            class="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 font-bold text-emerald-700 dark:text-emerald-400 dark:bg-emerald-900/50"
           >
             3
           </div>
-          <h3 class="mb-2 font-bold text-slate-800">We never take money to list</h3>
-          <p class="text-sm text-slate-600">
+          <h3 class="mb-2 font-bold text-slate-800 dark:text-slate-200">We never take money to list</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300">
             No provider pays to appear or to rank higher. Listed does not mean endorsed —
             you decide what fits.
           </p>
         </div>
-        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-700 dark:bg-slate-800">
           <div
-            class="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 font-bold text-emerald-700"
+            class="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 font-bold text-emerald-700 dark:text-emerald-400 dark:bg-emerald-900/50"
           >
             4
           </div>
-          <h3 class="mb-2 font-bold text-slate-800">We never hold your documents</h3>
-          <p class="text-sm text-slate-600">
+          <h3 class="mb-2 font-bold text-slate-800 dark:text-slate-200">We never hold your documents</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300">
             We never take custody of your ID, SSN card, or birth certificate. You hold
             your paperwork at all times — we help with the process, not the data.
           </p>
@@ -98,9 +98,9 @@ const cov = coverage();
       </div>
 
       <!-- Live coverage snapshot -->
-      <div class="mt-10 rounded-2xl border border-slate-200 bg-white p-6">
-        <h3 class="mb-1 text-lg font-bold text-slate-800">Current coverage</h3>
-        <p class="mb-4 text-sm text-slate-600">
+      <div class="mt-10 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-800">
+        <h3 class="mb-1 text-lg font-bold text-slate-800 dark:text-slate-200">Current coverage</h3>
+        <p class="mb-4 text-sm text-slate-600 dark:text-slate-300">
           {s.trusted} human-verified listings across {s.categories} categories.
           {s.sample > 0 && (
             <>
@@ -113,10 +113,10 @@ const cov = coverage();
         <ul class="grid grid-cols-2 gap-3 text-sm sm:grid-cols-3">
           {
             cov.map((c) => (
-              <li class="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2">
-                <span class="text-slate-700">{c.label}</span>
+              <li class="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2 dark:bg-slate-800">
+                <span class="text-slate-700 dark:text-slate-300">{c.label}</span>
                 <span
-                  class={c.trusted === 0 ? 'font-semibold text-amber-700' : 'font-semibold text-emerald-700'}
+                  class={c.trusted === 0 ? 'font-semibold text-amber-700 dark:text-amber-300' : 'font-semibold text-emerald-700 dark:text-emerald-400'}
                 >
                   {c.trusted} verified
                 </span>
@@ -125,7 +125,7 @@ const cov = coverage();
           }
         </ul>
         {gapList.length > 0 && (
-          <p class="mt-4 text-sm text-amber-800">
+          <p class="mt-4 text-sm text-amber-800 dark:text-amber-300">
             <strong>Gaps we are working to fill:</strong>{' '}
             {gapList.map((g) => g.label).join(', ')}.
             <a href="/submit" class="underline">Know a resource?</a>
@@ -133,7 +133,7 @@ const cov = coverage();
         )}
       </div>
 
-      <div class="mt-8 rounded-2xl border border-amber-200 bg-amber-50 p-6 text-sm leading-relaxed text-amber-900">
+      <div class="mt-8 rounded-2xl border border-amber-200 bg-amber-50 p-6 text-sm leading-relaxed text-amber-900 dark:border-amber-800 dark:text-amber-200 dark:bg-amber-950/40">
         <p class="mb-1 font-bold">Please read</p>
         <p>{LISTING_DISCLAIMER}</p>
       </div>
@@ -150,11 +150,11 @@ const cov = coverage();
       </p>
       <a
         href="/submit"
-        class="inline-block rounded-full bg-emerald-600 px-8 py-3 font-bold text-white shadow-lg transition hover:bg-emerald-500"
+        class="inline-block rounded-full bg-emerald-700 px-8 py-3 font-bold text-white shadow-lg transition hover:bg-emerald-500"
       >
         Suggest a resource
       </a>
-      <p class="mt-6 text-xs text-slate-500">
+      <p class="mt-6 text-xs text-slate-400">
         We never sell or share the information you give us here. &bull;
         <a href={`mailto:${SITE.email}`} class="underline">{SITE.email}</a>
       </p>

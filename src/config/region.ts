@@ -14,7 +14,7 @@ export const SITE = {
   email: 'info@baseimpact.org',
   tagline: 'Find help. Fill gaps. Build stability.',
   description:
-    "A crisis-first, verified resource locator for Florida's Space Coast — recovery, housing, employment, and basic needs across Brevard, Volusia, and Indian River counties.",
+    'Free, verified help in Brevard County, FL — food pantries, shelters, housing, recovery and job resources. No appointment, no account, no cost.',
   legalNotice:
     'Base Impact, Inc. is a Florida non-profit corporation in formation. Federal 501(c)(3) tax-exempt status application pending.',
   ein: '43-2200667',

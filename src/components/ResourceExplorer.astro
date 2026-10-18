@@ -17,7 +17,7 @@ for (const r of items) {
 <section id="resources" class="px-4 pb-16">
   <div class="mx-auto max-w-6xl">
     <!-- Controls -->
-    <div class="no-print rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+    <div class="no-print rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 dark:border-slate-700 dark:bg-slate-800">
       <label for="q" class="sr-only">Search resources</label>
       <div class="relative">
         <input
@@ -25,7 +25,7 @@ for (const r of items) {
           type="search"
           autocomplete="off"
           placeholder="Search by need or service — e.g. &quot;detox&quot;, &quot;shelter&quot;, &quot;resume&quot;"
-          class="w-full rounded-xl border border-slate-300 py-3 pr-11 pl-4 text-slate-800 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none"
+          class="w-full rounded-xl border border-slate-300 py-3 pr-11 pl-4 text-slate-800 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none dark:placeholder-slate-500 dark:border-slate-600 dark:text-slate-200"
         />
         <svg
           class="pointer-events-none absolute top-3.5 right-4 h-5 w-5 text-slate-400"
@@ -48,7 +48,7 @@ for (const r of items) {
         transmitted or stored. Device location is strictly opt-in and also stays local.
       -->
       <div class="mt-3 flex flex-wrap items-center gap-2">
-        <label for="zip" class="text-sm font-semibold text-slate-700">Near</label>
+        <label for="zip" class="text-sm font-semibold text-slate-700 dark:text-slate-300">Near</label>
         <input
           id="zip"
           type="text"
@@ -57,25 +57,25 @@ for (const r of items) {
           autocomplete="postal-code"
           placeholder="ZIP code"
           aria-describedby="zip-help"
-          class="w-28 rounded-xl border border-slate-300 px-3 py-2 text-slate-800 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none"
+          class="w-28 rounded-xl border border-slate-300 px-3 py-2 text-slate-800 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none dark:placeholder-slate-500 dark:border-slate-600 dark:text-slate-200"
         />
         <button
           id="use-location"
           type="button"
-          class="rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-emerald-600"
+          class="rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-emerald-600 dark:border-slate-600 dark:text-slate-300"
         >
           Use my location
         </button>
         <button
           id="clear-loc"
           type="button"
-          class="hidden rounded-xl px-3 py-2 text-sm font-semibold text-slate-500 underline hover:text-slate-700"
+          class="hidden rounded-xl px-3 py-2 text-sm font-semibold text-slate-500 underline hover:text-slate-700 dark:text-slate-400"
         >
           Clear
         </button>
-        <span id="loc-status" class="text-sm text-slate-500" role="status" aria-live="polite"></span>
+        <span id="loc-status" class="text-sm text-slate-500 dark:text-slate-400" role="status" aria-live="polite"></span>
       </div>
-      <p id="zip-help" class="mt-2 text-xs text-slate-500">
+      <p id="zip-help" class="mt-2 text-xs text-slate-500 dark:text-slate-400">
         Your ZIP and location stay in your browser — we don't send or store them. Distance is a rough
         guide: check whether there's a bus route before you travel.
       </p>
@@ -84,7 +84,7 @@ for (const r of items) {
         <button
           type="button"
           data-cat="all"
-          class="chip-active rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-emerald-600"
+          class="chip-active rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-emerald-600 dark:border-slate-600 dark:text-slate-300"
         >
           All
         </button>
@@ -93,7 +93,7 @@ for (const r of items) {
             <button
               type="button"
               data-cat={cat}
-              class="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-emerald-600"
+              class="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-emerald-600 dark:border-slate-600 dark:text-slate-300"
             >
               {CATEGORY_META[cat].label}
             </button>
@@ -102,8 +102,8 @@ for (const r of items) {
       </div>
 
       <!-- Who it's for -->
-      <details class="mt-4 rounded-xl border border-slate-200 bg-slate-50">
-        <summary class="cursor-pointer px-4 py-2.5 text-sm font-semibold text-slate-700">
+      <details class="mt-4 rounded-xl border border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800">
+        <summary class="cursor-pointer px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300">
           Who it's for (veterans, disability, reentry, seniors…)
         </summary>
         <div class="flex flex-wrap gap-2 px-4 pb-4" role="group" aria-label="Filter by population">
@@ -112,7 +112,7 @@ for (const r of items) {
               <button
                 type="button"
                 data-pop={p}
-                class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-emerald-600"
+                class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-emerald-600 dark:border-slate-600 dark:text-slate-300 dark:bg-slate-800"
               >
                 {POPULATION_LABELS[p]}
               </button>
@@ -121,7 +121,7 @@ for (const r of items) {
         </div>
       </details>
 
-      <p id="count" class="mt-4 text-sm text-slate-500" aria-live="polite"></p>
+      <p id="count" class="mt-4 text-sm text-slate-500 dark:text-slate-400" aria-live="polite"></p>
     </div>
 
     <!-- Results (server-rendered, filtered client-side) -->
@@ -142,9 +142,9 @@ for (const r of items) {
       }
     </div>
 
-    <p id="empty" class="hidden py-16 text-center text-slate-500">
+    <p id="empty" class="hidden py-16 text-center text-slate-500 dark:text-slate-400">
       No matches. Try a broader word — or call
-      <a href="tel:211" class="font-semibold text-emerald-700 underline">211</a>, which can search
+      <a href="tel:211" class="font-semibold text-emerald-700 underline dark:text-emerald-400">211</a>, which can search
       the whole region with a live person.
     </p>
   </div>
