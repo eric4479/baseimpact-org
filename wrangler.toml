@@ -1,3 +1,26 @@
 name = "baseimpact-org"
-compatibility_date = "2026-08-28"
-pages_build_output_dir = "dist"
+compatibility_date = "2026-04-15"
+compatibility_flags = ["nodejs_compat"]
+
+# Custom domains — Cloudflare manages the DNS records for these.
+[[routes]]
+pattern = "baseimpact.org/*"
+zone_name = "baseimpact.org"
+
+[[routes]]
+pattern = "www.baseimpact.org/*"
+zone_name = "baseimpact.org"
+
+# Static assets are served by the Worker via the ASSETS binding.
+[assets]
+directory = "./dist/client"
+binding = "ASSETS"
+
+# Email binding: submissions from /api/suggest are delivered to info@baseimpact.org.
+# Requires a verified sending domain on Cloudflare Email Service.
+[[send_email]]
+name = "EMAIL"
+destination_address = "info@baseimpact.org"
+
+[observability]
+enabled = true

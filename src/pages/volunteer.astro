@@ -1,0 +1,106 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config/region';
+
+export const prerender = true;
+---
+
+<Base
+  title={`Volunteer — ${SITE.name}`}
+  description="Give a few hours at a care-package day, at a community garden, or helping a small church with tech. No nonprofit experience required."
+>
+  <article class="mx-auto max-w-4xl px-4 py-16">
+    <h1 class="mb-4 text-4xl font-bold text-slate-900 md:text-5xl dark:text-slate-100">
+      Give a few hours. Change someone's week.
+    </h1>
+    <p class="mb-10 text-lg leading-relaxed text-slate-700 dark:text-slate-300">
+      You don't need a nonprofit background to help. If you can show up, listen, and help someone
+      fill out a form or carry a bag — you're qualified for most of what we do.
+    </p>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900 dark:text-slate-100">
+        What volunteering looks like
+      </h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <article class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-800">
+          <h3 class="font-semibold text-slate-800 dark:text-slate-200">Scottsmoor Community Care Hub</h3>
+          <p class="mt-1 text-sm font-semibold text-emerald-700 dark:text-emerald-400">Mon, Wed, Fri 1–5 PM</p>
+          <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700 dark:text-slate-300">
+            <li>Sit with someone while they fill out a housing application</li>
+            <li>Help a neighbor write or update a resume</li>
+            <li>Show someone how to stay safe online and keep their device updated</li>
+            <li>Hand out hygiene kits and listen if someone wants to talk</li>
+            <li>Keep the space tidy and welcoming</li>
+          </ul>
+        </article>
+
+        <article class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-800">
+          <h3 class="font-semibold text-slate-800 dark:text-slate-200">Care package and backpack days</h3>
+          <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700 dark:text-slate-300">
+            <li>Pack bags with essentials — socks, hygiene supplies, water, snacks, resource list</li>
+            <li>Help sort donated clothing and supplies</li>
+            <li>Hand packages out at scheduled distribution times</li>
+          </ul>
+        </article>
+
+        <article class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-800">
+          <h3 class="font-semibold text-slate-800 dark:text-slate-200">Community garden days</h3>
+          <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700 dark:text-slate-300">
+            <li>Help at the Mims Community Garden — planting, weeding, harvest, distribution</li>
+            <li>Assist with nutrition education workshops</li>
+          </ul>
+        </article>
+
+        <article class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-800">
+          <h3 class="font-semibold text-slate-800 dark:text-slate-200">Tech help for small nonprofits</h3>
+          <p class="mt-3 text-sm text-slate-700 dark:text-slate-300">
+            If you know IT, help a local church or pantry with Wi-Fi, backups, printer setup, and
+            basic security. If you don't — we can train you on the basics we actually use.
+          </p>
+        </article>
+
+        <article class="rounded-2xl border border-slate-200 bg-white p-5 sm:col-span-2 dark:border-slate-700 dark:bg-slate-800">
+          <h3 class="font-semibold text-slate-800 dark:text-slate-200">Behind the scenes</h3>
+          <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700 dark:text-slate-300">
+            <li>Research and verify local resources for the directory</li>
+            <li>Call partners and confirm their hours</li>
+            <li>Help update this site and keep information current</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="mb-12 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-800">
+      <h2 class="mb-3 text-2xl font-bold text-slate-900 dark:text-slate-100">What we ask</h2>
+      <ul class="list-disc space-y-1 pl-5 text-slate-700 dark:text-slate-300">
+        <li>Show up when you say you will</li>
+        <li>Treat everyone with the same respect you'd want for yourself or your family</li>
+        <li>Keep what people share with you private — their story isn't public material</li>
+        <li>If you don't know the answer, say so — then help them find someone who does</li>
+      </ul>
+    </section>
+
+    <section class="mb-12 rounded-2xl border border-amber-200 bg-amber-50 p-6 dark:border-amber-800 dark:bg-amber-950/40">
+      <h2 class="mb-3 text-2xl font-bold text-slate-900 dark:text-slate-100">What we can't do (yet)</h2>
+      <ul class="list-disc space-y-1 pl-5 text-slate-700 dark:text-slate-300">
+        <li>We can't provide housing directly — we connect people to those who can</li>
+        <li>We can't give cash assistance — we connect people to programs that can</li>
+        <li>We can't do everything — but we can help you take the next step</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="mb-3 text-2xl font-bold text-slate-900 dark:text-slate-100">Ready to help?</h2>
+      <p class="mb-4 text-slate-700 dark:text-slate-300">
+        Tell us what you're interested in and what times work. We'll follow up by phone or email.
+      </p>
+      <a
+        href={`mailto:${SITE.email}?subject=Volunteering%20with%20Base%20Impact`}
+        class="inline-block rounded-full bg-emerald-600 px-6 py-2.5 font-semibold text-white transition hover:bg-emerald-700"
+      >
+        Sign up to volunteer
+      </a>
+    </section>
+  </article>
+</Base>

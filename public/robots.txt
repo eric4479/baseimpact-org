@@ -1,8 +1,4 @@
 User-agent: *
 Allow: /
 
-# The Workers form handler lives here; there is nothing crawlable behind it.
-Disallow: /api/
-
-Sitemap: https://baseimpact.org/sitemap.xml
-Host: https://baseimpact.org
+Sitemap: https://baseimpact.org/sitemap-index.xml
