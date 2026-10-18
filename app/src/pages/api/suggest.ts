@@ -79,10 +79,10 @@ export const POST: APIRoute = async ({ request, env }) => {
   };
 
   // ─────────────────────────────────────────────────────────────────────────
-  // Email forwarding via Cloudflare Email Send API (wrangler.toml binding).
-  // Falls back to console.log if EMAIL binding is not configured.
+  // Email forwarding via the Cloudflare Email Sending binding (wrangler.toml).
+  // Falls back to console.log if the EMAIL binding is not configured.
   // ─────────────────────────────────────────────────────────────────────────
-  const emailSent = sendSubmissionEmail(submission, env);
+  const emailSent = await sendSubmissionEmail(submission, env);
 
   console.log('[suggest]', JSON.stringify(submission), 'email:', emailSent ? 'sent' : 'not configured');
 
@@ -93,36 +93,37 @@ export const POST: APIRoute = async ({ request, env }) => {
   });
 };
 
-function sendSubmissionEmail(
+interface EmailBinding {
+  send: (message: {
+    from: string;
+    to: string;
+    subject: string;
+    text: string;
+  }) => Promise<unknown>;
+}
+
+async function sendSubmissionEmail(
   submission: Record<string, unknown>,
   env: Record<string, unknown> | undefined
-): boolean {
-  const emailBinding = env?.EMAIL;
-  if (!emailBinding) return false;
+): Promise<boolean> {
+  const binding = env?.EMAIL as EmailBinding | undefined;
+  if (!binding || typeof binding.send !== 'function') return false;
 
-  const recipient = (typeof env === 'object' && env.EMAIL_RECIPIENT) || ADMIN_EMAIL;
+  const recipient = (env?.EMAIL_RECIPIENT as string) || ADMIN_EMAIL;
   const lines = Object.entries(submission)
     .map(([k, v]) => `${k}: ${v}`)
     .join('\n');
 
   try {
-    // Cloudflare Email Send API — see https://developers.cloudflare.com/email/send/
-    fetch('https://api.cloudflare.com/client/v4/accounts/<account-id>/email/send', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        // Authorization is set via wrangler secret, not hardcoded
-        Authorization: `Bearer ${env.CF_API_TOKEN || ''}`,
-      },
-      body: JSON.stringify({
-        from: 'noreply@baseimpact.org',
-        to: recipient,
-        subject: `New suggestion: ${submission.resourceName}`,
-        text: lines,
-      }),
+    await binding.send({
+      from: 'noreply@baseimpact.org',
+      to: recipient,
+      subject: `New suggestion: ${submission.resourceName}`,
+      text: lines,
     });
     return true;
-  } catch {
+  } catch (err) {
+    console.error('[suggest] email send failed', err);
     return false;
   }
 }
