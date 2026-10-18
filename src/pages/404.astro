@@ -1,0 +1,73 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config/region';
+
+export const prerender = true;
+---
+
+<Base
+  title={`Page not found — ${SITE.name}`}
+  description="That page doesn't exist. Here are the ways to find help on Florida's Space Coast."
+>
+  <div class="mx-auto max-w-3xl px-4 py-20 text-center">
+    <img
+      src="/logo-512.png"
+      alt=""
+      width="112"
+      height="112"
+      class="mx-auto h-28 w-28 rounded-2xl shadow-sm"
+      aria-hidden="true"
+    />
+
+    <p class="mt-8 text-sm font-bold tracking-widest text-emerald-700 uppercase dark:text-emerald-400">
+      Error 404
+    </p>
+    <h1 class="mt-2 text-4xl font-bold text-slate-900 md:text-5xl dark:text-slate-100">
+      We couldn't find that page
+    </h1>
+    <p class="mx-auto mt-4 max-w-xl text-lg leading-relaxed text-slate-700 dark:text-slate-300">
+      The link may be old, or the address may have a typo. Nothing is broken on your end — and if
+      you came here looking for help, you're still in the right place.
+    </p>
+
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a
+        href="/#resources"
+        class="rounded-full bg-emerald-600 px-6 py-2.5 font-semibold text-white transition hover:bg-emerald-700"
+      >
+        Find help near you
+      </a>
+      <a
+        href="/guide"
+        class="rounded-full border border-slate-300 px-6 py-2.5 font-semibold text-slate-700 transition hover:border-emerald-500 hover:text-emerald-700 dark:border-slate-600 dark:text-slate-300"
+      >
+        Pick your situation
+      </a>
+      <a
+        href="/"
+        class="rounded-full border border-slate-300 px-6 py-2.5 font-semibold text-slate-700 transition hover:border-emerald-500 hover:text-emerald-700 dark:border-slate-600 dark:text-slate-300"
+      >
+        Go home
+      </a>
+    </div>
+
+    <div class="mt-12 rounded-2xl border border-red-200 bg-red-50 p-6 text-left dark:border-red-900 dark:bg-red-950/40">
+      <p class="font-bold text-red-900 dark:text-red-200">Need help right now?</p>
+      <ul class="mt-2 space-y-1 text-sm text-red-800 dark:text-red-300">
+        <li><a href="tel:988" class="font-semibold underline">988</a> — Suicide &amp; Crisis Lifeline · call or text · 24/7</li>
+        <li><a href="tel:18006624357" class="font-semibold underline">1-800-662-HELP</a> — SAMHSA · free · 24/7 · confidential</li>
+        <li><a href="tel:211" class="font-semibold underline">211</a> — local resources</li>
+        <li><a href="tel:911" class="font-semibold underline">911</a> — immediate danger</li>
+      </ul>
+    </div>
+
+    <nav class="mt-10 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm text-slate-600 dark:text-slate-400" aria-label="Site sections">
+      <a href="/guide" class="underline hover:text-emerald-700">Resource Guide</a>
+      <a href="/partners" class="underline hover:text-emerald-700">Partners</a>
+      <a href="/volunteer" class="underline hover:text-emerald-700">Volunteer</a>
+      <a href="/donate" class="underline hover:text-emerald-700">Donate</a>
+      <a href="/about" class="underline hover:text-emerald-700">About</a>
+      <a href="/submit" class="underline hover:text-emerald-700">Suggest a resource</a>
+    </nav>
+  </div>
+</Base>

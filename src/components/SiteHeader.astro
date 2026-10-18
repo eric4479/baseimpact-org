@@ -16,13 +16,17 @@ const path = Astro.url.pathname;
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex h-16 items-center justify-between">
       <a href="/" class="flex items-center gap-3">
-        <span
-          class="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-600 text-xl font-bold text-white shadow-sm"
-          aria-hidden="true">B</span
-        >
+        <img
+          src="/logo.png"
+          alt=""
+          width="36"
+          height="36"
+          class="h-9 w-9 rounded-lg shadow-sm"
+          aria-hidden="true"
+        />
         <span class="flex flex-col">
-          <span class="text-xl leading-none font-bold tracking-tight text-slate-800">{SITE.name}</span>
-          <span class="mt-1 text-[10px] font-semibold tracking-wider text-emerald-600 uppercase"
+          <span class="text-xl leading-none font-bold tracking-tight text-slate-800 dark:text-slate-100">{SITE.name}</span>
+          <span class="mt-1 text-[10px] font-semibold tracking-wider text-emerald-600 uppercase dark:text-emerald-400"
             >{SITE.domain}</span
           >
         </span>
