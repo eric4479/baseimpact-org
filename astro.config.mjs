@@ -13,6 +13,11 @@ export default defineConfig({
 
   adapter: cloudflare(),
 
+  // Astro 7 defaults to compressHTML: 'jsx', which strips whitespace between text
+  // and inline elements using JSX rules (e.g. "accepts <strong>no compensation</strong>"
+  // renders as "acceptsno compensation"). Keep the v6 HTML-aware behaviour.
+  compressHTML: true,
+
   integrations: [
     // Emits /sitemap-index.xml + /sitemap-0.xml (referenced by public/robots.txt).
     sitemap({

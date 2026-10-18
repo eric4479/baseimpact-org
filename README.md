@@ -15,13 +15,20 @@ nonprofits modernize, and **partner with 211 rather than replacing it**.
 
 | Piece | Version |
 |---|---|
-| Astro | 6.4.4 |
-| Adapter | `@astrojs/cloudflare` 13.6.1 — **Cloudflare Workers** (v13 has no Pages target) |
+| Astro | 7.4.0 |
+| Adapter | `@astrojs/cloudflare` 14.4.0 — **Cloudflare Workers** (v13+ has no Pages target) |
+| Bundler | Vite 8 (required by Astro 7; not a direct dependency) |
 | Runtime | Cloudflare Worker `baseimpact-org` |
 | Tailwind | v4 (via `@tailwindcss/vite`) |
 | Node | >= 22 |
 
 All pages are **prerendered**. The only on-demand route is `/api/suggest`.
+
+> **Note on `compressHTML`.** Astro 7 defaults to `compressHTML: 'jsx'`, which strips
+> whitespace between text and inline elements under JSX rules — `accepts <strong>no
+> compensation</strong>` renders as `acceptsno compensation`. `astro.config.mjs` pins
+> `compressHTML: true` to keep the v6 HTML-aware behaviour. Remove that only if you
+> audit every template for adjacent inline elements.
 
 ---
 
