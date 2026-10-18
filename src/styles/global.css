@@ -35,8 +35,8 @@
 
 /* Active state for the category filter chips (toggled from ResourceExplorer) */
 .chip-active {
-  background-color: var(--color-emerald-700);
-  border-color: var(--color-emerald-700);
+  background-color: var(--color-emerald-800);
+  border-color: var(--color-emerald-800);
   color: #fff;
 }
 

@@ -69,13 +69,13 @@ for (const r of items) {
         <button
           id="clear-loc"
           type="button"
-          class="hidden rounded-xl px-3 py-2 text-sm font-semibold text-slate-500 underline hover:text-slate-700 dark:text-slate-400"
+          class="hidden rounded-xl px-3 py-2 text-sm font-semibold text-slate-600 underline hover:text-slate-700 dark:text-slate-300"
         >
           Clear
         </button>
-        <span id="loc-status" class="text-sm text-slate-500 dark:text-slate-400" role="status" aria-live="polite"></span>
+        <span id="loc-status" class="text-sm text-slate-600 dark:text-slate-300" role="status" aria-live="polite"></span>
       </div>
-      <p id="zip-help" class="mt-2 text-xs text-slate-500 dark:text-slate-400">
+      <p id="zip-help" class="mt-2 text-xs text-slate-600 dark:text-slate-300">
         Your ZIP and location stay in your browser — we don't send or store them. Distance is a rough
         guide: check whether there's a bus route before you travel.
       </p>
@@ -121,7 +121,7 @@ for (const r of items) {
         </div>
       </details>
 
-      <p id="count" class="mt-4 text-sm text-slate-500 dark:text-slate-400" aria-live="polite"></p>
+      <p id="count" class="mt-4 text-sm text-slate-600 dark:text-slate-300" aria-live="polite"></p>
     </div>
 
     <!-- Results (server-rendered, filtered client-side) -->
@@ -142,9 +142,9 @@ for (const r of items) {
       }
     </div>
 
-    <p id="empty" class="hidden py-16 text-center text-slate-500 dark:text-slate-400">
+    <p id="empty" class="hidden py-16 text-center text-slate-600 dark:text-slate-300">
       No matches. Try a broader word — or call
-      <a href="tel:211" class="font-semibold text-emerald-700 underline dark:text-emerald-400">211</a>, which can search
+      <a href="tel:211" class="font-semibold text-emerald-800 underline dark:text-emerald-400">211</a>, which can search
       the whole region with a live person.
     </p>
   </div>
@@ -189,8 +189,8 @@ for (const r of items) {
   }
 
   function tier(mi) {
-    if (mi <= 5) return 'bg-emerald-50 text-emerald-700 border-emerald-200';
-    if (mi <= 15) return 'bg-sky-50 text-sky-700 border-sky-200';
+    if (mi <= 5) return 'bg-emerald-50 text-emerald-800 border-emerald-200';
+    if (mi <= 15) return 'bg-sky-50 text-sky-800 border-sky-200';
     return 'bg-slate-100 text-slate-600 border-slate-200';
   }
 

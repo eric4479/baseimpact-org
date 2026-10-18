@@ -106,7 +106,7 @@ const directories = [
           <li class="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 dark:border-emerald-800 dark:bg-emerald-950/40">
             <a href={h.href} class="font-semibold text-emerald-800 underline dark:text-emerald-300">{h.label} →</a>
             <p class="mt-2 text-sm font-medium text-slate-800 dark:text-slate-200">{h.handles}</p>
-            <p class="mt-1 text-xs text-slate-600 dark:text-slate-400 dark:text-slate-300">{h.detail}</p>
+            <p class="mt-1 text-xs text-slate-600 dark:text-slate-300">{h.detail}</p>
           </li>
         ))}
       </ul>
@@ -125,16 +125,16 @@ const directories = [
                 {s.providers.map((p) => (
                   <li>
                     {p.href ? (
-                      <a href={p.href} class="text-sm font-semibold text-emerald-700 underline dark:text-emerald-400">{p.label} →</a>
+                      <a href={p.href} class="text-sm font-semibold text-emerald-800 underline dark:text-emerald-400">{p.label} →</a>
                     ) : (
                       <span class="text-sm font-semibold text-slate-700 dark:text-slate-300">{p.label}</span>
                     )}
-                    <p class="text-xs text-slate-600 dark:text-slate-400 dark:text-slate-300">{p.detail}</p>
+                    <p class="text-xs text-slate-600 dark:text-slate-300">{p.detail}</p>
                   </li>
                 ))}
               </ul>
             )}
-            {s.note && <p class="mt-3 text-sm text-slate-600 dark:text-slate-400 dark:text-slate-300">{s.note}</p>}
+            {s.note && <p class="mt-3 text-sm text-slate-600 dark:text-slate-300">{s.note}</p>}
           </div>
         ))}
       </div>
@@ -155,10 +155,10 @@ const directories = [
               href={d.url}
               target="_blank"
               rel="noopener noreferrer"
-              class="block rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-emerald-700 transition hover:border-emerald-400 dark:border-slate-700 dark:bg-slate-800 dark:text-emerald-400"
+              class="block rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-emerald-800 transition hover:border-emerald-400 dark:border-slate-700 dark:bg-slate-800 dark:text-emerald-400"
             >
               {d.label} →
-              <span class="block text-xs font-normal text-slate-600 dark:text-slate-400 dark:text-slate-300">{d.desc}</span>
+              <span class="block text-xs font-normal text-slate-600 dark:text-slate-300">{d.desc}</span>
             </a>
           </li>
         ))}

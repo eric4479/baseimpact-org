@@ -37,12 +37,12 @@ export const CATEGORY_META: Record<Category, CategoryMeta> = {
   housing: {
     label: 'Housing',
     blurb: 'Emergency and cold-weather shelter, rehousing, rent & utility aid.',
-    badge: 'bg-sky-100 text-sky-800',
+    badge: 'bg-sky-100 text-sky-900',
   },
   employment: {
     label: 'Jobs & Income',
     blurb: 'Workforce centers, training, fair-chance employers, day labor.',
-    badge: 'bg-amber-100 text-amber-800',
+    badge: 'bg-amber-100 text-amber-900',
   },
   basic: {
     label: 'Basic Needs',

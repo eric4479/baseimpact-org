@@ -29,28 +29,28 @@ const partners = resources.filter((r) => r.verification.status === 'partner');
       <h2 class="mb-3 text-2xl font-bold text-slate-900 dark:text-slate-100">What we do</h2>
       <ul class="space-y-3 text-slate-700 dark:text-slate-300">
         <li class="flex gap-3">
-          <span class="text-emerald-700" aria-hidden="true">✔</span>
+          <span class="text-emerald-800" aria-hidden="true">✔</span>
           <span
             ><strong>Find help.</strong> We locate recovery, housing, employment, and basic-needs
             resources across {REGION.counties.join(', ')} counties.</span
           >
         </li>
         <li class="flex gap-3">
-          <span class="text-emerald-700" aria-hidden="true">✔</span>
+          <span class="text-emerald-800" aria-hidden="true">✔</span>
           <span
             ><strong>Verify what we find.</strong> Volunteers confirm details by phone and in person,
             then stamp each listing with the date it was last checked.</span
           >
         </li>
         <li class="flex gap-3">
-          <span class="text-emerald-700" aria-hidden="true">✔</span>
+          <span class="text-emerald-800" aria-hidden="true">✔</span>
           <span
             ><strong>Fill the gaps.</strong> When a service doesn't exist, we work with partners to
             stand one up — or point people to the nearest thing that does.</span
           >
         </li>
         <li class="flex gap-3">
-          <span class="text-emerald-700" aria-hidden="true">✔</span>
+          <span class="text-emerald-800" aria-hidden="true">✔</span>
           <span
             ><strong>Modernize local nonprofits.</strong> We provide technology, security, and
             fee-free fundraising infrastructure to grassroots organizations.</span
@@ -128,12 +128,12 @@ const partners = resources.filter((r) => r.verification.status === 'partner');
                   <td class="px-4 py-2 text-slate-700 dark:text-slate-300">{c.label}</td>
                   <td
                     class={
-                      c.trusted === 0 ? 'px-4 py-2 font-semibold text-amber-700 dark:text-amber-300' : 'px-4 py-2 text-emerald-700 dark:text-emerald-400'
+                      c.trusted === 0 ? 'px-4 py-2 font-semibold text-amber-700 dark:text-amber-300' : 'px-4 py-2 text-emerald-800 dark:text-emerald-400'
                     }
                   >
                     {c.trusted}
                   </td>
-                  <td class="px-4 py-2 text-slate-500 dark:text-slate-400">{c.sample}</td>
+                  <td class="px-4 py-2 text-slate-600 dark:text-slate-300">{c.sample}</td>
                 </tr>
               ))
             }
@@ -142,7 +142,7 @@ const partners = resources.filter((r) => r.verification.status === 'partner');
       </div>
       {
         gapList.length > 0 && (
-          <p class="mt-4 text-sm text-amber-800 dark:text-amber-300">
+          <p class="mt-4 text-sm text-amber-900 dark:text-amber-300">
             <strong>Working to fill:</strong> {gapList.map((g) => g.label).join(', ')}.{' '}
             <a href="/submit" class="underline">Suggest a resource →</a>
           </p>
@@ -185,7 +185,7 @@ const partners = resources.filter((r) => r.verification.status === 'partner');
         />
         <div>
           <p class="mb-2 text-lg font-semibold text-slate-800 dark:text-slate-200">Eric Douglas</p>
-          <p class="mb-3 text-sm font-medium text-emerald-700 dark:text-emerald-400">Founder &amp; President</p>
+          <p class="mb-3 text-sm font-medium text-emerald-800 dark:text-emerald-400">Founder &amp; President</p>
           <p class="leading-relaxed text-slate-700 dark:text-slate-300">
             Eric has spent his life working with computers and technology, running Douglas PC tech
             support in Mims, FL. Base Impact is the nonprofit he's building to take that same
@@ -205,11 +205,11 @@ const partners = resources.filter((r) => r.verification.status === 'partner');
     <section>
       <h2 class="mb-3 text-2xl font-bold text-slate-900 dark:text-slate-100">Contact</h2>
       <p class="text-slate-700 dark:text-slate-300">
-        <a href={`mailto:${SITE.email}`} class="font-semibold text-emerald-700 underline dark:text-emerald-400"
+        <a href={`mailto:${SITE.email}`} class="font-semibold text-emerald-800 underline dark:text-emerald-400"
           >{SITE.email}</a
         >
       </p>
-      <p class="mt-6 text-xs text-slate-500 dark:text-slate-400">{SITE.legalNotice}</p>
+      <p class="mt-6 text-xs text-slate-600 dark:text-slate-300">{SITE.legalNotice}</p>
     </section>
   </article>
 </Base>

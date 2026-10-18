@@ -110,7 +110,7 @@ const labelCls = 'mb-1.5 block text-sm font-semibold text-slate-700 dark:text-sl
         </div>
       </fieldset>
 
-      <p class="text-xs text-slate-500 dark:text-slate-400">
+      <p class="text-xs text-slate-600 dark:text-slate-300">
         We only use your contact details to follow up about this submission. We never sell or share
         them.
       </p>
@@ -118,7 +118,7 @@ const labelCls = 'mb-1.5 block text-sm font-semibold text-slate-700 dark:text-sl
       <div class="flex flex-wrap items-center gap-4">
         <button
           type="submit"
-          class="rounded-full bg-emerald-700 px-8 py-3 font-bold text-white shadow-sm transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-60"
+          class="rounded-full bg-emerald-800 px-8 py-3 font-bold text-white shadow-sm transition hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-60"
         >
           Submit
         </button>
@@ -157,11 +157,11 @@ const labelCls = 'mb-1.5 block text-sm font-semibold text-slate-700 dark:text-sl
       } else {
         const first = json.errors ? Object.values(json.errors)[0] : undefined;
         status.textContent = first ?? 'Something was missing — please check the form.';
-        status.className = 'text-sm font-semibold text-red-700';
+        status.className = 'text-sm font-semibold text-red-800';
       }
     } catch {
       status.textContent = 'Could not reach the server. Please try again, or email us directly.';
-      status.className = 'text-sm font-semibold text-red-700';
+      status.className = 'text-sm font-semibold text-red-800';
     } finally {
       submitBtn && (submitBtn.disabled = false);
     }
