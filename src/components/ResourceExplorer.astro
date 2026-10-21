@@ -84,7 +84,7 @@ for (const r of items) {
         <button
           type="button"
           data-cat="all"
-          class="chip-active rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-emerald-600 dark:border-slate-600 dark:text-slate-300"
+          class="chip-active rounded-full border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-emerald-600 dark:border-slate-600 dark:text-slate-300"
         >
           All
         </button>
@@ -93,7 +93,7 @@ for (const r of items) {
             <button
               type="button"
               data-cat={cat}
-              class="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-emerald-600 dark:border-slate-600 dark:text-slate-300"
+              class="rounded-full border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-emerald-600 dark:border-slate-600 dark:text-slate-300"
             >
               {CATEGORY_META[cat].label}
             </button>
@@ -103,7 +103,7 @@ for (const r of items) {
 
       <!-- Who it's for -->
       <details class="mt-4 rounded-xl border border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800">
-        <summary class="cursor-pointer px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300">
+        <summary class="flex min-h-11 cursor-pointer items-center px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300">
           Who it's for (veterans, disability, reentry, seniors…)
         </summary>
         <div class="flex flex-wrap gap-2 px-4 pb-4" role="group" aria-label="Filter by population">
@@ -203,7 +203,7 @@ for (const r of items) {
       else el.appendChild(badge);
     }
     badge.className =
-      'js-distance mb-2 inline-block rounded-full border px-2 py-0.5 text-[11px] font-semibold ' +
+      'js-distance mb-2 inline-block rounded-full border px-2 py-0.5 text-xs font-semibold ' +
       tier(mi);
     // A city centroid is not a street address — say so rather than implying precision.
     badge.textContent =
