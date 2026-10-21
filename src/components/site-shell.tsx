@@ -42,7 +42,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
         aria-label="Organisation status"
         className="bg-inset px-4 py-2 text-center text-xs font-medium text-muted pt-[max(0.5rem,env(safe-area-inset-top))] sm:text-sm"
       >
-        Base Impact Inc. · Pre-filing nonprofit in Scottsmoor, FL · Preparing Sunbiz & 501(c)(3)
+        Base Impact Inc. · Florida nonprofit corporation · 501(c)(3) application pending board completion
       </aside>
 
       <header className="sticky top-0 z-40 border-b border-line/80 bg-band text-on-fill">

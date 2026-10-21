@@ -792,7 +792,7 @@ export function DirectoryPage() {
       {/* Footer note */}
       <div className="text-center text-xs text-muted pt-4 border-t border-line/40">
         <p>
-          Base Impact Inc. is a pre-filing nonprofit in Scottsmoor, FL.{" "}
+          Base Impact Inc. is a Florida nonprofit corporation.{" "}
           We're building a directory to help neighbors find resources.{" "}
           If something looks wrong,{" "}
           <a href="/feedback" className="text-accent underline underline-offset-2">

@@ -108,7 +108,7 @@ export function SocialsPage() {
       <section className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)] sm:p-6">
         <h2 className="font-display text-xl font-semibold">Found an account using our name?</h2>
         <p className="mt-3 text-sm text-muted">
-          We are a pre-filing nonprofit, and our name is used by unrelated organisations in other
+          We are a Florida nonprofit corporation, and our name is used by unrelated organisations in other
           states and countries. If you find a page that looks like us but is not on the handle
           above, it is not affiliated with us.
         </p>

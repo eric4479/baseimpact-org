@@ -11,7 +11,7 @@ const ORG_SCHEMA = {
   name: "Base Impact Inc.",
   url: "https://baseimpact.org",
   description:
-    "Pre-filing nonprofit in Scottsmoor, FL building a neighborhood navigation desk for Brevard, Volusia, and Orange Counties.",
+    "Florida nonprofit corporation in North Brevard County helping people get devices, internet, and digital skills — and providing free technology services to small local nonprofits.",
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "customer service",
@@ -23,23 +23,23 @@ const ORG_SCHEMA = {
 const PILLARS = [
   {
     icon: Laptop,
-    title: "Digital & job help",
-    body: "Walk-throughs for housing portals, job applications, and staying safe online.",
+    title: "Technology access",
+    body: "Helping neighbors get a working device and internet service — and learn to use them.",
   },
   {
     icon: Heart,
-    title: "Direct referrals",
-    body: "Food, shelter, and showers — pointed to partners who are open.",
-  },
-  {
-    icon: Leaf,
-    title: "Gardens & green space",
-    body: "Grant support for community gardens and quiet outdoor places in North Brevard.",
+    title: "Digital skills & job help",
+    body: "Walk-throughs for housing portals, job applications, benefits, and staying safe online.",
   },
   {
     icon: Building2,
     title: "Tech for small nonprofits",
-    body: "Free setup help for churches, pantries, and 1–5 person community groups.",
+    body: "Free setup, security, and support for churches, pantries, and 1–5 person community groups.",
+  },
+  {
+    icon: Leaf,
+    title: "Local resource guide",
+    body: "A simpler, local starting point that works alongside 211 — food, shelter, showers, and more.",
   },
 ];
 
@@ -60,11 +60,11 @@ export function HomePage() {
           Scottsmoor · Titusville · Brevard County
         </p>
         <h1 className="mt-4 max-w-2xl font-display text-3xl font-semibold tracking-tight sm:text-5xl">
-          Find food, shelter, and a computer — without hunting through ten websites.
+          Technology help for North Brevard — devices, internet, and the skills to use them.
         </h1>
         <p className="mt-4 max-w-xl text-base leading-relaxed text-faint sm:text-lg">
-          Base Impact is a neighborhood navigation desk. Big buttons. Real hours. Built first for
-          phones, because that’s what people actually have in hand.
+          Base Impact helps neighbors get connected and helps small local nonprofits keep their
+          technology working. Plus a local resource guide that works alongside 211.
         </p>
         <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
           <Button asChild variant="primary" size="lg" className="w-full sm:w-auto">

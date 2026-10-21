@@ -38,10 +38,12 @@ export function TermsPage() {
           <h2 className="font-display text-xl font-semibold">1. Who we are</h2>
           <p className="mt-2 text-sm leading-relaxed text-muted">
             Base Impact Inc. (&quot;Base Impact,&quot; &quot;we,&quot; &quot;us&quot;) is a
-            pre-filing nonprofit organization based in Scottsmoor, Florida. We are preparing our
-            Florida Sunbiz registration and our application for recognition of exemption under
-            Section 501(c)(3) of the Internal Revenue Code. We are not yet a registered or
-            tax-exempt organization. Nothing on this site should be read to claim otherwise.
+            Florida nonprofit corporation. We have filed with the Florida Division of Corporations
+            (Sunbiz) and are registered with the Florida Department of Agriculture and Consumer
+            Services. We are completing our founding board of directors, after which we will apply
+            for recognition of exemption under Section 501(c)(3) of the Internal Revenue Code. We
+            are not yet a tax-exempt organization. Nothing on this site should be read to claim
+            otherwise.
           </p>
         </div>
 

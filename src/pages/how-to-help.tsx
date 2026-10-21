@@ -87,7 +87,7 @@ export function HowToHelpPage() {
     <div className="space-y-10">
       <PageMeta
         title="How to help"
-        description="Volunteer, partner, or keep the directory accurate. Base Impact is a pre-filing nonprofit and is not asking for money."
+        description="Volunteer, partner, or help keep the directory accurate. Base Impact is a Florida nonprofit corporation and is not asking for money."
         path="/how-to-help"
       />
       <JsonLd data={HOW_TO_HELP_SCHEMA} />
@@ -97,8 +97,8 @@ export function HowToHelpPage() {
           Help without giving money.
         </h1>
         <p className="mt-4 max-w-xl text-base leading-relaxed text-faint sm:text-lg">
-          Base Impact Inc. is a pre-filing nonprofit. We are not yet registered to solicit
-          contributions in Florida and we are not 501(c)(3) approved, so{" "}
+          Base Impact Inc. is a Florida nonprofit corporation. We are not yet
+          501(c)(3) approved, so{" "}
           <strong className="font-semibold text-on-fill">
             we are not asking anyone for money or goods right now
           </strong>
@@ -123,10 +123,12 @@ export function HowToHelpPage() {
       <section className="rounded-3xl bg-inset px-5 py-8 sm:p-8">
         <h2 className="font-display text-2xl font-semibold sm:text-3xl">Where we are</h2>
         <p className="mt-3 text-sm text-muted">
-          Base Impact Inc. is a pre-filing nonprofit in Scottsmoor, Florida. We are preparing
-          our Florida Sunbiz registration and our application for recognition of exemption
-          under Section 501(c)(3) of the Internal Revenue Code. We are not yet a registered
-          or tax-exempt organization, and nothing on this page should be read to claim
+          Base Impact Inc. is a Florida nonprofit corporation. We have filed with the Florida
+          Division of Corporations (Sunbiz) and are registered with the Florida Department of
+          Agriculture and Consumer Services. We are completing our founding board of directors,
+          after which we will apply for recognition of exemption under Section 501(c)(3) of the
+          Internal Revenue Code. We are not yet a tax-exempt organization, and nothing on this
+          page should be read to claim
           otherwise.
         </p>
         <p className="mt-3 text-sm text-muted">

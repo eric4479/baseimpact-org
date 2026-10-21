@@ -39,7 +39,7 @@ export function PurposePage() {
     <div className="mx-auto max-w-3xl space-y-8">
       <PageMeta
         title="Corporate purpose"
-        description="The full purpose clause from the Articles of Incorporation of Base Impact Inc., a pre-filing Florida nonprofit."
+        description="The full purpose clause from the Articles of Incorporation of Base Impact Inc., a Florida nonprofit corporation."
         path="/purpose"
       />
       <JsonLd data={PURPOSE_SCHEMA} />
@@ -79,10 +79,10 @@ export function PurposePage() {
         <h2 className="font-display text-lg font-semibold">Where this comes from</h2>
         <p className="mt-2 text-sm text-muted">
           The clause above is taken from the Articles of Incorporation filed with the
-          Florida Division of Corporations. Base Impact Inc. is a pre-filing nonprofit: we
-          are preparing our Sunbiz registration and our application for recognition of
-          exemption under Section 501(c)(3) of the Internal Revenue Code, and we are not
-          yet a registered or tax-exempt organization.
+          Florida Division of Corporations. Base Impact Inc. is a Florida nonprofit
+          corporation: we are completing our founding board of directors, after which we
+          will apply for recognition of exemption under Section 501(c)(3) of the Internal
+          Revenue Code, and we are not yet a tax-exempt organization.
         </p>
         <p className="mt-3 text-sm text-muted">
           If the Articles are ever amended, this page will be updated to match, and the

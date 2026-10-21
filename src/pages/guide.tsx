@@ -28,7 +28,7 @@ const ORG_SCHEMA = {
       name: "Can I donate goods or money?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Not yet. Base Impact is a pre-filing nonprofit and is not registered to solicit contributions in Florida, so we are not accepting donations of money or goods at this time. See the how-to-help page for what does help.",
+        text: "Not yet. Base Impact is a Florida nonprofit corporation but is not yet a tax-exempt 501(c)(3) organization, so we are not accepting donations of money or goods at this time. See the how-to-help page for what does help.",
       },
     },
   ],

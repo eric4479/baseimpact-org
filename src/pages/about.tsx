@@ -16,7 +16,7 @@ export function AboutPage() {
     <div className="space-y-8">
       <PageMeta
         title="About Base Impact"
-        description="Founder Eric Douglas's story, board duties, partner list, and pre-filing nonprofit status."
+        description="Founder Eric Douglas's story, board duties, partner list, and current nonprofit status."
         path="/about"
       />
       <JsonLd data={ABOUT_SCHEMA} />
@@ -72,10 +72,69 @@ export function AboutPage() {
           Ministries raising money for clothing, food, and shelter.
         </p>
         <p className="mt-3 text-sm leading-relaxed text-muted">
-          Every one of those moments had the same gap: people who need help don&apos;t have a single
-          place to go to find out who&apos;s open, who has what, and how to get there. They&apos;re
-          hunting through ten different websites or making calls that go nowhere. Base Impact is my
-          attempt to build that neighborhood navigation desk.
+          Every one of those moments had the same gap: people who need help don&apos;t have the
+          technology to reach it, and the small organizations trying to help don&apos;t have anyone
+          to keep their computers, networks, and security working. Base Impact is my attempt to
+          close both halves of that gap — get people connected, and keep the local safety net
+          running.
+        </p>
+      </section>
+
+      <section className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)] sm:p-6">
+        <h2 className="font-display text-xl font-semibold">What we do</h2>
+        <ul className="mt-3 space-y-2 text-sm leading-relaxed text-muted">
+          <li>
+            <strong className="text-body">Technology access.</strong> Helping neighbors get a
+            working device and internet service — and learn to use them.
+          </li>
+          <li>
+            <strong className="text-body">Digital skills and education.</strong> Walk-throughs for
+            housing portals, job applications, benefits, and staying safe online.
+          </li>
+          <li>
+            <strong className="text-body">Free technology services for small nonprofits.</strong>{" "}
+            Computers, networks, security, and fee-free fundraising tools for churches, pantries,
+            and 1–5 person community groups.
+          </li>
+          <li>
+            <strong className="text-body">A local resource guide.</strong> A simpler, local
+            starting point that works alongside 211 — not a replacement for it.
+          </li>
+        </ul>
+      </section>
+
+      <section className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)] sm:p-6">
+        <h2 className="font-display text-xl font-semibold">
+          We work alongside 211 — we don&apos;t replace it
+        </h2>
+        <p className="mt-3 text-sm leading-relaxed text-muted">
+          211 already maintains a statewide, staffed resource database. Rebuilding it would waste
+          money and rot faster than we could maintain it. Our guide is a simpler, local starting
+          point on top of that — the neighborhood organizations, the volunteer-run pantry, the
+          church that opens when it&apos;s cold — plus teaching people to use 211, SAMHSA, and
+          FindTreatment.gov themselves.
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-muted">
+          Call 211 for the full county-wide picture. Use our guide for the local detail.
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-muted">
+          We don&apos;t independently verify every listing. Always call ahead before you travel —
+          hours, eligibility, and availability change.
+        </p>
+      </section>
+
+      <section className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)] sm:p-6">
+        <h2 className="font-display text-xl font-semibold">
+          We don&apos;t take or hold your documents — ever
+        </h2>
+        <p className="mt-3 text-sm leading-relaxed text-muted">
+          No ID, SSN card, birth certificate, or any other personal document ever enters our hands.
+          A volunteer can <strong className="text-body">accompany</strong> you to the office; you
+          hold your paperwork at all times. We help with the process — which form to fill, what to
+          bring, how much it costs — not with your data.
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-muted">
+          This protects you from identity theft and us from a breach we&apos;d never recover from.
         </p>
       </section>
 
@@ -97,10 +156,13 @@ export function AboutPage() {
       <section className="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)] sm:p-6">
         <h2 className="font-display text-xl font-semibold">Our status</h2>
         <p className="mt-3 text-sm text-muted">
-          Base Impact Inc. is a pre-filing nonprofit in Scottsmoor, FL. We&apos;re preparing our
-          Florida Sunbiz filing and our 501(c)(3) application. We&apos;re not there yet. We&apos;re
-          building in the open about that — because if we&apos;re asking for your trust, you should
-          know exactly where we stand.
+          Base Impact Inc. is a Florida nonprofit corporation, filed with the Florida Division of
+          Corporations (Sunbiz) and registered with the Florida Department of Agriculture and
+          Consumer Services. We are completing our founding board of directors, after which we will
+          file Form 1023-EZ with the IRS for recognition of tax-exempt status under Section
+          501(c)(3). We are not yet a tax-exempt organization, and we are building in the open
+          about that — because if we&apos;re asking for your trust, you should know exactly where we
+          stand.
         </p>
       </section>
 

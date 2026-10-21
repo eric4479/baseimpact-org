@@ -24,7 +24,7 @@ export function ContactPage() {
           Reach Base Impact.
         </h1>
         <p className="mt-4 max-w-xl text-base leading-relaxed text-faint sm:text-lg">
-          We&apos;re a small, pre-filing nonprofit. We read every message. Response times vary — if
+          We&apos;re a small nonprofit. We read every message. Response times vary — if
           you need help now, call 211.
         </p>
       </section>

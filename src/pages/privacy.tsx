@@ -80,7 +80,7 @@ export function PrivacyPage() {
       </section>
 
       <p className="text-xs text-muted">
-        Base Impact Inc. is a pre-filing nonprofit in Scottsmoor, FL. This site does not collect
+        Base Impact Inc. is a Florida nonprofit corporation. This site does not collect
         payment information. We do not accept donations.
       </p>
     </div>

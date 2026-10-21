@@ -83,13 +83,13 @@ export const ROUTE_META: RouteMeta[] = [
     path: "/purpose",
     title: "Corporate purpose",
     description:
-      "The full purpose clause from the Articles of Incorporation of Base Impact Inc., a pre-filing Florida nonprofit.",
+      "The full purpose clause from the Articles of Incorporation of Base Impact Inc., a Florida nonprofit corporation.",
   },
   {
     path: "/about",
     title: "About Base Impact",
     description:
-      "Founder Eric Douglas's story, board duties, partner list, and pre-filing nonprofit status.",
+      "Founder Eric Douglas's story, board duties, partner list, and current nonprofit status.",
   },
   {
     path: "/join",
@@ -100,7 +100,7 @@ export const ROUTE_META: RouteMeta[] = [
     path: "/contact",
     title: "Contact Base Impact",
     description:
-      "Phone, email, and contact details for Base Impact, a pre-filing nonprofit serving North Brevard County, Florida.",
+      "Phone, email, and contact details for Base Impact, a Florida nonprofit serving North Brevard County.",
   },
   {
     path: "/feedback",
