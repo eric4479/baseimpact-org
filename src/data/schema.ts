@@ -10,12 +10,14 @@
  */
 
 export const CATEGORIES = [
-  'recovery',
-  'housing',
-  'employment',
+  'food',
   'basic',
+  'health',
+  'housing',
   'stability',
+  'employment',
   'community',
+  'recovery',
 ] as const;
 
 export type Category = (typeof CATEGORIES)[number];
@@ -29,24 +31,24 @@ export interface CategoryMeta {
 }
 
 export const CATEGORY_META: Record<Category, CategoryMeta> = {
-  recovery: {
-    label: 'Recovery',
-    blurb: 'Faith-based recovery, treatment, sober living, peer support.',
-    badge: 'bg-emerald-100 text-emerald-800',
+  food: {
+    label: 'Food',
+    blurb: 'Food pantries, food banks, hot meals, groceries, WIC & SNAP.',
+    badge: 'bg-amber-100 text-amber-900',
+  },
+  health: {
+    label: 'Health & Dental',
+    blurb: 'Medical and dental care for low or no income, sliding-scale clinics.',
+    badge: 'bg-rose-100 text-rose-900',
   },
   housing: {
     label: 'Housing',
     blurb: 'Emergency and cold-weather shelter, rehousing, rent & utility aid.',
     badge: 'bg-sky-100 text-sky-900',
   },
-  employment: {
-    label: 'Jobs & Income',
-    blurb: 'Workforce centers, training, fair-chance employers, day labor.',
-    badge: 'bg-amber-100 text-amber-900',
-  },
   basic: {
     label: 'Basic Needs',
-    blurb: 'Food, clothing, hygiene, transportation, childcare.',
+    blurb: 'Clothing, hygiene, showers, transportation, childcare.',
     badge: 'bg-rose-100 text-rose-800',
   },
   stability: {
@@ -54,10 +56,20 @@ export const CATEGORY_META: Record<Category, CategoryMeta> = {
     blurb: 'Referral lines, legal aid, ID & documents, benefits, healthcare.',
     badge: 'bg-violet-100 text-violet-800',
   },
+  employment: {
+    label: 'Jobs & Income',
+    blurb: 'Workforce centers, training, fair-chance employers, day labor.',
+    badge: 'bg-emerald-100 text-emerald-800',
+  },
   community: {
     label: 'Community',
     blurb: 'Churches, support groups, community meals, mentorship.',
     badge: 'bg-teal-100 text-teal-800',
+  },
+  recovery: {
+    label: 'Recovery',
+    blurb: 'Treatment, recovery support, and peer programs.',
+    badge: 'bg-slate-200 text-slate-800',
   },
 };
 

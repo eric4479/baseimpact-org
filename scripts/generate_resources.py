@@ -13,7 +13,23 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CSV_PATH = os.path.join(REPO, "data", "sources.csv")
 OUT_PATH = os.path.join(REPO, "src", "data", "resources.ts")
 
-CATEGORIES = {"recovery", "housing", "employment", "basic", "stability", "community"}
+def load_categories():
+    """
+    Read the category list from src/data/schema.ts.
+
+    Reading it from the schema rather than hard-coding it here means adding a
+    category to the schema is enough — this script can never drift out of sync
+    and silently downgrade a listing to the fallback category.
+    """
+    path = os.path.join(REPO, "src", "data", "schema.ts")
+    src = open(path, encoding="utf-8").read()
+    m = re.search(r"export const CATEGORIES\s*=\s*\[(.*?)\]\s*as const", src, re.S)
+    if not m:
+        sys.exit("could not read CATEGORIES from src/data/schema.ts")
+    return {c.strip().strip("'\"") for c in m.group(1).split(",") if c.strip()}
+
+
+CATEGORIES = load_categories()
 POPULATIONS = {"recovery", "disability", "mental-health", "reentry", "veterans", "seniors",
                "youth", "families", "immigrants", "unhoused", "lgbtq"}
 
