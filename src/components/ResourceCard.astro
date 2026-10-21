@@ -21,9 +21,42 @@ if (status === 'sample') {
   badge = { cls: 'bg-slate-200 text-slate-700 border-slate-300', text: 'Closed' };
 }
 
-const rows: Array<{ icon: string; label: string; value: string }> = [];
-if (r.city) rows.push({ icon: '📍', label: 'Location', value: r.address ?? r.city });
-else if (r.address) rows.push({ icon: '📍', label: 'Location', value: r.address });
+const rows: Array<{ icon: string; label: string; value: string; href?: string }> = [];
+
+/**
+ * Build a Google Maps query from a record's location fields.
+ *
+ * Returns undefined when the location is not a real, mappable place — a statewide or
+ * national helpline, or a note like "call for directions". Sending those to Maps would
+ * produce a wrong pin, which is worse than no link.
+ */
+function mapsHref(addr: string | undefined, city: string | undefined): string | undefined {
+  const NON_PLACES = /^(statewide|national|florida|n\/?a|none|various|multiple)$/i;
+  const NOT_AN_ADDRESS = /call for directions|not published|by appointment|mobile|outreach/i;
+  const a = (addr ?? '').trim();
+  const c = (city ?? '').trim();
+
+  if (NOT_AN_ADDRESS.test(a) || NON_PLACES.test(c)) return undefined;
+  if (!a && (!c || NON_PLACES.test(c))) return undefined;
+
+  const parts: string[] = [];
+  if (a) parts.push(a);
+  if (c && !a.toLowerCase().includes(c.toLowerCase())) parts.push(c);
+  if (!/\bFL\b|\bFlorida\b/i.test(parts.join(' '))) parts.push('FL');
+
+  const place = parts.join(', ');
+  if (!place || NON_PLACES.test(place)) return undefined;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place)}`;
+}
+
+if (r.city || r.address) {
+  rows.push({
+    icon: '📍',
+    label: 'Location',
+    value: r.address ?? r.city!,
+    href: mapsHref(r.address, r.city),
+  });
+}
 if (r.hours) rows.push({ icon: '🕑', label: 'Hours', value: r.hours });
 if (r.cost?.length) rows.push({ icon: '💲', label: 'Cost', value: r.cost.join(' · ') });
 if (r.eligibility) rows.push({ icon: '👤', label: 'Who qualifies', value: r.eligibility });
@@ -75,7 +108,21 @@ if (r.address) {
         <div class="flex gap-2">
           <dt class="sr-only">{row.label}</dt>
           <span aria-hidden="true">{row.icon}</span>
-          <dd>{row.value}</dd>
+          {row.href ? (
+            <dd>
+              <a
+                href={row.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="underline decoration-dotted underline-offset-2 hover:text-emerald-800 dark:hover:text-emerald-400"
+                aria-label={`${row.value} — open in Google Maps`}
+              >
+                {row.value}
+              </a>
+            </dd>
+          ) : (
+            <dd>{row.value}</dd>
+          )}
         </div>
       ))
     }
