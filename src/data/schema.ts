@@ -12,6 +12,7 @@
 export const CATEGORIES = [
   'food',
   'basic',
+  'tech',
   'health',
   'housing',
   'stability',
@@ -50,6 +51,11 @@ export const CATEGORY_META: Record<Category, CategoryMeta> = {
     label: 'Basic Needs',
     blurb: 'Clothing, hygiene, showers, transportation, childcare.',
     badge: 'bg-rose-100 text-rose-800',
+  },
+  tech: {
+    label: 'Tech & Internet',
+    blurb: 'Free computer access, low-cost internet, devices, and digital help.',
+    badge: 'bg-indigo-100 text-indigo-900',
   },
   stability: {
     label: 'Stability',
