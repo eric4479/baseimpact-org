@@ -1,0 +1,42 @@
+# Cloudflare Pages redirects — 301 permanent
+#
+# baseimpact.org was rebuilt from a React/Vite app to an Astro app. The route
+# names changed. Everything below is a legacy path that now 404s but may still
+# be bookmarked, indexed by search engines, or linked from an external site.
+#
+# 301 (permanent) so search engines transfer ranking to the new page.
+# Format: <from>  <to>  <status>
+
+# ── the directory moved onto the homepage ──────────────────────────────
+/find-help          /               301
+/directory          /               301
+/resources          /               301
+/search             /               301
+/log                /               301
+
+# ── the guide is now /guide ────────────────────────────────────────────
+/help               /guide          301
+/food               /guide          301
+/shelter            /guide          301
+/need-help          /guide          301
+
+# ── volunteering absorbed /how-to-help and /join ───────────────────────
+/how-to-help        /volunteer      301
+/join               /volunteer      301
+/help-out           /volunteer      301
+
+# ── contact, purpose, and impact are all on /about ─────────────────────
+/contact            /about          301
+/purpose            /about          301
+/impact             /about          301
+/socials            /about          301
+/our-story          /about          301
+
+# ── feedback and connect both route to the suggestion form ─────────────
+/feedback           /submit         301
+/connect            /submit         301
+/suggest            /submit         301
+/report             /submit         301
+
+# ── catch-all for anything else under the old naming ───────────────────
+/index.html         /               301

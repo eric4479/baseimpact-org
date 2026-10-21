@@ -1,0 +1,82 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config/region';
+---
+
+<Base
+  title={`Request removal of a listing | ${SITE.shortName}`}
+  description="Ask Base Impact to remove your organization from our resource guide. No reason required — we remove it."
+>
+  <article class="mx-auto max-w-2xl px-4 py-16">
+    <h1 class="mb-4 text-4xl font-bold text-slate-900 dark:text-slate-100">
+      Request removal of a listing
+    </h1>
+
+    <p class="mb-8 text-lg leading-relaxed text-slate-700 dark:text-slate-300">
+      <strong>If your organization is listed on this site and you want it removed, we will remove
+      it. No reason required.</strong> You do not have to explain why. A listing is a courtesy, not
+      something we hold over you.
+    </p>
+
+    <div class="mb-10 rounded-2xl border border-emerald-200 bg-emerald-50 p-6 dark:border-emerald-800 dark:bg-emerald-950/40">
+      <p class="mb-2 font-bold text-emerald-900 dark:text-emerald-200">What happens next</p>
+      <ol class="list-decimal space-y-1 pl-5 text-sm leading-relaxed text-emerald-900 dark:text-emerald-200">
+        <li>We acknowledge your request within <strong>2 business days</strong>.</li>
+        <li>We remove or hide the listing within <strong>5 business days</strong> — sooner if you ask urgently.</li>
+        <li>We record the request so the listing cannot reappear in a future update.</li>
+      </ol>
+      <p class="mt-3 text-sm text-emerald-900 dark:text-emerald-200">
+        We may tell you once if we think the listing is useful to the community. You still decide.
+        Your decision is final.
+      </p>
+    </div>
+
+    <section class="mb-10 space-y-6 text-slate-700 leading-relaxed dark:text-slate-300">
+      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Fastest: email us</h2>
+      <p>
+        Send an email to{' '}
+        <a href={`mailto:${SITE.email}?subject=Removal%20request`} class="font-semibold text-emerald-800 underline dark:text-emerald-400">
+          {SITE.email}
+        </a>{' '}
+        with the subject line <strong>&ldquo;Removal request&rdquo;</strong>. Include the
+        organization name and, if you can, the page you saw it on. That is all we need.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Or use the form</h2>
+      <p>
+        The same form we use for corrections and suggestions works for removals — just choose
+        <strong>&ldquo;Remove my organization&rdquo;</strong> in the reason field.
+      </p>
+      <p>
+        <a
+          href="/submit"
+          class="inline-flex items-center justify-center rounded-xl bg-emerald-800 px-6 py-3 font-semibold text-white transition-colors hover:bg-emerald-900"
+        >
+          Open the form
+        </a>
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Corrections welcome too</h2>
+      <p>
+        If you would rather stay listed but something is wrong — wrong phone number, wrong hours, a
+        service you no longer offer — tell us and we will fix it from your own website. Many
+        organizations prefer this, and it is usually faster than removal.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Why we do this</h2>
+      <p>
+        A directory that will not remove a listing on request is publishing information about
+        someone without their consent. We are a small local nonprofit and we have no interest in
+        doing that. If you want out, you are out.
+      </p>
+    </section>
+
+    <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-sm leading-relaxed text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+      <p class="mb-1 font-bold text-slate-900 dark:text-slate-100">Questions about how we list?</p>
+      <p>
+        Our <a href="/sources" class="underline">Sources page</a> shows where each listing came
+        from, and our full listing policy is published in the site repository.
+      </p>
+    </div>
+  </article>
+</Base>

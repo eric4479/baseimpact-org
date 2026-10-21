@@ -14,11 +14,13 @@ import { SITE } from '../config/region';
     <section class="mb-10 space-y-6 text-slate-700 leading-relaxed dark:text-slate-300">
       <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Who we are</h2>
       <p>
-        Base Impact, Inc. is a Florida non-profit corporation in formation, seeking
-        501(c)(3) tax-exempt status. Until that status is granted, donations are
-        <strong>not tax-deductible</strong>. We operate a free resource locator for
-        Florida's Space Coast and Central Florida (Brevard, Volusia, Indian River,
-        Orange, Flagler counties).
+        Base Impact Inc. is a Florida nonprofit corporation, filed with the Florida Division of
+        Corporations and registered with the Florida Department of Agriculture and Consumer
+        Services. We are completing our founding board of directors, after which we will apply for
+        501(c)(3) tax-exempt status. Until that status is granted, donations made directly to
+        Base Impact Inc. are <strong>not tax-deductible</strong>. We operate a free local resource
+        guide for Florida's Space Coast (Brevard, Volusia, Indian River, Orange, and Flagler
+        counties).
       </p>
 
       <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">We are a navigator, not a provider</h2>
@@ -26,7 +28,7 @@ import { SITE } from '../config/region';
         Base Impact does not provide medical, mental health, legal, housing, or
         employment services. We do not operate, manage, own, or endorse any
         provider listed on this site. We route people to licensed gatekeepers —
-        government agencies, 211, SAMHSA, AHCA, HUD, SSA, and verified local
+        government agencies, 211, SAMHSA, AHCA, HUD, SSA, and local
         organizations. A listing is not an endorsement, and listing does not mean
         we recommend a particular level of care.
       </p>
@@ -64,8 +66,91 @@ import { SITE } from '../config/region';
       <p>
         We do not track, store, or sell your location, search terms, or
         submission data on help pages. The submission form collects only what
-        you choose to give us, and we use it only to verify and improve listings.
+        you choose to give us, and we use it only to check and improve listings.
         See our <a href="/privacy" class="underline">privacy note</a> for details.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Third-party information</h2>
+      <p>
+        Listings on this site describe <strong>third-party organizations</strong>. We compile them
+        from sources published by those organizations or by government agencies — an official
+        website, a public Facebook page, or a government program page. We are not the author or
+        publisher of that information, we do not control it, and it can change without notice.
+      </p>
+      <p>
+        Where we record a source and the date we read it, that record exists so we can answer
+        &ldquo;where did this come from?&rdquo; It is <strong>not</strong> a claim that we
+        contacted, visited, or inspected the organization. Our{' '}
+        <a href="/sources" class="underline">Sources page</a> lists where each listing came from.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Names and trademarks</h2>
+      <p>
+        Organization names, logos, and trademarks mentioned on this site belong to their
+        respective owners. We use them only to identify the organization being described. A
+        listing implies <strong>no affiliation, sponsorship, partnership, or endorsement</strong>
+        by either party.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Removal requests</h2>
+      <p>
+        <strong>If you represent an organization listed here and want it removed, we will remove
+        it — no reason required.</strong> Use the{' '}
+        <a href="/removal" class="underline">removal request form</a>, or email{' '}
+        <a href={`mailto:${SITE.email}`} class="underline">{SITE.email}</a> with the subject line
+        &ldquo;Removal request&rdquo;. We acknowledge within 2 business days and remove within 5,
+        sooner if you ask urgently. Our decision is not up for negotiation — it is your listing to
+        withdraw.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Limitation of liability</h2>
+      <p>
+        This site and every listing on it are provided <strong>free of charge</strong> and
+        &ldquo;as is.&rdquo; To the fullest extent permitted by Florida law, Base Impact Inc., its
+        directors, officers, volunteers, contributors, and agents are <strong>not liable</strong>
+        for any damages of any kind arising out of or relating to this site or any organization
+        listed on it — including direct, indirect, incidental, special, consequential, exemplary,
+        or punitive damages, and any loss of profits, data, goodwill, or opportunity.
+      </p>
+      <p>
+        This applies whether the claim arises in contract, tort, negligence, strict liability, or
+        any other legal theory, and whether or not we were advised of the possibility of such
+        damages. <strong>You use this site and contact any organization at your own risk.</strong>
+      </p>
+      <p>
+        We make no warranty of any kind, express or implied, including merchantability, fitness for
+        a particular purpose, or non-infringement, and we do not warrant that the site will be
+        uninterrupted, secure, or error-free.
+      </p>
+      <p>
+        Some jurisdictions do not allow the exclusion of certain warranties or damages, so parts of
+        this section may not apply to you. Where a limitation is not permitted, our liability is
+        limited to the smallest amount the law allows.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Indemnification</h2>
+      <p>
+        You agree to hold harmless and indemnify Base Impact Inc. and its directors, officers,
+        volunteers, and contributors from any claim, demand, loss, or expense (including reasonable
+        attorneys&rsquo; fees) arising from your use of this site or your violation of these terms.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Governing law</h2>
+      <p>
+        These terms are governed by the laws of the <strong>State of Florida</strong>, without
+        regard to conflict-of-law principles. Any dispute arising from this site will be brought
+        exclusively in the state or federal courts located in{' '}
+        <strong>Brevard County, Florida</strong>, and you consent to venue and personal
+        jurisdiction there.
+      </p>
+
+      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Accessibility</h2>
+      <p>
+        We aim to meet <strong>WCAG 2.1 Level AA</strong>. The site is built mobile-first, with
+        large touch targets and screen-reader support. If any part of this site is not usable for
+        you, please{' '}
+        <a href={`mailto:${SITE.email}`} class="underline">tell us</a> and we will fix it or get
+        you the information another way.
       </p>
 
       <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Changes</h2>

@@ -89,7 +89,7 @@ export const POST: APIRoute = async ({ request, env }) => {
   return json({
     ok: true,
     message:
-      'Thanks — a volunteer will review this and verify it before it appears. We appreciate you.',
+      'Thanks — we will check this against the source and add it if it fits. We appreciate you.',
   });
 };
 

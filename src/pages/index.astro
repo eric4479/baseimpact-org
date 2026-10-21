@@ -18,14 +18,15 @@ const cov = coverage();
       <span
         class="mb-5 inline-block rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold tracking-widest text-emerald-800 uppercase dark:text-emerald-300 dark:bg-emerald-900/50"
       >
-        Free · Confidential · No cost to you
+        Free · Local · Brevard County
       </span>
       <h1 class="mb-5 text-4xl leading-tight font-bold text-slate-900 md:text-6xl dark:text-slate-100">
-        Find food, shelter, and real help in Brevard County
+        Technology help for people and nonprofits in Brevard County
       </h1>
       <p class="mx-auto max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-        Recovery, housing, jobs, food, and support — verified and organized so you can actually use
-        it. No appointment, no account, no explaining yourself. Start with a phone call.
+        We help neighbors get devices, internet, and the skills to use them — and we set up
+        technology free for small local nonprofits, churches, and food pantries. Plus a plain-language
+        guide to food, shelter, recovery, and jobs in Brevard County.
       </p>
       <p class="mt-4 text-sm text-slate-600 dark:text-slate-300">
         Serving {REGION.label} — {REGION.counties.join(' · ')} counties
@@ -40,10 +41,11 @@ const cov = coverage();
   <section id="how" class="border-t border-slate-200 bg-white py-16 dark:border-slate-700 dark:bg-slate-800">
     <div class="mx-auto max-w-5xl px-4">
       <h2 class="mb-3 text-center text-3xl font-bold text-slate-900 md:text-4xl dark:text-slate-100">
-        How we verify — and what we promise
+        How we build the list — and what we promise
       </h2>
       <p class="mx-auto mb-10 max-w-2xl text-center text-slate-600 dark:text-slate-300">
-        Every listing is checked by a human and stamped with the date it was last confirmed.
+        We compile listings from public sources and community word of mouth. We tell you
+        to call ahead. We never claim more than that.
       </p>
 
       <div class="grid gap-6 md:grid-cols-3">
@@ -53,10 +55,11 @@ const cov = coverage();
           >
             1
           </div>
-          <h3 class="mb-2 font-bold text-slate-800 dark:text-slate-200">We call before we list</h3>
+          <h3 class="mb-2 font-bold text-slate-800 dark:text-slate-200">Where our listings come from</h3>
           <p class="text-sm text-slate-600 dark:text-slate-300">
-            A volunteer confirms the phone number, hours, cost, and intake process.
-            No record goes live unverified.
+            Official websites, public Facebook pages, government program pages, and what
+            neighbors and partner organizations tell us. We read the source; we do not
+            inspect or call every location.
           </p>
         </div>
         <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-700 dark:bg-slate-800">
@@ -65,10 +68,11 @@ const cov = coverage();
           >
             2
           </div>
-          <h3 class="mb-2 font-bold text-slate-800 dark:text-slate-200">We stamp the date</h3>
+          <h3 class="mb-2 font-bold text-slate-800 dark:text-slate-200">Always call ahead</h3>
           <p class="text-sm text-slate-600 dark:text-slate-300">
-            Each card shows when it was last verified. Anything older than 120 days is
-            flagged &ldquo;call ahead.&rdquo;
+            Hours, eligibility, and availability change without notice. Treat every listing
+            as a starting point, not a guarantee. For the full county-wide picture, call{" "}
+            <a href="tel:211" class="font-semibold underline">211</a>.
           </p>
         </div>
         <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-700 dark:bg-slate-800">
@@ -101,7 +105,7 @@ const cov = coverage();
       <div class="mt-10 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-800">
         <h3 class="mb-1 text-lg font-bold text-slate-800 dark:text-slate-200">Current coverage</h3>
         <p class="mb-4 text-sm text-slate-600 dark:text-slate-300">
-          {s.trusted} human-verified listings across {s.categories} categories.
+          {s.trusted} listings across {s.categories} categories.
           {s.sample > 0 && (
             <>
               {' '}
@@ -118,7 +122,7 @@ const cov = coverage();
                 <span
                   class={c.trusted === 0 ? 'font-semibold text-amber-700 dark:text-amber-300' : 'font-semibold text-emerald-800 dark:text-emerald-400'}
                 >
-                  {c.trusted} verified
+                  {c.trusted} listed
                 </span>
               </li>
             ))

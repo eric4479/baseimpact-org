@@ -29,6 +29,7 @@ Everything below follows from that one sentence.
 | **Verified partner organizations** | No One Hungry, LifePointe Ministries, Under The Bridge | Organizations we work alongside and have confirmed directly. |
 | **Accredited helplines** | 988, SAMHSA, VA homeless veterans, Elder Helpline | National infrastructure with published standards. |
 | **Community organizations** | Churches, food pantries, support groups | Local, human-scale help that big directories miss. |
+| **Named local treatment & recovery providers** | Circles of Care, local detox and outpatient programs | The local name a person in crisis can actually reach. See §3a for the three conditions. |
 
 **Every listing must have:**
 - A name we can confirm exists
@@ -43,7 +44,7 @@ Everything below follows from that one sentence.
 | Type | Why | What we do instead |
 |---|---|---|
 | **Residential care facilities** (ALFs, group homes, sober living) | Licensed by AHCA/APD/FARR under Ch. 429, § 397.487. § 429.47 requires license numbers in advertising. | Link the **AHCA facility locator** and **APD** — they carry the license numbers. |
-| **Treatment providers we haven't verified** | § 817.505 makes paid referral a felony; unverified referral is a trust failure. | Link **SAMHSA** and **FindTreatment.gov**. |
+| **Treatment providers with no source we can point to** | § 817.505 makes *paid* referral a felony; an unsourced listing is a trust failure. | Link **SAMHSA** and **FindTreatment.gov**. |
 | **"Free government phone" / ACP sites** | ACP **ended June 1, 2024**. The FCC has warned about sites still advertising it. | Link **Lifeline Support Center** and explain the difference. |
 | **Any organization that pays to appear** | 501(c)(3) private-benefit rule; § 817.505. | We accept **zero** compensation for listings. Period. |
 | **Services that handle ID/SSN documents for people** | Document custody creates breach liability and fraud exposure. | Link **SSA** and **vital records** offices; a volunteer may accompany, never hold. |
@@ -52,57 +53,145 @@ Everything below follows from that one sentence.
 
 ---
 
-## 4. The verification standard
+## 3a. Named local treatment and recovery providers — we DO list these
 
-A listing goes live only when a human has confirmed it. "Found it on Google" is not verification.
+**A person in crisis needs the name of the local detox, not a federal search box.** Listing a
+named provider is legal and it is useful, so we do it.
 
-**Minimum to list:**
-- [ ] Called the number, or visited in person, or confirmed via an official website
-- [ ] Confirmed it is currently operating
-- [ ] Recorded hours, cost, and eligibility if available
-- [ ] Set `last_verified` to today's date
-- [ ] Named who verified it
+**Why it is legal.** F.S. § 817.505 (the Patient Brokering Act) criminalizes *paying or receiving
+compensation* for a client referral. It does **not** prohibit a free directory from naming a
+provider. Our compensation rule (§9) is absolute, so the statute is not engaged.
 
-**Re-verification:** every record is re-checked **quarterly**. Anything older than **120 days**
-automatically renders a "⚠ Call ahead" warning on the site.
+**The three conditions.** We list a named treatment or recovery provider only when **all** hold:
 
-**If a record can't be verified:** it either doesn't go up, or it goes up with
-`verification.status: 'pending'` and a visible badge. It never goes up silently.
+1. **No compensation, ever** — no fee, no gift, no in-kind, no affiliate link (§9).
+2. **A source we can point to** — the provider's own site, or a government page (§4). Source URL
+   and date are recorded in `data/sources.csv`.
+3. **No clinical claim.** We describe what the organization says it offers. We never say a
+   provider is "the best", "recommended", "licensed by us", or that we screened it.
+
+**We always list the federal gateways alongside** — **SAMHSA National Helpline (1-800-662-4357)**
+and **FindTreatment.gov**. A local listing is a shortcut, never the only door.
+
+**Residential facilities are still different.** A sober-living or residential facility must show
+its **license number** (F.S. § 429.47). Until we have that number, we link the **AHCA facility
+locator** instead of listing the facility. That rule does not change.
 
 ---
 
-## 5. The SAMPLE rule
+## 4. Our listing standard
+
+**We compile from public sources. We do not call, visit, or inspect every location.**
+
+A listing goes up when we can read the information from a source we can point to.
+
+**Accepted sources:**
+- The organization's **own official website**
+- The organization's **public Facebook page** or other verified social account
+- A **government program page** — 211, AHCA, HUD, DHS, CareerSource, SSA, VA
+- A **referral from a partner organization or a community member**, cross-checked against one of
+  the above before it appears
+
+**What we record:** the source and the date we read it. That record exists so we can answer
+*"where did this come from?"* — it is **not** a claim that we contacted the organization.
+
+**What we do NOT claim — on the site or anywhere else:**
+
+| We do not claim | Why |
+|---|---|
+| That we called the organization | We don't, as a rule |
+| That we visited or inspected the location | We don't |
+| That hours, eligibility, or cost are currently accurate | They change without notice |
+| That the listing is complete or ranked | It is a starting point |
+
+**Standing advice on every listing: call ahead.** This is printed on every card.
+
+**Re-checking.** Listings are **not** individually re-verified on a schedule. Corrections arrive
+from community reports and from periodic sweeps of the source pages. A listing shown to be wrong
+is corrected or removed within 48 hours.
+
+---
+
+## 5. Where we sit relative to 211
+
+**Base Impact is a supplement to 211, not a replacement for it.**
+
+211 maintains a statewide, staffed, verified resource database with live specialists. We cannot
+match that and we do not try. Our value is narrow and local: the North Brevard organizations that
+bigger directories miss, presented simply.
+
+**We point people to 211 for the full county-wide picture** — on the homepage, on the guide, and
+on every page footer. If someone needs a complete answer, 211 is the answer.
+
+**We will not:** describe ourselves as a resource database, claim statewide coverage, or position
+the guide as a substitute for calling 211.
+
+---
+
+## 6. The SAMPLE rule
 
 `verification.status: 'sample'` is a **placeholder**. It renders a loud SAMPLE badge and is
-intended to be replaced with a real, verified organization.
+intended to be replaced with a real organization.
 
 **A SAMPLE record must never:**
-- Present a real organization's name without verification
-- Show a phone number we haven't called
+- Present a real organization's name without a source
+- Show a phone number we have not seen published by that organization
 - Be mistaken for a live listing by a volunteer or a visitor
 
-When a SAMPLE is replaced, the new record starts at `pending` and only becomes `verified` after a
-human confirms it.
+When a SAMPLE is replaced, the new record is added from a real source and the badge disappears.
 
 ---
 
-## 6. Corrections and takedowns
+## 7. Corrections and takedowns
 
 Anyone can report a problem through the **Suggest a Resource** form. We treat every report as
 legitimate until proven otherwise.
 
-- **Wrong number / closed** → mark `status: 'closed'` within 48 hours
-- **Changed hours or location** → update and re-stamp `last_verified`
-- **Disputed listing** → remove pending review; a human decides
+- **Wrong number / closed** → correct or remove within 48 hours
+- **Changed hours or location** → update from the new source
+- **Disputed listing** → remove pending review
 - **Legal concern** → remove immediately, document the reason, escalate to the board
+
+### 7a. Removal on request — an organization's right
+
+**Any organization listed here can ask to be removed, for any reason, and we remove it.**
+
+No justification required. We do not argue, we do not ask them to reconsider, and we do not
+require them to explain. A listing is a courtesy, not a right we hold over them.
+
+**How to ask:**
+
+| Channel | Detail |
+|---|---|
+| **Form** | `/removal` — the fastest route |
+| **Email** | `info@baseimpact.org`, subject line "Removal request" |
+| **Phone** | The number in the site footer |
+
+**What we do:**
+
+1. **Acknowledge within 2 business days.**
+2. **Remove or suppress the listing within 5 business days** — sooner if asked urgently.
+3. **Record the request** in `data/removals.csv` (organization, date, channel, who handled it).
+   We keep this log so we can prove we honored the request, and so the listing does not silently
+   reappear at the next data refresh.
+4. **Mark it permanently excluded** so a future import cannot restore it.
+
+**If we believe the listing is genuinely useful to the community,** we may say so **once** — but
+the organization decides, and their decision is final. No means no.
+
+**Why this policy exists:** a directory that will not remove a listing on request is publishing
+about someone without their consent. That is both a reputational and a legal risk, and it is not
+how a community organization should behave.
 
 ---
 
-## 7. What "listed" means
+## 8. What "listed" means
 
 **Listed ≠ endorsed.**
 
-A listing means: *we confirmed this organization exists and is operating.* It does **not** mean:
+A listing means: *we found this organization described on a source we can point to.* It does
+**not** mean:
+- We have contacted them
 - We vouch for the quality of their services
 - We recommend them over another option
 - We have inspected their facilities
@@ -112,7 +201,7 @@ This distinction is printed on every page and on every card.
 
 ---
 
-## 8. The compensation rule (non-negotiable)
+## 9. The compensation rule (non-negotiable)
 
 **Base Impact accepts zero compensation for any listing or referral.**
 
@@ -124,14 +213,14 @@ Patient Brokering Act) and a condition of **501(c)(3)** status.
 
 ---
 
-## 9. Review cadence
+## 10. Review cadence
 
 | What | How often | Who |
 |---|---|---|
-| Re-verify all listings | Quarterly | Volunteers |
+| Sweep source pages for changes | Quarterly | Volunteers / automated |
 | Review this policy | Annually | Board |
-| Audit for stale records | Monthly (automated) | System |
-| Review SAMPLE replacements | As submitted | Volunteer + reviewer |
+| Action community corrections | Within 48 hours | Whoever sees it |
+| Audit for SAMPLE records | Monthly | System |
 
 ---
 

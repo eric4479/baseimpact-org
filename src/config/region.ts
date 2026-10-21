@@ -7,16 +7,16 @@
  */
 
 export const SITE = {
-  name: 'Base Impact, Inc.',
+  name: 'Base Impact Inc.',
   shortName: 'Base Impact',
   url: 'https://baseimpact.org',
   domain: 'baseimpact.org',
   email: 'info@baseimpact.org',
   tagline: 'Find help. Fill gaps. Build stability.',
   description:
-    'Free, verified help in Brevard County, FL — food pantries, shelters, housing, recovery and job resources. No appointment, no account, no cost.',
+    'Free local help in Brevard County, FL — food pantries, shelters, housing, recovery and job resources. No appointment, no account, no cost.',
   legalNotice:
-    'Base Impact, Inc. is a Florida non-profit corporation in formation. Federal 501(c)(3) tax-exempt status application pending.',
+    'Base Impact Inc. is a Florida nonprofit corporation. Federal 501(c)(3) tax-exempt status application pending.',
   ein: '43-2200667',
   fdacsRegistration: 'CH85670',
   fdacsExpiration: 'October 16, 2027',
