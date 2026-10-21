@@ -14,7 +14,7 @@ const partners = resources.filter((r) => r.verification.status === 'partner');
 
 <Base
   title={`About Base Impact — Brevard County Resource Navigator`}
-  description="Base Impact connects neighbors to verified resources, helps nonprofits modernize, and fills community gaps across Florida's Space Coast."
+  description="Base Impact connects neighbors to local resources, helps nonprofits modernize, and fills community gaps across Florida's Space Coast."
 >
   <article class="mx-auto max-w-4xl px-4 py-16">
     <h1 class="mb-6 text-4xl font-bold text-slate-900 md:text-5xl dark:text-slate-100">About Base Impact</h1>
@@ -38,8 +38,9 @@ const partners = resources.filter((r) => r.verification.status === 'partner');
         <li class="flex gap-3">
           <span class="text-emerald-800" aria-hidden="true">✔</span>
           <span
-            ><strong>Verify what we find.</strong> Volunteers confirm details by phone and in person,
-            then stamp each listing with the date it was last checked.</span
+            ><strong>Where it comes from.</strong> We gather listings from official websites, public
+            Facebook pages, government program pages, and what neighbors tell us. We read the
+            source — we do not call or inspect every location, so always call ahead.</span
           >
         </li>
         <li class="flex gap-3">
@@ -109,7 +110,7 @@ const partners = resources.filter((r) => r.verification.status === 'partner');
     <section id="gaps" class="mb-12">
       <h2 class="mb-3 text-2xl font-bold text-slate-900 dark:text-slate-100">Coverage &amp; gaps</h2>
       <p class="mb-4 text-slate-600 dark:text-slate-300">
-        {s.total} listings tracked &middot; {s.trusted} human-verified &middot; {s.sample} placeholders
+        {s.total} listings tracked &middot; {s.trusted} active &middot; {s.sample} placeholders
         awaiting replacement.
       </p>
       <div class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700">
@@ -117,7 +118,7 @@ const partners = resources.filter((r) => r.verification.status === 'partner');
           <thead class="bg-slate-50 text-slate-600 dark:text-slate-300 dark:bg-slate-800">
             <tr>
               <th class="px-4 py-2 font-semibold">Category</th>
-              <th class="px-4 py-2 font-semibold">Verified</th>
+              <th class="px-4 py-2 font-semibold">Listed</th>
               <th class="px-4 py-2 font-semibold">Placeholders</th>
             </tr>
           </thead>
@@ -153,9 +154,11 @@ const partners = resources.filter((r) => r.verification.status === 'partner');
     <section class="mb-12">
       <h2 class="mb-3 text-2xl font-bold text-slate-900 dark:text-slate-100">How we gather and check information</h2>
       <p class="mb-4 text-slate-700 dark:text-slate-300">
-        We collect listings from partner organizations, public websites, and word of mouth. Each one
-        is confirmed before it appears, re-checked quarterly, and stamped with the date it was last
-        verified. Anyone can submit a correction or a new resource through our
+        We compile listings from public sources — official websites, public Facebook pages, and
+        government program pages — plus what neighbors and partner organizations tell us. We read
+        the source and record it. We do not call, inspect, or visit every location, and listings
+        are not individually re-checked on a schedule. Anyone can submit a correction or a new
+        resource through our
         <a href="/submit" class="underline">feedback form</a> — we improve the process as we learn.
       </p>
       <div class="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-sm leading-relaxed text-amber-900 dark:border-amber-800 dark:text-amber-200 dark:bg-amber-950/40">

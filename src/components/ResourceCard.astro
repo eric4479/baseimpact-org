@@ -1,6 +1,5 @@
 ---
 import { CATEGORY_META, POPULATION_LABELS, type Resource } from '../data/schema';
-import { fmtDate, isStale } from '../lib/resources';
 
 interface Props {
   resource: Resource;
@@ -9,29 +8,17 @@ const { resource: r } = Astro.props;
 
 const meta = CATEGORY_META[r.category];
 const status = r.verification.status;
-const stale = isStale(r.verification.lastVerified);
 const tel = r.phone ? r.phone.replace(/[^0-9+]/g, '') : undefined;
 
-// One badge per record, in priority order.
-let badge: { cls: string; text: string };
+// Badges are operational only. There is deliberately NO "verified" badge and NO
+// verification date: we compile listings from public sources (official websites,
+// Facebook pages, community word of mouth) and do not claim to have inspected or
+// called each one. The standing advice is always "call ahead" — see below.
+let badge: { cls: string; text: string } | null = null;
 if (status === 'sample') {
   badge = { cls: 'bg-amber-100 text-amber-900 border-amber-300', text: 'SAMPLE — replace' };
 } else if (status === 'closed') {
   badge = { cls: 'bg-slate-200 text-slate-700 border-slate-300', text: 'Closed' };
-} else if (status === 'pending') {
-  badge = { cls: 'bg-slate-100 text-slate-700 border-slate-300', text: 'Pending verification' };
-} else if (stale) {
-  badge = {
-    cls: 'bg-amber-50 text-amber-900 border-amber-200',
-    text: `⚠ Call ahead — verified ${fmtDate(r.verification.lastVerified)}`,
-  };
-} else if (r.verification.lastVerified) {
-  badge = {
-    cls: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-    text: `✔ Verified ${fmtDate(r.verification.lastVerified)}`,
-  };
-} else {
-  badge = { cls: 'bg-teal-50 text-teal-700 border-teal-200', text: 'Partner' };
 }
 
 const rows: Array<{ icon: string; label: string; value: string }> = [];
@@ -70,9 +57,13 @@ if (r.address) {
       class={`rounded-full px-2.5 py-1 text-[11px] font-bold tracking-wider uppercase ${meta.badge}`}
       >{meta.label}</span
     >
-    <span class={`rounded-full border px-2 py-0.5 text-[11px] font-semibold ${badge.cls}`}>
-      {badge.text}
-    </span>
+    {
+      badge && (
+        <span class={`rounded-full border px-2 py-0.5 text-[11px] font-semibold ${badge.cls}`}>
+          {badge.text}
+        </span>
+      )
+    }
   </div>
 
   <h3 class="mb-1 text-lg leading-snug font-bold text-slate-900 dark:text-slate-100">{r.name}</h3>
@@ -92,7 +83,7 @@ if (r.address) {
       rows.length === 0 && (
         <div class="flex gap-2">
           <span aria-hidden="true">📍</span>
-          <dd class="text-slate-600 dark:text-slate-300">Details pending verification</dd>
+          <dd class="text-slate-600 dark:text-slate-300">Details not listed — call ahead</dd>
         </div>
       )
     }
@@ -108,7 +99,7 @@ if (r.address) {
       </a>
     ) : (
       <p class="mt-auto rounded-xl bg-slate-50 px-4 py-2.5 text-center text-sm text-slate-600 dark:text-slate-300 dark:bg-slate-800">
-        Contact info pending verification
+        No phone listed — see website
       </p>
     )
   }
@@ -125,5 +116,7 @@ if (r.address) {
       </a>
     )
   }
-  <p class="mt-3 text-xs text-slate-600 dark:text-slate-300">Listed does not mean endorsed.</p>
+  <p class="mt-3 text-xs text-slate-600 dark:text-slate-300">
+    Call ahead — hours and availability change. Listed does not mean endorsed.
+  </p>
 </article>

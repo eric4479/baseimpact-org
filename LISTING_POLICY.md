@@ -52,57 +52,88 @@ Everything below follows from that one sentence.
 
 ---
 
-## 4. The verification standard
+## 4. Our listing standard
 
-A listing goes live only when a human has confirmed it. "Found it on Google" is not verification.
+**We compile from public sources. We do not call, visit, or inspect every location.**
 
-**Minimum to list:**
-- [ ] Called the number, or visited in person, or confirmed via an official website
-- [ ] Confirmed it is currently operating
-- [ ] Recorded hours, cost, and eligibility if available
-- [ ] Set `last_verified` to today's date
-- [ ] Named who verified it
+A listing goes up when we can read the information from a source we can point to.
 
-**Re-verification:** every record is re-checked **quarterly**. Anything older than **120 days**
-automatically renders a "⚠ Call ahead" warning on the site.
+**Accepted sources:**
+- The organization's **own official website**
+- The organization's **public Facebook page** or other verified social account
+- A **government program page** — 211, AHCA, HUD, DHS, CareerSource, SSA, VA
+- A **referral from a partner organization or a community member**, cross-checked against one of
+  the above before it appears
 
-**If a record can't be verified:** it either doesn't go up, or it goes up with
-`verification.status: 'pending'` and a visible badge. It never goes up silently.
+**What we record:** the source and the date we read it. That record exists so we can answer
+*"where did this come from?"* — it is **not** a claim that we contacted the organization.
+
+**What we do NOT claim — on the site or anywhere else:**
+
+| We do not claim | Why |
+|---|---|
+| That we called the organization | We don't, as a rule |
+| That we visited or inspected the location | We don't |
+| That hours, eligibility, or cost are currently accurate | They change without notice |
+| That the listing is complete or ranked | It is a starting point |
+
+**Standing advice on every listing: call ahead.** This is printed on every card.
+
+**Re-checking.** Listings are **not** individually re-verified on a schedule. Corrections arrive
+from community reports and from periodic sweeps of the source pages. A listing shown to be wrong
+is corrected or removed within 48 hours.
 
 ---
 
-## 5. The SAMPLE rule
+## 5. Where we sit relative to 211
+
+**Base Impact is a supplement to 211, not a replacement for it.**
+
+211 maintains a statewide, staffed, verified resource database with live specialists. We cannot
+match that and we do not try. Our value is narrow and local: the North Brevard organizations that
+bigger directories miss, presented simply.
+
+**We point people to 211 for the full county-wide picture** — on the homepage, on the guide, and
+on every page footer. If someone needs a complete answer, 211 is the answer.
+
+**We will not:** describe ourselves as a resource database, claim statewide coverage, or position
+the guide as a substitute for calling 211.
+
+---
+
+## 6. The SAMPLE rule
 
 `verification.status: 'sample'` is a **placeholder**. It renders a loud SAMPLE badge and is
-intended to be replaced with a real, verified organization.
+intended to be replaced with a real organization.
 
 **A SAMPLE record must never:**
-- Present a real organization's name without verification
-- Show a phone number we haven't called
+- Present a real organization's name without a source
+- Show a phone number we have not seen published by that organization
 - Be mistaken for a live listing by a volunteer or a visitor
 
-When a SAMPLE is replaced, the new record starts at `pending` and only becomes `verified` after a
-human confirms it.
+When a SAMPLE is replaced, the new record is added from a real source and the badge disappears.
 
 ---
 
-## 6. Corrections and takedowns
+## 7. Corrections and takedowns
 
 Anyone can report a problem through the **Suggest a Resource** form. We treat every report as
 legitimate until proven otherwise.
 
-- **Wrong number / closed** → mark `status: 'closed'` within 48 hours
-- **Changed hours or location** → update and re-stamp `last_verified`
-- **Disputed listing** → remove pending review; a human decides
+- **Wrong number / closed** → correct or remove within 48 hours
+- **Changed hours or location** → update from the new source
+- **Disputed listing** → remove pending review
 - **Legal concern** → remove immediately, document the reason, escalate to the board
 
 ---
 
-## 7. What "listed" means
+## 8. What "listed" means
 
 **Listed ≠ endorsed.**
 
-A listing means: *we confirmed this organization exists and is operating.* It does **not** mean:
+A listing means: *we found this organization described on a source we can point to.* It does
+**not** mean:
+- We have contacted them
 - We vouch for the quality of their services
 - We recommend them over another option
 - We have inspected their facilities
@@ -112,7 +143,7 @@ This distinction is printed on every page and on every card.
 
 ---
 
-## 8. The compensation rule (non-negotiable)
+## 9. The compensation rule (non-negotiable)
 
 **Base Impact accepts zero compensation for any listing or referral.**
 
@@ -124,14 +155,14 @@ Patient Brokering Act) and a condition of **501(c)(3)** status.
 
 ---
 
-## 9. Review cadence
+## 10. Review cadence
 
 | What | How often | Who |
 |---|---|---|
-| Re-verify all listings | Quarterly | Volunteers |
+| Sweep source pages for changes | Quarterly | Volunteers / automated |
 | Review this policy | Annually | Board |
-| Audit for stale records | Monthly (automated) | System |
-| Review SAMPLE replacements | As submitted | Volunteer + reviewer |
+| Action community corrections | Within 48 hours | Whoever sees it |
+| Audit for SAMPLE records | Monthly | System |
 
 ---
 
