@@ -81,6 +81,11 @@ def main():
         counties = split_list(r.get("counties") or "Brevard") or ["Brevard"]
         lines.append(f"    counties: [{', '.join(q(c) for c in counties)}],")
 
+        # Additional categories (multi-category listing, no duplicate record)
+        also = [c for c in split_list(r.get("also_categories")) if c in CATEGORIES and c != cat]
+        if also:
+            lines.append(f"    alsoIn: [{', '.join(q(c) for c in also)}],")
+
         # ---- optional contact fields (only emit when present) --------------------
         for csv_key, ts_key in (("city", "city"), ("address", "address"),
                                 ("phone", "phone"), ("website", "website"),

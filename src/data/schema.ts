@@ -132,6 +132,16 @@ export interface Resource {
   /** Plain-language description of what it is, e.g. "Food pantry". */
   orgType: string;
   category: Category;
+  /**
+   * Additional categories this listing should also appear under.
+   *
+   * Some organizations genuinely serve more than one need — LifePointe runs a food
+   * ministry, a shower/hygiene ministry, and a cold-night shelter. Without this, the
+   * choice is either to duplicate the record (which produces two cards for one place)
+   * or to bury it under one category. Neither is honest. `category` stays the primary
+   * (it drives the card badge); `alsoIn` widens the filter without duplicating anything.
+   */
+  alsoIn?: Category[];
   /** Which of the tri-county counties it serves. */
   counties: string[];
   city?: string;

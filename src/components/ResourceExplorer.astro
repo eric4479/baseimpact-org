@@ -131,7 +131,7 @@ for (const r of items) {
           <div
             class="resource-item"
             data-id={r.id}
-            data-category={r.category}
+            data-category={[r.category, ...(r.alsoIn ?? [])].join(' ')}
             data-search={searchIndex(r)}
             data-pop={(r.population ?? []).join(' ')}
             data-trust={r.verification.status === 'sample' ? 'sample' : 'trusted'}
@@ -225,7 +225,7 @@ for (const r of items) {
     const visible = [];
 
     for (const el of items) {
-      const okCat = activeCat === 'all' || el.dataset.category === activeCat;
+      const okCat = activeCat === 'all' || (el.dataset.category || '').split(' ').includes(activeCat);
       const okTerm = term === '' || (el.dataset.search || '').includes(term);
       const pops = (el.dataset.pop || '').split(' ').filter(Boolean);
       const okPop = activePops.size === 0 || Array.from(activePops).every((p) => pops.includes(p));
