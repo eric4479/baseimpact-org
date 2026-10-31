@@ -35,6 +35,22 @@ export function transitHref(address: string): string {
 }
 
 /**
+ * Walking directions. Used as a fallback where transit (bus) service does not
+ * reach the destination, so a visitor is never left with a dead-end error.
+ */
+export function walkHref(address: string): string {
+  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}&travelmode=walking`;
+}
+
+/**
+ * Driving directions. Last-resort fallback for areas with no transit or walkable
+ * route (e.g. rural addresses), so the visitor can at least get there by car.
+ */
+export function driveHref(address: string): string {
+  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}&travelmode=driving`;
+}
+
+/**
  * The bare hostname of a URL, for labelling a link with where it actually goes.
  *
  * A full URL is too long for a button and the scheme is noise, but a button reading
