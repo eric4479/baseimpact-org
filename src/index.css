@@ -174,6 +174,47 @@
 }
 
 @layer base {
+  html.hc {
+    color-scheme: light;
+  }
+  html.hc body {
+    background: #ffffff;
+    color: #000000;
+  }
+}
+.hc {
+  --color-page: #ffffff;
+  --color-card: #ffffff;
+  --color-inset: #e5e5e5;
+  --color-band: #000000;
+  --color-band-deep: #000000;
+  --color-body: #000000;
+  --color-muted: #000000;
+  --color-faint: #1a1a1a;
+  --color-on-fill: #ffffff;
+  --color-line: #000000;
+  --color-accent: #0000cc;
+  --color-accent-hover: #000099;
+  --color-positive: #004d00;
+  --color-caution: #7a3300;
+  --color-critical: #8b0000;
+  --color-inactive: #1a1a1a;
+  --color-fill: #0000cc;
+  --color-fill-hover: #000099;
+  --color-fill-caution: #7a3300;
+  --color-fill-critical: #8b0000;
+  --color-fill-positive: #004d00;
+  --color-tint-positive: #ccffcc;
+  --color-tint-caution: #ffe5cc;
+  --color-tint-critical: #ffcccc;
+  --color-tint-inactive: #e5e5e5;
+}
+.hc :focus-visible {
+  outline: 3px solid #ffcc00 !important;
+  outline-offset: 3px !important;
+}
+
+@layer base {
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
