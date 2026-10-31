@@ -1,6 +1,6 @@
 import { Bookmark, MapPin, Navigation, Phone } from "lucide-react";
 import type { ProcessedResource } from "@/lib/resources";
-import { directionsHref, telHref, transitHref } from "@/lib/resources";
+import { directionsHref, telHref, transitHref, walkHref } from "@/lib/resources";
 import { useSavedStore } from "@/lib/stores";
 import { cn } from "@/lib/utils";
 import { StatusBadge } from "@/components/status-badge";
@@ -101,7 +101,7 @@ export function ResourceCard({ resource }: { resource: ProcessedResource }) {
             </Button>
           )}
           {canNavigate && (
-            <Button asChild variant="outline" size="lg" className="min-w-[120px] flex-1 rounded-xl">
+            <Button asChild variant="outline" size="lg" className="min-w-[100px] flex-1 rounded-xl">
               <a
                 href={transitHref(resource.address)}
                 target="_blank"
@@ -110,6 +110,19 @@ export function ResourceCard({ resource }: { resource: ProcessedResource }) {
               >
                 <Navigation className="size-4" aria-hidden />
                 Bus route
+              </a>
+            </Button>
+          )}
+          {canNavigate && (
+            <Button asChild variant="outline" size="lg" className="min-w-[100px] flex-1 rounded-xl">
+              <a
+                href={walkHref(resource.address)}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`Open walking directions to ${resource.name}`}
+              >
+                <Navigation className="size-4" aria-hidden />
+                Walk
               </a>
             </Button>
           )}
