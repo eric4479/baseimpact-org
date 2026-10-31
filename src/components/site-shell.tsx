@@ -116,6 +116,20 @@ export function SiteShell({ children }: { children: ReactNode }) {
               </nav>
 
           <div className="flex items-center gap-2">
+            <a
+              href="https://translate.google.com/translate?sl=en&tl=es&u=https://baseimpact.org"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="View this page in Spanish via Google Translate"
+              className="flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-line/60 bg-card/40 px-2 text-xs font-bold text-on-fill hover:bg-card/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-fill"
+              onClick={(e) => {
+                e.preventDefault();
+                const url = `https://translate.google.com/translate?sl=en&tl=es&u=${encodeURIComponent(window.location.href)}`;
+                window.open(url, "_blank", "noopener");
+              }}
+            >
+              ES
+            </a>
             <button
               type="button"
               onClick={toggleHc}
