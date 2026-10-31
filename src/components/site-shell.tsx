@@ -135,9 +135,9 @@ export function SiteShell({ children }: { children: ReactNode }) {
               onClick={toggleHc}
               aria-pressed={hc}
               aria-label={hc ? "Turn off high contrast" : "Turn on high contrast"}
-              className="flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-line/60 bg-card/40 text-on-fill hover:bg-card/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-fill"
+              className="flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-line/60 bg-card/40 px-2 text-xs font-bold text-on-fill hover:bg-card/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-fill"
             >
-              {hc ? "HC" : "Aa"}
+              {hc ? "Standard" : "Contrast"}
             </button>
             <Button variant="emergency" size="sm" onClick={openTriage} className="shrink-0">
               <Zap className="size-4" aria-hidden />
