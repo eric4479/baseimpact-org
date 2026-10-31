@@ -26,6 +26,15 @@ export function directionsHref(address: string): string {
 }
 
 /**
+ * A directions link that opens Google Maps already in transit mode (bus + walk).
+ * Used for resources where a visitor may not have a car; the map app still
+ * allows switching to walking or driving once it opens.
+ */
+export function transitHref(address: string): string {
+  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}&travelmode=transit`;
+}
+
+/**
  * The bare hostname of a URL, for labelling a link with where it actually goes.
  *
  * A full URL is too long for a button and the scheme is noise, but a button reading

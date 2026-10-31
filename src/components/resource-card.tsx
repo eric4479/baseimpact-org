@@ -1,6 +1,6 @@
 import { Bookmark, MapPin, Navigation, Phone } from "lucide-react";
 import type { ProcessedResource } from "@/lib/resources";
-import { directionsHref, telHref } from "@/lib/resources";
+import { directionsHref, telHref, transitHref } from "@/lib/resources";
 import { useSavedStore } from "@/lib/stores";
 import { cn } from "@/lib/utils";
 import { StatusBadge } from "@/components/status-badge";
@@ -19,8 +19,6 @@ export function ResourceCard({ resource }: { resource: ProcessedResource }) {
   // Mobile-only services such as outreach vans and phone lines have no fixed address
   // to navigate to, so directions would be meaningless for them.
   const canNavigate = !resource.mobileOnly && resource.address.trim().length > 0;
-
-  const actionCount = (hasPhone ? 1 : 0) + (canNavigate ? 1 : 0);
 
   return (
     <article className="rounded-2xl bg-card p-4 shadow-[var(--shadow-border)] sm:p-5">
@@ -80,10 +78,9 @@ export function ResourceCard({ resource }: { resource: ProcessedResource }) {
         </span>
       </div>
 
-      {actionCount > 0 && (
-        <div className={cn("mt-4 grid gap-2", actionCount === 2 && "grid-cols-2")}>
+      <div className="mt-4 flex flex-wrap gap-2">
           {hasPhone && (
-            <Button asChild variant="call" size="lg" className="rounded-xl">
+            <Button asChild variant="call" size="lg" className="min-w-[120px] flex-1 rounded-xl">
               <a href={telHref(phone)}>
                 <Phone className="size-4" aria-hidden />
                 Call
@@ -91,9 +88,7 @@ export function ResourceCard({ resource }: { resource: ProcessedResource }) {
             </Button>
           )}
           {canNavigate && (
-            <Button asChild variant="outline" size="lg" className="rounded-xl">
-              {/* Opens the phone's own map app, which already offers walking, driving,
-                  and transit, so the travel mode is chosen there rather than here. */}
+            <Button asChild variant="outline" size="lg" className="min-w-[120px] flex-1 rounded-xl">
               <a
                 href={directionsHref(resource.address)}
                 target="_blank"
@@ -105,8 +100,20 @@ export function ResourceCard({ resource }: { resource: ProcessedResource }) {
               </a>
             </Button>
           )}
+          {canNavigate && (
+            <Button asChild variant="outline" size="lg" className="min-w-[120px] flex-1 rounded-xl">
+              <a
+                href={transitHref(resource.address)}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`Open bus and transit directions to ${resource.name}`}
+              >
+                <Navigation className="size-4" aria-hidden />
+                Bus route
+              </a>
+            </Button>
+          )}
         </div>
-      )}
     </article>
   );
 }
