@@ -105,7 +105,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
                         "flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-semibold",
                         active
                           ? "bg-fill text-on-fill"
-                          : "text-faint hover:bg-band-deep hover:text-on-fill",
+                          : "text-on-fill/70 hover:bg-band-deep hover:text-on-fill",
                       )}
                     >
                       <Icon className="size-4" aria-hidden />

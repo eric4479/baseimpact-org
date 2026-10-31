@@ -209,9 +209,15 @@
   --color-tint-critical: #ffcccc;
   --color-tint-inactive: #e5e5e5;
 }
-.hc :focus-visible {
-  outline: 3px solid #ffcc00 !important;
-  outline-offset: 3px !important;
+.hc header {
+  --color-faint: var(--color-on-fill);
+  --color-muted: var(--color-on-fill);
+}
+.hc header button:not([class*="emergency"]),
+.hc header a[aria-label] {
+  background-color: #000000;
+  border-color: #ffffff;
+  color: #ffffff;
 }
 
 @layer base {
