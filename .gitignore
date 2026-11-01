@@ -25,3 +25,14 @@ pnpm-debug.log*
 
 # Cloudflare wrangler state
 .wrangler/
+
+# Internal documents (not for public repo)
+cloudflare-api-reference.md
+AGENTS.md
+outreach-emails-and-letters.md
+ai-hardware-and-grant-research.md
+impact-summary.md
+program-budgets.md
+
+# IDE settings
+.vscode/
