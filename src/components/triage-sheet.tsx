@@ -50,7 +50,7 @@ export function TriageSheet() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="triage-title"
-        className="relative max-h-[92dvh] w-full overflow-y-auto rounded-t-3xl bg-page p-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] shadow-[var(--shadow-border)] md:max-w-lg md:rounded-3xl md:p-7"
+        className="relative max-h-[92dvh] w-full overflow-y-auto rounded-t-3xl bg-page p-9 pb-[max(1.5rem,env(safe-area-inset-bottom))] shadow-[var(--shadow-border)] md:max-w-lg md:rounded-3xl md:p-7"
       >
         <button
           type="button"
@@ -90,7 +90,7 @@ export function TriageSheet() {
                       setNeed(option.key);
                       setStep(2);
                     }}
-                    className="rounded-2xl bg-card p-4 text-left shadow-[var(--shadow-border)] transition-shadow duration-150 hover:shadow-[var(--shadow-border-hover)]"
+                    className="rounded-2xl bg-card p-10 text-left shadow-[var(--shadow-border)] transition-shadow duration-150 hover:shadow-[var(--shadow-border-hover)]"
                   >
                     <span className="flex items-center gap-2 font-semibold text-accent">
                       <Icon className="size-4" aria-hidden />
@@ -116,7 +116,7 @@ export function TriageSheet() {
                 <p className="text-muted">No exact matches. Browse the full directory.</p>
               ) : (
                 matches.map((res) => (
-                  <div key={res.id} className="rounded-2xl bg-card p-4 shadow-[var(--shadow-border)]">
+                  <div key={res.id} className="rounded-2xl bg-card p-10 shadow-[var(--shadow-border)]">
                     <div className="flex items-start justify-between gap-2">
                       <h3 className="font-display text-lg font-semibold">{res.name}</h3>
                       <span className="shrink-0 rounded-full bg-tint-positive px-2 py-1 text-xs font-bold text-positive">

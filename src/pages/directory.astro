@@ -12,10 +12,10 @@ const resources = processResources(origin, 50, {
   savedIds: [],
 });
 
-const groups = ['all', 'food', 'shelter', 'health', 'money', 'basics', 'crisis'];
+const groups = ['all', 'food', 'shelter', 'health', 'money', 'basics', 'crisis', 'saved'];
 const groupLabels: Record<string, string> = {
   all: 'All', food: 'Food', shelter: 'Shelter', health: 'Health',
-  money: 'Money', basics: 'Basics', crisis: 'Crisis',
+  money: 'Money', basics: 'Basics', crisis: 'Crisis', saved: 'Saved',
 };
 ---
 
@@ -49,7 +49,7 @@ const groupLabels: Record<string, string> = {
 
   <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" id="resource-grid">
     {resources.map((r: any) => (
-      <div class="resource-item" data-group={r.group} data-name={r.name.toLowerCase()} data-desc={r.description.toLowerCase()} data-tags={r.tags.join(' ').toLowerCase()} data-open={r.nextAvail?.status === 'OPEN' ? '1' : '0'}>
+      <div class="resource-item" data-resource-id={r.id} data-group={r.group} data-name={r.name.toLowerCase()} data-desc={r.description.toLowerCase()} data-tags={r.tags.join(' ').toLowerCase()} data-open={r.nextAvail?.status === 'OPEN' ? '1' : '0'}>
         <ResourceCard resource={r} />
       </div>
     ))}
@@ -60,7 +60,7 @@ const groupLabels: Record<string, string> = {
     <p class="text-sm text-faint mt-2">Try a different search or filter.</p>
   </div>
 
-  <div class="mt-8 rounded-2xl bg-inset p-4 text-center">
+  <div class="mt-8 rounded-2xl bg-inset p-10 text-center">
     <p class="text-sm text-muted mb-2">Need immediate help?</p>
     <div class="flex gap-2 justify-center flex-wrap">
       <a href="tel:211" class="inline-flex items-center gap-1 rounded-lg bg-fill px-4 py-2 text-sm font-semibold text-on-fill">Call 211</a>
@@ -93,7 +93,7 @@ const groupLabels: Record<string, string> = {
       const tags = el.dataset.tags || '';
       const isOpen = el.dataset.open === '1';
 
-      const matchesGroup = activeGroup === 'all' || group === activeGroup;
+      const matchesGroup = activeGroup === 'all' || group === activeGroup || (activeGroup === 'saved' && getSaved().includes(el.getAttribute('data-resource-id') || ''));
       const matchesSearch = !query || name.includes(query) || desc.includes(query) || tags.includes(query);
       const matchesOpen = !openOnly || isOpen;
 
@@ -125,6 +125,50 @@ const groupLabels: Record<string, string> = {
       chip.classList.remove('bg-inset', 'text-body');
       chip.classList.add('bg-fill', 'text-on-fill');
       filter();
+    });
+  });
+
+  // Save for later functionality
+  const SAVED_KEY = 'baseimpact-saved';
+  function getSaved() {
+    try { return JSON.parse(localStorage.getItem(SAVED_KEY) || '[]'); } catch { return []; }
+  }
+  function setSaved(ids) {
+    localStorage.setItem(SAVED_KEY, JSON.stringify(ids));
+  }
+  function updateSaveBtn(btn, saved) {
+    btn.setAttribute('aria-pressed', saved ? 'true' : 'false');
+    btn.classList.toggle('text-accent', saved);
+    btn.classList.toggle('text-muted', !saved);
+    const svg = btn.querySelector('svg');
+    if (svg) svg.setAttribute('fill', saved ? 'currentColor' : 'none');
+  }
+
+  // Initialize saved state on page load
+  const savedIds = getSaved();
+  document.querySelectorAll('.save-btn').forEach(btn => {
+    const id = btn.getAttribute('data-resource-id');
+    if (id && savedIds.includes(id)) {
+      updateSaveBtn(btn, true);
+    }
+  });
+
+  // Handle save button clicks
+  document.querySelectorAll('.save-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const id = btn.getAttribute('data-resource-id');
+      if (!id) return;
+      const current = getSaved();
+      const idx = current.indexOf(id);
+      if (idx >= 0) {
+        current.splice(idx, 1);
+        updateSaveBtn(btn, false);
+      } else {
+        current.push(id);
+        updateSaveBtn(btn, true);
+      }
+      setSaved(current);
     });
   });
 </script>

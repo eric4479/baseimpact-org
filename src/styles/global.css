@@ -11,13 +11,13 @@
   --color-page: #f7f9fb;
   --color-card: #ffffff;
   --color-inset: #e5e7eb;
-  --color-band: #0f172a;
-  --color-band-deep: #020617;
+  --color-band: #0a0f1a;
+  --color-band-deep: #000000;
 
   /* text */
   --color-body: #111827;
   --color-muted: #374151;
-  --color-faint: #4b5563;
+  --color-faint: #374151;
   --color-on-fill: #ffffff;
 
   /* border */
@@ -32,8 +32,8 @@
   --color-inactive: #4b5563;
 
   /* fills */
-  --color-fill: #2563eb;
-  --color-fill-hover: #1d4ed8;
+  --color-fill: #1d4ed8;
+  --color-fill-hover: #1e40af;
   --color-fill-caution: #92400e;
   --color-fill-critical: #991b1b;
   --color-fill-positive: #065f46;
@@ -69,11 +69,11 @@
   --color-card: #111827;
   --color-inset: #1f2937;
   --color-band: #0b1220;
-  --color-band-deep: #020617;
+  --color-band-deep: #000000;
 
   --color-body: #f8fafc;
   --color-muted: #e2e8f0;
-  --color-faint: #cbd5e1;
+  --color-faint: #e2e8f0;
   --color-on-fill: #ffffff;
 
   --color-line: #4b5563;
@@ -85,8 +85,8 @@
   --color-critical: #fca5a5;
   --color-inactive: #cbd5e1;
 
-  --color-fill: #2563eb;
-  --color-fill-hover: #1d4ed8;
+  --color-fill: #1d4ed8;
+  --color-fill-hover: #1e40af;
   --color-fill-caution: #b45309;
   --color-fill-critical: #b91c1c;
   --color-fill-positive: #064e3b;
@@ -98,52 +98,6 @@
 
   --shadow-border: 0 0 0 1px #ffffff14, 0 1px 2px -1px #ffffff0f, 0 2px 4px #ffffff0a;
   --shadow-border-hover: 0 0 0 1px #ffffff1f, 0 1px 2px -1px #ffffff14, 0 2px 4px #ffffff0f;
-}
-
-.hc {
-  --color-page: #ffffff;
-  --color-card: #ffffff;
-  --color-inset: #e5e5e5;
-  --color-band: #000000;
-  --color-band-deep: #000000;
-  --color-body: #000000;
-  --color-muted: #000000;
-  --color-faint: #1a1a1a;
-  --color-on-fill: #ffffff;
-  --color-line: #000000;
-  --color-accent: #0000cc;
-  --color-accent-hover: #000099;
-  --color-positive: #004d00;
-  --color-caution: #7a3300;
-  --color-critical: #8b0000;
-  --color-inactive: #1a1a1a;
-  --color-fill: #0000cc;
-  --color-fill-hover: #000099;
-  --color-fill-caution: #7a3300;
-  --color-fill-critical: #8b0000;
-  --color-fill-positive: #004d00;
-  --color-tint-positive: #ccffcc;
-  --color-tint-caution: #ffe5cc;
-  --color-tint-critical: #ffcccc;
-  --color-tint-inactive: #e5e5e5;
-}
-
-html.hc {
-  color-scheme: light;
-}
-html.hc body {
-  background: #ffffff;
-  color: #000000;
-}
-.hc header {
-  --color-faint: var(--color-on-fill);
-  --color-muted: var(--color-on-fill);
-}
-.hc header button:not(.emergency),
-.hc header a[aria-label] {
-  background-color: #000000;
-  border-color: #ffffff;
-  color: #ffffff;
 }
 
 /* Base */
@@ -333,12 +287,135 @@ input, select, textarea {
   .xl\:pb-12 { padding-bottom: 3rem; }
 }
 
+/* ── Kairo-inspired design upgrades (stage 1) ── */
+
+/* Easing tokens */
+:root {
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.35, 0.64, 1);
+}
+
+/* Signal accent (Kairo orange) — used for highlights, selection, focus */
+:root {
+  --color-signal: #e85d04;
+  --color-signal-soft: rgb(232 93 4 / 0.12);
+}
+.dark {
+  --color-signal: #ff7a3d;
+  --color-signal-soft: rgb(255 122 61 / 0.15);
+}
+
+/* Grain texture overlay — subtle noise for depth */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.dark body::after {
+  opacity: 0.06;
+}
+
+/* Improved card shadows (Kairo-style subtle depth) */
+.bg-card {
+  box-shadow: var(--shadow-border);
+  transition: box-shadow 0.3s var(--ease-out-expo), transform 0.3s var(--ease-out-expo);
+}
+.bg-card:hover {
+  box-shadow: var(--shadow-border-hover);
+  transform: translateY(-1px);
+}
+
+/* Better focus rings */
+:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Selection color */
+::selection {
+  background-color: var(--color-signal);
+  color: var(--color-page);
+}
+
 /* Micro-interactions: smooth transitions */
 a, button {
-  transition: background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+  transition: background-color 0.2s var(--ease-out-expo), color 0.2s var(--ease-out-expo), opacity 0.2s var(--ease-out-expo), box-shadow 0.2s var(--ease-out-expo), transform 0.15s var(--ease-spring);
 }
 a:active, button:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
+}
+
+/* text-wrap improvements */
+h1, h2, h3, h4 {
+  text-wrap: balance;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+p {
+  text-wrap: pretty;
+}
+
+/* Prose spacing for content pages */
+.prose-content > * + * {
+  margin-top: 1.25em;
+}
+.prose-content h2 {
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+.prose-content h3 {
+  margin-top: 1.5em;
+  margin-bottom: 0.4em;
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+.prose-content strong {
+  font-weight: 600;
+}
+.prose-content a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  text-decoration-color: var(--color-signal);
+}
+.prose-content ul {
+  list-style: none;
+  padding-left: 0;
+}
+.prose-content li {
+  position: relative;
+  padding-left: 1.25em;
+  margin-top: 0.4em;
+}
+.prose-content li::before {
+  content: '';
+  position: absolute;
+  top: 0.7em;
+  left: 0;
+  width: 0.6em;
+  height: 1px;
+  background-color: var(--color-signal);
+}
+
+/* Shell container (Kairo-style max-width) */
+.shell {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 72rem;
+  padding-inline: 1rem;
+}
+@media (min-width: 768px) {
+  .shell { padding-inline: 2rem; }
+}
+@media (min-width: 1280px) {
+  .shell { padding-inline: 3rem; }
 }
 /* High contrast mode for low-vision users */
 @media (prefers-contrast: more) {
@@ -443,6 +520,11 @@ a:active, button:active {
 
 .p-4 { padding: 1rem; }
 .p-5 { padding: 1.25rem; }
+.p-6 { padding: 1.5rem; }
+.p-7 { padding: 1.75rem; }
+.p-8 { padding: 2rem; }
+.p-9 { padding: 2.25rem; }
+.p-10 { padding: 2.5rem; }
 .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
 .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
 .px-4 { padding-left: 1rem; padding-right: 1rem; }
