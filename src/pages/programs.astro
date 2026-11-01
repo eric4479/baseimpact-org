@@ -56,14 +56,14 @@ const programs = [
       expand these programs.
     </p>
     {programs.map((prog) => (
-      <article class="rounded-2xl bg-card p-10 shadow-[var(--shadow-border)] space-y-4">
+      <article class="rounded-2xl bg-card p-6 shadow-[var(--shadow-border)] space-y-4">
         <h2 class="font-display text-xl font-semibold text-body">{prog.title}</h2>
         <p class="text-muted">{prog.description}</p>
         <p class="text-sm text-muted leading-relaxed">{prog.details}</p>
         <p class="text-xs text-faint"><strong>Impact metrics:</strong> {prog.outcomes}</p>
       </article>
     ))}
-    <div class="rounded-2xl bg-band p-10 text-on-fill">
+    <div class="rounded-2xl bg-band p-6 text-on-fill">
       <h2 class="font-display text-xl font-semibold mb-2">Want to support our programs?</h2>
       <p class="text-sm opacity-90 mb-4">Your donation helps us provide devices, internet, training, and tech support to neighbors and small nonprofits.</p>
       <a href="/contact" class="inline-flex min-h-11 items-center rounded-lg bg-fill px-5 py-2 text-sm font-semibold text-on-fill hover:bg-fill-hover">Get involved</a>
