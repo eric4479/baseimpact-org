@@ -943,3 +943,115 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   background-color: var(--color-signal);
   color: var(--color-page);
 }
+
+/* ── Kairo-inspired design upgrades (stage 9) ── */
+
+/* High contrast mode enhancements (ADA/WCAG) */
+@media (prefers-contrast: more) {
+  :root {
+    --color-body: #000000;
+    --color-muted: #1a1a1a;
+    --color-faint: #333333;
+    --color-line: #000000;
+    --color-accent: #0000cc;
+    --shadow-border: 0 0 0 2px #000000;
+    --shadow-border-hover: 0 0 0 2px #000000, 0 2px 4px #000000;
+  }
+  .dark {
+    --color-body: #ffffff;
+    --color-muted: #e5e5e5;
+    --color-faint: #cccccc;
+    --color-line: #ffffff;
+    --color-accent: #66b3ff;
+  }
+  a, button {
+    text-decoration: underline;
+  }
+  .bg-card {
+    border: 2px solid var(--color-line);
+  }
+}
+
+/* Reduced motion: disable all animations */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .fade-in, .stagger-children > * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Better keyboard navigation */
+:focus-visible {
+  outline: 3px solid var(--color-signal);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Skip link improvement */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  padding: 0.75rem 1.5rem;
+  background: var(--color-band);
+  color: var(--color-on-fill);
+  font-weight: 600;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  transition: top 0.2s var(--ease-out-expo);
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* Better form input styling */
+input, select, textarea {
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  padding: 0.625rem 0.875rem;
+  background: var(--color-card);
+  color: var(--color-body);
+  transition: border-color 0.2s var(--ease-out-expo), box-shadow 0.2s var(--ease-out-expo);
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-signal-soft);
+  outline: none;
+}
+
+/* Better button disabled state */
+button:disabled, [disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Improved error/success messages */
+.alert-success {
+  background: var(--color-tint-positive);
+  color: var(--color-positive);
+  border: 1px solid var(--color-positive);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+}
+.alert-error {
+  background: var(--color-tint-critical);
+  color: var(--color-critical);
+  border: 1px solid var(--color-critical);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+}
+.alert-caution {
+  background: var(--color-tint-caution);
+  color: var(--color-caution);
+  border: 1px solid var(--color-caution);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+}
