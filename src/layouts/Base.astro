@@ -120,10 +120,23 @@ const ogImageUrl = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`
             entry.target.classList.add('visible');
           }
         });
-      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-      document.querySelectorAll('.fade-in, .stagger-children').forEach((el) => observer.observe(el));
+      }, { threshold: 0, rootMargin: '0px 0px 0px 0px' });
+      // Also immediately show elements already in viewport
+      document.querySelectorAll('.fade-in, .stagger-children').forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          el.classList.add('visible');
+        } else {
+          observer.observe(el);
+        }
+      });
     </script>
 
-    <!-- Browser-native translation is supported via lang attribute on html tag -->
+    <!-- Fallback for no-JS: show all content -->
+    <noscript>
+      <style>
+        .fade-in, .stagger-children > * { opacity: 1 !important; transform: none !important; }
+      </style>
+    </noscript>
   </body>
 </html>
