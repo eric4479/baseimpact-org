@@ -10,14 +10,14 @@ const stats = [
 ---
 
 <Base title="Impact — Base Impact" description="The impact Base Impact is making in Brevard County, FL — technology access, digital skills, and community support.">
-  <h1 class="font-display text-3xl font-semibold text-body mb-4">Impact</h1>
+  <h1 class="font-display text-3xl font-semibold text-body mb-4 fade-in">Impact</h1>
   <div class="space-y-8">
     <p class="max-w-2xl text-muted leading-relaxed">
       Base Impact is a young organization making a real difference in Brevard County.
       Here's what we're building and the impact we're having.
     </p>
 
-    <section class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+    <section class="grid grid-cols-2 gap-4 sm:grid-cols-4 stagger-children">
       {stats.map((stat) => (
         <div class="rounded-2xl bg-card p-5 text-center shadow-[var(--shadow-border)]">
           <p class="font-display text-2xl font-bold text-accent">{stat.value}</p>

@@ -343,9 +343,119 @@ body::after {
   color: var(--color-page);
 }
 
-/* Micro-interactions: smooth transitions */
-a, button {
-  transition: background-color 0.2s var(--ease-out-expo), color 0.2s var(--ease-out-expo), opacity 0.2s var(--ease-out-expo), box-shadow 0.2s var(--ease-out-expo), transform 0.15s var(--ease-spring);
+/* ── Kairo-inspired design upgrades (stage 2) ── */
+
+/* Scroll fade-in animations (CSS-only, enhanced by IntersectionObserver) */
+.fade-in {
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition: opacity 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { opacity: 1; transform: none; transition: none; }
+}
+
+/* Staggered children */
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(1rem);
+  transition: opacity 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo);
+}
+.stagger-children.visible > *:nth-child(1) { transition-delay: 0ms; }
+.stagger-children.visible > *:nth-child(2) { transition-delay: 80ms; }
+.stagger-children.visible > *:nth-child(3) { transition-delay: 160ms; }
+.stagger-children.visible > *:nth-child(4) { transition-delay: 240ms; }
+.stagger-children.visible > *:nth-child(5) { transition-delay: 320ms; }
+.stagger-children.visible > *:nth-child(6) { transition-delay: 400ms; }
+.stagger-children.visible > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .stagger-children > * { opacity: 1; transform: none; transition: none; }
+}
+
+/* Section dividers (Kairo-style subtle lines) */
+.section-divider {
+  border: none;
+  border-top: 1px solid var(--color-line);
+  margin: 2rem 0;
+  opacity: 0.5;
+}
+
+/* Improved button styles (pill-shaped with spring easing) */
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 2.75rem;
+  padding-inline: 1.25rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: transform 0.3s var(--ease-spring), box-shadow 0.3s var(--ease-out-expo), background-color 0.2s var(--ease-out-expo);
+}
+.btn-pill:active {
+  transform: scale(0.96);
+}
+.btn-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.12);
+}
+
+/* Card hover enhancement (Kairo-style lift) */
+.bg-card {
+  transition: box-shadow 0.3s var(--ease-out-expo), transform 0.3s var(--ease-out-expo), border-color 0.3s var(--ease-out-expo);
+}
+.bg-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-border-hover);
+}
+
+/* Signal glow for accent elements */
+.signal-glow {
+  box-shadow: 0 0 20px var(--color-signal-soft);
+}
+
+/* Better link underline (Kairo-style) */
+a.link-underline {
+  text-decoration: underline;
+  text-decoration-color: var(--color-signal);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color 0.2s var(--ease-out-expo), text-decoration-thickness 0.2s var(--ease-out-expo);
+}
+a.link-underline:hover {
+  text-decoration-color: var(--color-signal);
+  text-decoration-thickness: 2px;
+}
+
+/* Improved stat number (Kairo-style large display) */
+.stat-number {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--color-accent);
+}
+
+/* Better empty state */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: var(--color-faint);
+}
+.empty-state svg {
+  margin-inline: auto;
+  margin-bottom: 1rem;
+  opacity: 0.4;
 }
 a:active, button:active {
   transform: scale(0.97);

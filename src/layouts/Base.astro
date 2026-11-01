@@ -112,6 +112,18 @@ const ogImageUrl = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`
       <slot />
     </SiteShell>
 
+    <!-- Scroll fade-in animations -->
+    <script>
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+      document.querySelectorAll('.fade-in, .stagger-children').forEach((el) => observer.observe(el));
+    </script>
+
     <!-- Browser-native translation is supported via lang attribute on html tag -->
   </body>
 </html>
