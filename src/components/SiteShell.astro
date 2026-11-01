@@ -152,17 +152,8 @@ import { getRelativeLocaleUrl } from 'astro:i18n';
     });
   }
 
-  // Mobile menu toggle
-  const menuBtn = document.getElementById('menu-btn');
-  const mobileMenu = document.getElementById('mobile-menu');
-  if (menuBtn && mobileMenu) {
-    menuBtn.addEventListener('click', () => {
-      const isOpen = !mobileMenu.classList.contains('hidden');
-      mobileMenu.classList.toggle('hidden', isOpen);
-      menuBtn.setAttribute('aria-expanded', String(!isOpen));
-      menuBtn.setAttribute('aria-label', isOpen ? 'Open menu' : 'Close menu');
-    });
-  }
+  // Mobile menu toggle handled by inline script below
+
 
   // Triage button (placeholder)
   const triageBtn = document.getElementById('triage-btn');
@@ -202,4 +193,26 @@ import { getRelativeLocaleUrl } from 'astro:i18n';
       });
     });
   }
+</script>
+
+<script is:inline>
+  (function() {
+    function setupMenu() {
+      var btn = document.getElementById('menu-btn');
+      var menu = document.getElementById('mobile-menu');
+      if (btn && menu) {
+        btn.addEventListener('click', function() {
+          var open = !menu.classList.contains('hidden');
+          menu.classList.toggle('hidden', open);
+          btn.setAttribute('aria-expanded', String(!open));
+          btn.setAttribute('aria-label', open ? 'Open menu' : 'Close menu');
+        });
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupMenu);
+    } else {
+      setupMenu();
+    }
+  })();
 </script>
