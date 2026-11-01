@@ -68,13 +68,13 @@ const canNavigate = !resource.mobileOnly && resource.address.trim().length > 0;
     {canNavigate && (
       <a href={directionsHref(resource.address)} target="_blank" rel="noreferrer" aria-label={`Open directions to ${resource.name} in your map app`}
         class="min-w-[120px] flex-1 rounded-xl border border-line bg-card px-4 py-2 text-center text-sm font-semibold text-body hover:bg-inset">
-        Directions
+        Map
       </a>
     )}
     {canNavigate && (
       <a href={transitHref(resource.address)} target="_blank" rel="noreferrer" aria-label={`Open Space Coast Area Transit trip planner to plan a bus route to ${resource.name}`}
         class="min-w-[100px] flex-1 rounded-xl border border-line bg-card px-4 py-2 text-center text-sm font-semibold text-body hover:bg-inset">
-        Bus route
+        Bus
       </a>
     )}
     {canNavigate && (
