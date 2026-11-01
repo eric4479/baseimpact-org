@@ -48,22 +48,22 @@ const pillars = [
     </section>
 
     <section class="grid grid-cols-2 gap-4 sm:grid-cols-4 stagger-children">
-      <div class="rounded-2xl bg-card p-6 text-center shadow-[var(--shadow-border)]">
+      <div class="rounded-2xl bg-card p-4 text-center shadow-[var(--shadow-border)]">
         <p class="font-display text-2xl font-bold text-accent">80+</p>
         <p class="text-sm font-semibold text-body mt-1">Resources listed</p>
         <p class="text-xs text-faint mt-1">Local services in our directory</p>
       </div>
-      <div class="rounded-2xl bg-card p-6 text-center shadow-[var(--shadow-border)]">
+      <div class="rounded-2xl bg-card p-4 text-center shadow-[var(--shadow-border)]">
         <p class="font-display text-2xl font-bold text-accent">12</p>
         <p class="text-sm font-semibold text-body mt-1">Service categories</p>
         <p class="text-xs text-faint mt-1">Food, shelter, health, housing, and more</p>
       </div>
-      <div class="rounded-2xl bg-card p-6 text-center shadow-[var(--shadow-border)]">
+      <div class="rounded-2xl bg-card p-4 text-center shadow-[var(--shadow-border)]">
         <p class="font-display text-2xl font-bold text-accent">Any</p>
         <p class="text-sm font-semibold text-body mt-1">Languages</p>
         <p class="text-xs text-faint mt-1">Use your browser's translate</p>
       </div>
-      <div class="rounded-2xl bg-card p-6 text-center shadow-[var(--shadow-border)]">
+      <div class="rounded-2xl bg-card p-4 text-center shadow-[var(--shadow-border)]">
         <p class="font-display text-2xl font-bold text-accent">24/7</p>
         <p class="text-sm font-semibold text-body mt-1">Help available</p>
         <p class="text-xs text-faint mt-1">Call 211 anytime</p>
@@ -76,11 +76,11 @@ const pillars = [
         Immediate needs first. Then the skills and tools that keep people housed, employed, and
         connected.
       </p>
-      <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {pillars.map((pillar) => (
-          <article class="rounded-2xl bg-card p-9 shadow-[var(--shadow-border)]">
-            <h3 class="mt-4 font-display text-xl font-semibold">{pillar.title}</h3>
-            <p class="mt-2 text-muted">{pillar.body}</p>
+          <article class="rounded-2xl bg-card p-4 shadow-[var(--shadow-border)]">
+            <h3 class="font-display text-base font-semibold">{pillar.title}</h3>
+            <p class="mt-1 text-sm text-muted leading-snug">{pillar.body}</p>
           </article>
         ))}
       </div>
