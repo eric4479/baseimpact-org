@@ -26,12 +26,14 @@ export function directionsHref(address: string): string {
 }
 
 /**
- * A directions link that opens Google Maps already in transit mode (bus + walk).
- * Used for resources where a visitor may not have a car; the map app still
- * allows switching to walking or driving once it opens.
+ * A directions link that opens the local transit agency's trip planner.
+ * Google Maps does not have transit data for Brevard County, FL, so we link
+ * to Space Coast Area Transit's (SCAT) trip planner instead.
+ * The SCAT planner is form-based and cannot be pre-filled with a destination,
+ * so we link to their tools page where visitors can enter their address.
  */
 export function transitHref(address: string): string {
-  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}&travelmode=transit`;
+  return `https://321transit.com/tools/#plantrip`;
 }
 
 /**
