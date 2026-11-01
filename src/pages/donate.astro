@@ -18,10 +18,18 @@ import Base from '../layouts/Base.astro';
     <div class="rounded-2xl bg-band p-6 text-on-fill">
       <h2 class="font-display text-xl font-semibold mb-2">How to donate</h2>
       <p class="text-sm opacity-90 mb-4">
-        Base Impact is currently accepting donations. Please contact us to arrange a donation.
-        Once 501(c)(3) status is granted, donations will be tax-deductible.
+        Base Impact is currently accepting donations. Your support helps us provide devices,
+        internet service, digital skills training, and tech support to neighbors and small nonprofits.
       </p>
-      <a href="/contact" class="inline-flex min-h-11 items-center rounded-lg bg-fill px-5 py-2 text-sm font-semibold text-on-fill hover:bg-fill-hover">Contact us to donate</a>
+      <div class="flex flex-wrap gap-3">
+        <a href="https://www.zeffy.com/donation-form/PLACEHOLDER" target="_blank" rel="noreferrer"
+          class="inline-flex min-h-11 items-center rounded-full bg-fill px-5 py-2 text-sm font-semibold text-on-fill hover:bg-fill-hover btn-pill">
+          Donate via Zeffy (fee-free)
+        </a>
+        <a href="/contact" class="inline-flex min-h-11 items-center rounded-lg border border-on-fill/30 px-5 py-2 text-sm font-semibold text-on-fill hover:bg-on-fill/10">
+          Contact us to donate
+        </a>
+      </div>
     </div>
 
     <p class="text-sm text-faint">
