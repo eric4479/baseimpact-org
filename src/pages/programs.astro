@@ -1,0 +1,72 @@
+---
+import Base from '../layouts/Base.astro';
+
+const programs = [
+  {
+    title: "Technology Access",
+    description: "Helping neighbors get a working device and internet service — and learn to use them.",
+    details: "We provide refurbished devices, help with internet service applications, and walk people through setup. Many neighbors in Brevard County lack reliable access to technology, which limits their ability to apply for jobs, housing, benefits, and healthcare.",
+    outcomes: "Devices distributed, internet connections established, digital skills taught",
+  },
+  {
+    title: "Digital Skills & Job Help",
+    description: "Walk-throughs for housing portals, job applications, benefits, and staying safe online.",
+    details: "One-on-one and small group sessions covering: how to use a computer, email, online forms, job search platforms, housing applications, benefit portals, and online safety. Sessions are tailored to each person's needs and pace.",
+    outcomes: "People trained, job applications submitted, housing portals navigated, benefits accessed",
+  },
+  {
+    title: "Tech for Small Nonprofits",
+    description: "Free setup, security, and support for churches, pantries, and 1–5 person community groups.",
+    details: "Small community organizations often lack IT support. We provide free technology setup, security hardening, backup strategies, and ongoing support. This includes device setup, email configuration, cloud storage, and basic cybersecurity.",
+    outcomes: "Organizations supported, devices secured, volunteers trained",
+  },
+  {
+    title: "Local Resource Guide",
+    description: "A simpler, local starting point that works alongside 211 — food, shelter, showers, and more.",
+    details: "Our online directory lists local services for food, shelter, showers, health, housing, and recovery. It works alongside 211, making it easier to find help in Brevard County. Includes open/closed status, phone numbers, directions, and transit options.",
+    outcomes: "Resources listed, searches performed, people connected to services",
+  },
+  {
+    title: "Laptop & Device Training",
+    description: "Hands-on training for people who have never used a computer, tablet, or smartphone.",
+    details: "We plan to acquire laptops and tablets to use in training sessions. Participants learn basic computer skills, internet safety, email, job search, and how to access online services. Devices may be loaned or donated to participants who complete training.",
+    outcomes: "People trained, devices loaned/donated, digital literacy improved",
+  },
+  {
+    title: "AI & Technology Infrastructure",
+    description: "Building local AI capability to help neighbors and nonprofits with technology support.",
+    details: "We plan to acquire AI-capable hardware (laptops, workstations) to run local AI models. This will allow us to provide AI-assisted help with form filling, document understanding, job search, and technology troubleshooting — all running locally for privacy and accessibility. No cloud dependency, no data leaving the device.",
+    outcomes: "AI hardware acquired, local models deployed, AI-assisted services offered",
+  },
+  {
+    title: "Cell Phone & Tablet Partnerships",
+    description: "Partnering with cell providers to get phones and tablets to homeless and people in need.",
+    details: "We are seeking partnerships with cellular providers (AT&T, Verizon, T-Mobile, and others) to provide free or low-cost phones and tablets to homeless individuals and people in need. Devices come with data plans so recipients can access job portals, housing applications, telehealth, and emergency services.",
+    outcomes: "Partnerships established, devices distributed, people connected",
+  },
+];
+---
+
+<Base title="Programs — Base Impact" description="Base Impact's programs: technology access, digital skills, laptop training, AI infrastructure, cell phone partnerships, and a local resource guide for Brevard County, FL.">
+  <h1 class="font-display text-3xl font-semibold text-body mb-4">Programs</h1>
+  <div class="space-y-8">
+    <p class="max-w-2xl text-muted leading-relaxed">
+      Base Impact runs seven core programs serving Brevard County. Each program addresses
+      a specific need in our community. We are actively seeking grants and partnerships to
+      expand these programs.
+    </p>
+    {programs.map((prog) => (
+      <article class="rounded-2xl bg-card p-6 shadow-[var(--shadow-border)] space-y-3">
+        <h2 class="font-display text-xl font-semibold text-body">{prog.title}</h2>
+        <p class="text-muted">{prog.description}</p>
+        <p class="text-sm text-muted leading-relaxed">{prog.details}</p>
+        <p class="text-xs text-faint"><strong>Impact metrics:</strong> {prog.outcomes}</p>
+      </article>
+    ))}
+    <div class="rounded-2xl bg-band p-6 text-on-fill">
+      <h2 class="font-display text-xl font-semibold mb-2">Want to support our programs?</h2>
+      <p class="text-sm opacity-90 mb-4">Your donation helps us provide devices, internet, training, and tech support to neighbors and small nonprofits.</p>
+      <a href="/contact" class="inline-flex min-h-11 items-center rounded-lg bg-fill px-5 py-2 text-sm font-semibold text-on-fill hover:bg-fill-hover">Get involved</a>
+    </div>
+  </div>
+</Base>

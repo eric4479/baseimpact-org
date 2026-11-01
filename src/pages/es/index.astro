@@ -1,0 +1,24 @@
+---
+import Base from '../../layouts/Base.astro';
+import { processResources } from '../../lib/resources/logic';
+
+const origin = { lat: 28.0836, lng: -80.6081 };
+const resources = processResources(origin, 50, {
+  category: 'All',
+  tag: 'All',
+  query: '',
+  onlySaved: false,
+  savedIds: [],
+});
+---
+
+<Base>
+  <main id="main" class="mx-auto w-full max-w-6xl px-4 py-5 sm:py-8">
+    <h1 class="font-display text-3xl font-semibold text-body mb-4">Buscar Ayuda</h1>
+    <p class="text-muted mb-6">{resources.length} recursos en el Condado de Brevard, FL</p>
+    <p class="text-sm text-muted mb-4">
+      Traducido con Google Translate. Para la versión en inglés, visita
+      <a href="/directory" class="text-accent underline">/directory</a>.
+    </p>
+  </main>
+</Base>

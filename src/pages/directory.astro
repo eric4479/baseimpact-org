@@ -1,0 +1,130 @@
+---
+import Base from '../layouts/Base.astro';
+import ResourceCard from '../components/ResourceCard.astro';
+import { processResources } from '../lib/resources/logic';
+
+const origin = { lat: 28.0836, lng: -80.6081 };
+const resources = processResources(origin, 50, {
+  category: 'All',
+  tag: 'All',
+  query: '',
+  onlySaved: false,
+  savedIds: [],
+});
+
+const groups = ['all', 'food', 'shelter', 'health', 'money', 'basics', 'crisis'];
+const groupLabels: Record<string, string> = {
+  all: 'All', food: 'Food', shelter: 'Shelter', health: 'Health',
+  money: 'Money', basics: 'Basics', crisis: 'Crisis',
+};
+---
+
+<Base>
+  <div class="mb-6">
+    <h1 class="font-display text-3xl font-semibold text-body mb-2">Find Help</h1>
+    <p class="text-muted mb-4">{resources.length} resources in Brevard County, FL</p>
+
+    <div class="relative mb-4">
+      <svg class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="search-input" placeholder="Search food, shelter, health..."
+        class="w-full rounded-xl border border-line bg-card pl-10 pr-4 py-3 text-body placeholder:text-faint" />
+    </div>
+
+    <div class="chip-row mb-4" id="filter-chips">
+      {groups.map((g) => (
+        <button type="button" data-group={g}
+          class={`chip px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap ${g === 'all' ? 'bg-fill text-on-fill' : 'bg-inset text-body hover:bg-line'}`}>
+          {groupLabels[g]}
+        </button>
+      ))}
+    </div>
+
+    <label class="flex items-center gap-2 text-sm text-muted cursor-pointer">
+      <input type="checkbox" id="open-now" class="rounded" />
+      Open now
+    </label>
+  </div>
+
+  <p id="results-count" class="text-sm text-muted mb-4">{resources.length} results</p>
+
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" id="resource-grid">
+    {resources.map((r: any) => (
+      <div class="resource-item" data-group={r.group} data-name={r.name.toLowerCase()} data-desc={r.description.toLowerCase()} data-tags={r.tags.join(' ').toLowerCase()} data-open={r.nextAvail?.status === 'OPEN' ? '1' : '0'}>
+        <ResourceCard resource={r} />
+      </div>
+    ))}
+  </div>
+
+  <div id="empty-state" class="hidden text-center py-12">
+    <p class="text-lg text-muted">No resources found.</p>
+    <p class="text-sm text-faint mt-2">Try a different search or filter.</p>
+  </div>
+
+  <div class="mt-8 rounded-2xl bg-inset p-4 text-center">
+    <p class="text-sm text-muted mb-2">Need immediate help?</p>
+    <div class="flex gap-2 justify-center flex-wrap">
+      <a href="tel:211" class="inline-flex items-center gap-1 rounded-lg bg-fill px-4 py-2 text-sm font-semibold text-on-fill">Call 211</a>
+      <a href="tel:988" class="inline-flex items-center gap-1 rounded-lg bg-fill-caution px-4 py-2 text-sm font-semibold text-on-fill">Crisis 988</a>
+    </div>
+  </div>
+</Base>
+
+<script>
+  const searchInput = document.getElementById('search-input');
+  const openNowCheckbox = document.getElementById('open-now');
+  const chips = document.querySelectorAll('#filter-chips button');
+  const items = document.querySelectorAll('.resource-item');
+  const countEl = document.getElementById('results-count');
+  const emptyState = document.getElementById('empty-state');
+  const grid = document.getElementById('resource-grid');
+
+  let activeGroup = 'all';
+
+  function filter() {
+    const query = (searchInput?.value || '').toLowerCase().trim();
+    const openOnly = openNowCheckbox?.checked || false;
+    let visible = 0;
+
+    items.forEach(item => {
+      const el = item;
+      const group = el.dataset.group || '';
+      const name = el.dataset.name || '';
+      const desc = el.dataset.desc || '';
+      const tags = el.dataset.tags || '';
+      const isOpen = el.dataset.open === '1';
+
+      const matchesGroup = activeGroup === 'all' || group === activeGroup;
+      const matchesSearch = !query || name.includes(query) || desc.includes(query) || tags.includes(query);
+      const matchesOpen = !openOnly || isOpen;
+
+      if (matchesGroup && matchesSearch && matchesOpen) {
+        el.style.display = '';
+        visible++;
+      } else {
+        el.style.display = 'none';
+      }
+    });
+
+    if (countEl) countEl.textContent = visible + ' result' + (visible !== 1 ? 's' : '');
+    if (emptyState && grid) {
+      emptyState.classList.toggle('hidden', visible > 0);
+      grid.classList.toggle('hidden', visible === 0);
+    }
+  }
+
+  searchInput?.addEventListener('input', filter);
+  openNowCheckbox?.addEventListener('change', filter);
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      activeGroup = chip.getAttribute('data-group') || 'all';
+      chips.forEach(c => {
+        c.classList.remove('bg-fill', 'text-on-fill');
+        c.classList.add('bg-inset', 'text-body');
+      });
+      chip.classList.remove('bg-inset', 'text-body');
+      chip.classList.add('bg-fill', 'text-on-fill');
+      filter();
+    });
+  });
+</script>

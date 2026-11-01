@@ -1,0 +1,13 @@
+---
+interface Props {
+  siteKey?: string;
+}
+
+const { siteKey = '0x4AAAAAAFth0EGwlXRPMrb0' } = Astro.props;
+---
+
+<div class="turnstile-widget my-4">
+  <!-- Turnstile script: SRI not used, Cloudflare versions this script and updates it frequently -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <div class="cf-turnstile" data-sitekey={siteKey} data-theme="auto"></div>
+</div>

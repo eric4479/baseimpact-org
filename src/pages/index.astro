@@ -1,0 +1,104 @@
+---
+import Base from '../layouts/Base.astro';
+
+const pillars = [
+  { title: "Technology access", body: "Helping neighbors get a working device and internet service — and learn to use them." },
+  { title: "Digital skills & job help", body: "Walk-throughs for housing portals, job applications, benefits, and staying safe online." },
+  { title: "Tech for small nonprofits", body: "Free setup, security, and support for churches, pantries, and 1–5 person community groups." },
+  { title: "Local resource guide", body: "A simpler, local starting point that works alongside 211 — food, shelter, showers, and more." },
+];
+---
+
+<Base>
+  <div class="space-y-10">
+    <section class="overflow-hidden rounded-3xl bg-band px-5 py-8 text-on-fill sm:px-10 sm:py-12">
+      <p class="text-xs font-bold uppercase tracking-[0.16em] text-faint">
+        Scottsmoor · Titusville · Brevard County
+      </p>
+      <h1 class="mt-4 max-w-2xl font-display text-3xl font-semibold tracking-tight sm:text-5xl">
+        Technology help for Brevard County — devices, internet, and the skills to use them.
+      </h1>
+      <p class="mt-4 max-w-xl text-base leading-relaxed text-faint sm:text-lg">
+        Base Impact helps neighbors get connected and helps small local nonprofits keep their
+        technology working. Plus a local resource guide that works alongside 211.
+      </p>
+      <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        <a href="/directory" class="flex w-full items-center justify-center gap-2 rounded-xl bg-fill px-6 py-3 text-base font-semibold text-on-fill hover:bg-fill-hover sm:w-auto">
+          Find help near me
+        </a>
+        <button type="button" class="flex w-full items-center justify-center gap-2 rounded-xl bg-fill-caution px-6 py-3 text-base font-semibold text-on-fill hover:opacity-90 sm:w-auto">
+          Need help?
+        </button>
+      </div>
+    </section>
+
+    <section class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <a href="tel:211" class="flex min-h-16 items-center justify-between rounded-2xl bg-card px-4 shadow-[var(--shadow-border)]">
+        <span>
+          <span class="block text-xs font-bold uppercase tracking-wide text-accent">24/7 local help</span>
+          <span class="font-display text-xl font-semibold">Call 211</span>
+        </span>
+      </a>
+      <a href="tel:+13213230999" class="flex min-h-16 items-center justify-between rounded-2xl bg-card px-4 shadow-[var(--shadow-border)]">
+        <span>
+          <span class="block text-xs font-bold uppercase tracking-wide text-accent">Base Impact · by appointment</span>
+          <span class="font-display text-xl font-semibold">(321) 323-0999</span>
+        </span>
+      </a>
+    </section>
+
+    <section class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+      <div class="rounded-2xl bg-card p-4 text-center shadow-[var(--shadow-border)]">
+        <p class="font-display text-2xl font-bold text-accent">80+</p>
+        <p class="text-sm font-semibold text-body mt-1">Resources listed</p>
+        <p class="text-xs text-faint mt-1">Local services in our directory</p>
+      </div>
+      <div class="rounded-2xl bg-card p-4 text-center shadow-[var(--shadow-border)]">
+        <p class="font-display text-2xl font-bold text-accent">12</p>
+        <p class="text-sm font-semibold text-body mt-1">Service categories</p>
+        <p class="text-xs text-faint mt-1">Food, shelter, health, housing, and more</p>
+      </div>
+      <div class="rounded-2xl bg-card p-4 text-center shadow-[var(--shadow-border)]">
+        <p class="font-display text-2xl font-bold text-accent">2</p>
+        <p class="text-sm font-semibold text-body mt-1">Languages</p>
+        <p class="text-xs text-faint mt-1">English and Spanish</p>
+      </div>
+      <div class="rounded-2xl bg-card p-4 text-center shadow-[var(--shadow-border)]">
+        <p class="font-display text-2xl font-bold text-accent">24/7</p>
+        <p class="text-sm font-semibold text-body mt-1">Help available</p>
+        <p class="text-xs text-faint mt-1">Call 211 anytime</p>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="font-display text-2xl font-semibold sm:text-3xl">What we focus on</h2>
+      <p class="mt-2 max-w-2xl text-muted">
+        Immediate needs first. Then the skills and tools that keep people housed, employed, and
+        connected.
+      </p>
+      <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        {pillars.map((pillar) => (
+          <article class="rounded-2xl bg-card p-5 shadow-[var(--shadow-border)]">
+            <h3 class="mt-4 font-display text-xl font-semibold">{pillar.title}</h3>
+            <p class="mt-2 text-muted">{pillar.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+    <section class="rounded-3xl bg-band px-5 py-8 text-on-fill sm:px-10 sm:py-12">
+      <h2 class="font-display text-2xl font-semibold sm:text-3xl">Support our mission</h2>
+      <p class="mt-2 max-w-2xl text-faint">
+        Base Impact is a pre-filing nonprofit. Your support helps us provide devices, internet,
+        training, and tech support to neighbors and small nonprofits in Brevard County.
+      </p>
+      <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        <a href="/donate" class="flex w-full items-center justify-center gap-2 rounded-xl bg-fill px-6 py-3 text-base font-semibold text-on-fill hover:bg-fill-hover sm:w-auto">
+          Donate
+        </a>
+        <a href="/volunteer" class="flex w-full items-center justify-center gap-2 rounded-xl bg-fill-caution px-6 py-3 text-base font-semibold text-on-fill hover:opacity-90 sm:w-auto">
+          Volunteer
+        </a>
+      </div>
+    </section>
+  </div>
+</Base>

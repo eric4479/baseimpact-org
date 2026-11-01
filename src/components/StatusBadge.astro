@@ -1,0 +1,22 @@
+---
+interface Props {
+  avail: { status: string; label: string };
+  className?: string;
+}
+
+const { avail, className } = Astro.props;
+
+const styles: Record<string, string> = {
+  OPEN: "bg-tint-positive text-positive",
+  SOON: "bg-tint-caution text-caution",
+  CLOSED: "bg-tint-inactive text-inactive",
+  UNKNOWN: "bg-tint-inactive text-inactive",
+};
+
+const style = styles[avail.status] || styles.UNKNOWN;
+---
+
+<span class={`inline-flex min-h-8 items-center gap-1.5 rounded-full px-2.5 text-xs font-bold ${style} ${className || ''}`}>
+  <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+  {avail.label}
+</span>

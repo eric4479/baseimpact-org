@@ -1,0 +1,24 @@
+---
+import Base from '../../layouts/Base.astro';
+import ResourceCard from '../../components/ResourceCard.astro';
+import { processResources } from '../../lib/resources/logic';
+
+const origin = { lat: 28.0836, lng: -80.6081 };
+const resources = processResources(origin, 50, {
+  category: 'All',
+  tag: 'All',
+  query: '',
+  onlySaved: false,
+  savedIds: [],
+});
+---
+
+<Base>
+  <h1 class="font-display text-3xl font-semibold text-body mb-4">Buscar Ayuda</h1>
+  <p class="text-muted mb-6">{resources.length} recursos en el Condado de Brevard, FL</p>
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {resources.map((r: any) => (
+      <ResourceCard resource={r} />
+    ))}
+  </div>
+</Base>

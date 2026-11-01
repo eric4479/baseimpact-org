@@ -1,0 +1,87 @@
+---
+import Base from '../layouts/Base.astro';
+
+const stats = [
+  { label: "Resources listed", value: "80+", detail: "Local services in our directory" },
+  { label: "Service categories", value: "12", detail: "Food, shelter, health, housing, recovery, and more" },
+  { label: "Coverage area", value: "Brevard County", detail: "Brevard County focus, county-wide directory" },
+  { label: "Languages", value: "2", detail: "English and Spanish" },
+];
+---
+
+<Base title="Impact — Base Impact" description="The impact Base Impact is making in Brevard County, FL — technology access, digital skills, and community support.">
+  <h1 class="font-display text-3xl font-semibold text-body mb-4">Impact</h1>
+  <div class="space-y-8">
+    <p class="max-w-2xl text-muted leading-relaxed">
+      Base Impact is a young organization making a real difference in Brevard County.
+      Here's what we're building and the impact we're having.
+    </p>
+
+    <section class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+      {stats.map((stat) => (
+        <div class="rounded-2xl bg-card p-6 text-center shadow-[var(--shadow-border)]">
+          <p class="font-display text-2xl font-bold text-accent">{stat.value}</p>
+          <p class="text-sm font-semibold text-body mt-1">{stat.label}</p>
+          <p class="text-xs text-faint mt-1">{stat.detail}</p>
+        </div>
+      ))}
+    </section>
+
+    <h2 class="font-display text-xl font-semibold text-body mt-6">What we're building</h2>
+    <ul class="list-disc pl-5 space-y-2 text-muted leading-relaxed">
+      <li><strong>Resource directory</strong> — A simpler, local starting point for finding food, shelter, health, housing, and recovery services. Works alongside 211.</li>
+      <li><strong>Technology access</strong> — Helping neighbors get working devices and internet service.</li>
+      <li><strong>Digital skills</strong> — Walk-throughs for housing portals, job applications, benefits, and staying safe online.</li>
+      <li><strong>Nonprofit tech support</strong> — Free setup, security, and support for small community groups.</li>
+    </ul>
+
+    <h2 class="font-display text-xl font-semibold text-body mt-6">How we measure impact</h2>
+    <p class="text-muted leading-relaxed">
+      We track the resources people find, the organizations we help, and the skills people learn.
+      Our goal is simple: more neighbors connected, more nonprofits supported.
+    </p>
+
+    <h2 class="font-display text-xl font-semibold text-body mt-6">AI &amp; technology grants</h2>
+    <p>Base Impact is pursuing technology grants and partnerships to bring AI-powered tools to the community:</p>
+    <ul class="list-disc pl-5 space-y-2 text-muted leading-relaxed">
+      <li><strong>AI form filling assistant</strong> — Local AI that helps people complete government forms, job applications, and housing applications without cloud dependency.</li>
+      <li><strong>AI document reader for seniors</strong> — AI-powered tool that reads and summarizes documents, medical bills, and legal notices for elderly residents.</li>
+      <li><strong>AI resource finder</strong> — Chatbot that connects people to local resources (food, shelter, jobs, healthcare) based on their needs.</li>
+      <li><strong>AI job search assistant</strong> — Helps people write resumes, practice interviews, and find employment.</li>
+      <li><strong>AI translation service</strong> — Real-time translation for non-English speakers at community events.</li>
+    </ul>
+    <p class="text-sm text-faint">All AI runs locally — no data leaves the device. This protects privacy for vulnerable community members.</p>
+
+    <h2 class="font-display text-xl font-semibold text-body mt-6">Technology grant targets</h2>
+    <ul class="list-disc pl-5 space-y-2 text-muted leading-relaxed">
+      <li><strong>Florida State Digital Equity Grant</strong> — Workforce development, digital literacy, device ownership.</li>
+      <li><strong>NCOA Digital Literacy Grant</strong> — Digital skills training for adults 60+ (AT&T funded).</li>
+      <li><strong>Mobile Beacon Wi-Fly Grant</strong> — $20,000+ in donated technology and internet access.</li>
+      <li><strong>NTIA Digital Equity Competitive Grant</strong> — $1.25B program, reopening December 2026.</li>
+      <li><strong>Google for Nonprofits</strong> — $10,000/month Ad Grants + free Workspace + cloud credits.</li>
+      <li><strong>Microsoft for Nonprofits</strong> — $2,000/year Azure credits + discounted software.</li>
+      <li><strong>TechSoup</strong> — 50-90% off hardware and software for nonprofits.</li>
+      <li><strong>PCs for People</strong> — Refurbished computers and tablets at low cost.</li>
+      <li><strong>AWS Imagine Grant</strong> — Cloud credits + cash grants for AI/cloud projects.</li>
+    </ul>
+
+    <h2 class="font-display text-xl font-semibold text-body mt-6">Infrastructure goals</h2>
+    <ul class="list-disc pl-5 space-y-2 text-muted leading-relaxed">
+      <li><strong>AI-capable hardware</strong> — Acquire laptops and workstations to run local AI models for form filling, document understanding, and technology troubleshooting. No cloud dependency, no data leaving the device.</li>
+      <li><strong>Training devices</strong> — Laptops and tablets for hands-on digital skills training sessions. Devices may be loaned or donated to participants.</li>
+      <li><strong>Cell phone partnerships</strong> — Partner with cellular providers (AT&T, Verizon, T-Mobile) to provide free or low-cost phones and tablets to homeless individuals and people in need.</li>
+      <li><strong>Tech company partnerships</strong> — Tablets, laptops, computers, parts, and servers from technology companies for NPO use and AI generation.</li>
+      <li><strong>Church &amp; nonprofit partnerships</strong> — Collaborations with local churches and nonprofits for events, programs, and projects.</li>
+      <li><strong>Device refurbishment</strong> — Establish a device refurbishment program to extend the life of donated technology.</li>
+    </ul>
+
+    <h2 class="font-display text-xl font-semibold text-body mt-6">Community need</h2>
+    <p class="text-muted leading-relaxed">
+      Brevard County has limited access to technology support for vulnerable populations.
+      Many neighbors lack reliable internet, working devices, or the digital skills needed to
+      access housing, jobs, healthcare, and benefits. Small nonprofits serving these communities
+      often operate with minimal technology resources.
+    </p>
+    <p class="text-sm text-faint">Base Impact is a pre-filing nonprofit in Scottsmoor, FL. We're just getting started.</p>
+  </div>
+</Base>

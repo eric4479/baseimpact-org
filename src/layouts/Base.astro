@@ -1,0 +1,115 @@
+---
+import '../styles/global.css';
+import SiteShell from '../components/SiteShell.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  ogImage?: string;
+  noIndex?: boolean;
+}
+
+const {
+  title = 'Base Impact — Find Help',
+  description = 'Find food, shelter, health, housing, and recovery resources in Brevard County, FL. Technology help for Brevard County.',
+  canonical,
+  ogImage = '/og-image.png',
+  noIndex = false,
+} = Astro.props;
+
+const siteUrl = 'https://baseimpact.org';
+const canonicalUrl = canonical || `${siteUrl}${Astro.url.pathname}`;
+const ogImageUrl = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Font preloading for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap" />
+
+    <!-- SEO -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noIndex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:site_name" content="Base Impact" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <!-- Accessibility & Mobile -->
+    <meta name="theme-color" content="#1a1a2e" />
+    <meta name="color-scheme" content="light dark" />
+
+    <!-- Cloudflare Web Analytics -->
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "d7ea3bbf897d40438db5374ed3dc46d7"}'></script>
+
+    <!-- Service Worker -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      }
+    </script>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "NonprofitOrganization",
+      "name": "Base Impact Inc.",
+      "url": siteUrl,
+      "description": "Technology help for Brevard County — devices, internet, and the skills to use them. Helping neighbors get connected and small nonprofits keep their technology working.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Scottsmoor",
+        "addressRegion": "FL",
+        "postalCode": "32775",
+        "addressCountry": "US"
+      },
+      "telephone": "+1-321-323-0999",
+      "email": "admin@baseimpact.org",
+      "areaServed": {
+        "@type": "GeoCircle",
+        "geoMidpoint": {
+          "@type": "GeoCoordinates",
+          "latitude": 28.7,
+          "longitude": -80.9
+        },
+        "geoRadius": "50000"
+      },
+      "nonprofitStatus": "Nonprofit501c3",
+      "foundingLocation": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Scottsmoor",
+          "addressRegion": "FL",
+          "addressCountry": "US"
+        }
+      }
+    })} />
+  </head>
+  <body>
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-card focus:px-4 focus:py-2 focus:text-base focus:font-semibold focus:shadow-lg">Skip to main content</a>
+    <SiteShell>
+      <slot />
+    </SiteShell>
+  </body>
+</html>

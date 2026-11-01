@@ -1,0 +1,165 @@
+import { useState } from "react";
+import { Droplets, Heart, Phone, Shield, X, Zap } from "lucide-react";
+import { Link } from "@/lib/nav";
+import { resourcesForTriage, telHref, type HelpGroup } from "@/lib/resources";
+import { useUiStore } from "@/lib/stores";
+import { Button } from "@/components/ui/button";
+
+/**
+ * The four things somebody needs *tonight*, in the order they usually need them.
+ *
+ * A deliberately narrower set than the directory's browse groups: health cover and
+ * benefit applications are appointment-shaped, so offering them here would push the
+ * things that cannot wait further down. Crisis is included because a crisis line is
+ * the one listing where making somebody browse is itself the failure.
+ */
+const NEEDS: Array<{
+  key: HelpGroup;
+  label: string;
+  desc: string;
+  icon: typeof Shield;
+}> = [
+  { key: "shelter", label: "Shelter tonight", desc: "Beds, day center, cold night", icon: Shield },
+  { key: "food", label: "Food today", desc: "Hot meals, groceries, no ID", icon: Heart },
+  { key: "crisis", label: "In crisis", desc: "988, abuse hotline, 24/7", icon: Zap },
+  { key: "basics", label: "Shower & basics", desc: "Showers, laundry, hygiene", icon: Droplets },
+];
+
+export function TriageSheet() {
+  const open = useUiStore((s) => s.triageOpen);
+  const close = useUiStore((s) => s.closeTriage);
+  const [step, setStep] = useState<1 | 2>(1);
+  const [need, setNeed] = useState<HelpGroup>("food");
+
+  if (!open) return null;
+
+  const matches = resourcesForTriage(need);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center md:items-center md:p-6">
+      <button
+        type="button"
+        className="absolute inset-0 bg-band-deep/70"
+        aria-label="Close helper"
+        onClick={() => {
+          close();
+          setStep(1);
+        }}
+      />
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="triage-title"
+        className="relative max-h-[92dvh] w-full overflow-y-auto rounded-t-3xl bg-page p-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] shadow-[var(--shadow-border)] md:max-w-lg md:rounded-3xl md:p-7"
+      >
+        <button
+          type="button"
+          onClick={() => {
+            close();
+            setStep(1);
+          }}
+          className="absolute right-3 top-3 flex size-11 items-center justify-center rounded-xl text-muted"
+          aria-label="Close"
+        >
+          <X className="size-5" />
+        </button>
+
+        {step === 1 ? (
+          <div className="space-y-5">
+            <div className="pr-10">
+              <p className="inline-flex items-center gap-1.5 rounded-full bg-tint-caution px-3 py-1 text-xs font-bold text-caution">
+                <Zap className="size-3.5" aria-hidden />
+                Quick helper
+              </p>
+              <h2 id="triage-title" className="mt-3 font-display text-2xl font-semibold">
+                What do you need right now?
+              </h2>
+              <p className="mt-2 text-muted">
+                One tap. We’ll show the closest Brevard County options.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {NEEDS.map((option) => {
+                const Icon = option.icon;
+                return (
+                  <button
+                    key={option.key}
+                    type="button"
+                    onClick={() => {
+                      setNeed(option.key);
+                      setStep(2);
+                    }}
+                    className="rounded-2xl bg-card p-4 text-left shadow-[var(--shadow-border)] transition-shadow duration-150 hover:shadow-[var(--shadow-border-hover)]"
+                  >
+                    <span className="flex items-center gap-2 font-semibold text-accent">
+                      <Icon className="size-4" aria-hidden />
+                      {option.label}
+                    </span>
+                    <span className="mt-1 block text-sm text-muted">{option.desc}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-5">
+            <div className="pr-10">
+              <p className="text-xs font-bold uppercase tracking-widest text-accent">Next steps</p>
+              <h2 id="triage-title" className="mt-1 font-display text-2xl font-semibold">
+                Places that can help
+              </h2>
+            </div>
+
+            <div className="space-y-3">
+              {matches.length === 0 ? (
+                <p className="text-muted">No exact matches. Browse the full directory.</p>
+              ) : (
+                matches.map((res) => (
+                  <div key={res.id} className="rounded-2xl bg-card p-4 shadow-[var(--shadow-border)]">
+                    <div className="flex items-start justify-between gap-2">
+                      <h3 className="font-display text-lg font-semibold">{res.name}</h3>
+                      <span className="shrink-0 rounded-full bg-tint-positive px-2 py-1 text-xs font-bold text-positive">
+                        {res.hoursText}
+                      </span>
+                    </div>
+                    <p className="mt-2 text-sm text-muted">{res.description}</p>
+                    <p className="mt-2 text-sm text-muted">{res.address}</p>
+                    <a
+                      href={telHref(res.phone)}
+                      className="mt-3 inline-flex min-h-11 items-center gap-2 font-bold text-accent"
+                    >
+                      <Phone className="size-4" aria-hidden />
+                      {res.phone}
+                    </a>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div className="flex items-center justify-between gap-3 border-t border-line pt-4">
+              <button
+                type="button"
+                onClick={() => setStep(1)}
+                className="min-h-11 font-semibold text-muted"
+              >
+                Back
+              </button>
+              <Button asChild variant="pine" size="sm">
+                <Link
+                  to="/directory"
+                  onClick={() => {
+                    close();
+                    setStep(1);
+                  }}
+                >
+                  Full directory
+                </Link>
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

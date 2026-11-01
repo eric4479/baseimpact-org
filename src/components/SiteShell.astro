@@ -1,0 +1,208 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+---
+
+<div class="site-shell">
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-card focus:px-3 focus:py-2">
+    Skip to content
+  </a>
+
+  <aside class="bg-inset px-4 py-2 text-center text-xs font-medium text-muted sm:text-sm">
+    Base Impact Inc. · Pre-filing nonprofit in Scottsmoor, FL
+  </aside>
+
+  <header class="sticky top-0 z-40 border-b border-line/80 bg-band text-on-fill">
+    <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4">
+      <a href="/" class="flex min-h-11 min-w-0 items-center gap-3">
+        <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-fill text-on-fill">
+          <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </span>
+        <span class="min-w-0">
+          <span class="block font-display text-lg font-semibold leading-none tracking-tight">Base Impact</span>
+          <span class="mt-1 block text-xs font-bold uppercase tracking-widest text-faint">Brevard County, FL</span>
+        </span>
+      </a>
+
+      <nav class="hidden items-center gap-1 xl:flex" aria-label="Primary" id="desktop-nav">
+        <!-- Populated by script -->
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <a href="#" id="es-btn" aria-label="View this page in Spanish via Google Translate"
+          class="flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-line/60 bg-card/40 px-2 text-xs font-bold text-on-fill hover:bg-card/60">
+          ES
+        </a>
+        <button type="button" id="hc-btn" aria-pressed="false"
+          aria-label="Turn on high contrast"
+          class="flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-line/60 bg-card/40 px-2 text-xs font-bold text-on-fill hover:bg-card/60">
+          Contrast
+        </button>
+        <button type="button" id="triage-btn" class="flex min-h-11 shrink-0 items-center gap-1 rounded-lg bg-fill-caution px-3 text-sm font-semibold text-on-fill hover:bg-fill-caution/90">
+          <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          <span class="hidden sm:inline">Need help now</span>
+          <span class="sm:hidden">Help now</span>
+        </button>
+        <button type="button" id="menu-btn" aria-expanded="false" aria-controls="mobile-menu"
+          aria-label="Open menu"
+          class="flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-line/60 bg-card/40 text-on-fill hover:bg-card/60 xl:hidden">
+          <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden xl:hidden border-b border-line bg-card shadow-lg" role="dialog" aria-modal="true" aria-label="Site navigation">
+      <nav aria-label="Mobile full menu" class="mx-auto max-w-6xl px-4 py-3">
+        <p class="mb-2 text-xs font-bold uppercase tracking-widest text-muted">Navigate</p>
+        <ul class="flex flex-col gap-1" id="mobile-nav">
+          <!-- Populated by script -->
+        </ul>
+        <p class="mb-2 mt-4 text-xs font-bold uppercase tracking-widest text-muted">More</p>
+        <ul class="flex flex-col gap-1" id="mobile-more">
+          <!-- Populated by script -->
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="mx-auto w-full max-w-6xl flex-1 px-4 py-5 sm:py-8 xl:pb-12">
+    <slot />
+  </main>
+
+  <footer class="border-t border-line bg-band px-4 pt-8 pb-8 text-sm text-faint">
+    <div class="mx-auto flex max-w-6xl flex-col gap-5 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+      <div>
+        <p class="font-display text-lg font-semibold text-on-fill">Base Impact Inc.</p>
+        <p class="mt-1">Scottsmoor, FL 32775 · Brevard County</p>
+        <p class="mt-2">
+          <a href="tel:+13213230999" class="inline-flex min-h-11 items-center font-semibold text-on-fill underline-offset-2 hover:underline">(321) 323-0999</a>
+          · call or text · by appointment only
+        </p>
+      </div>
+      <div class="sm:text-right">
+        <p>© {new Date().getFullYear()} Base Impact Inc.</p>
+        <a href="/privacy" class="mt-1 inline-flex min-h-11 items-center text-on-fill underline-offset-2 hover:underline">Privacy policy</a>
+        <a href="/terms" class="mt-1 inline-flex min-h-11 items-center text-on-fill underline-offset-2 hover:underline">Terms &amp; disclaimer</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  const NAV = [
+    { to: '/', label: 'Home' },
+    { to: '/directory', label: 'Help' },
+    { to: '/about', label: 'About' },
+    { to: '/programs', label: 'Programs' },
+    { to: '/impact', label: 'Impact' },
+    { to: '/partners', label: 'Partners' },
+    { to: '/volunteer', label: 'Volunteer' },
+    { to: '/guide', label: 'Guide' },
+  ];
+  const MORE = [
+    { to: '/how-to-help', label: 'How to help' },
+    { to: '/purpose', label: 'Our purpose' },
+    { to: '/join', label: 'Join us' },
+    { to: '/donate', label: 'Donate' },
+    { to: '/financials', label: 'Financials' },
+    { to: '/contact', label: 'Contact' },
+    { to: '/feedback', label: 'Feedback' },
+    { to: '/connect', label: 'Connect' },
+    { to: '/socials', label: 'Socials' },
+    { to: '/privacy', label: 'Privacy' },
+    { to: '/terms', label: 'Terms' },
+  ];
+
+  const path = window.location.pathname.replace(/\/$/, '') || '/';
+
+  // Desktop nav
+  const desktopNav = document.getElementById('desktop-nav');
+  if (desktopNav) {
+    NAV.forEach(item => {
+      const a = document.createElement('a');
+      a.href = item.to;
+      a.className = 'flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-semibold ' +
+        (path === item.to ? 'bg-fill text-on-fill' : 'text-on-fill/70 hover:bg-band-deep hover:text-on-fill');
+      a.textContent = item.label;
+      desktopNav.appendChild(a);
+    });
+  }
+
+  // Mobile nav
+  const mobileNav = document.getElementById('mobile-nav');
+  if (mobileNav) {
+    NAV.forEach(item => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = item.to;
+      a.className = 'flex min-h-12 items-center gap-3 rounded-xl px-3 text-base font-semibold ' +
+        (path === item.to ? 'bg-fill text-on-fill' : 'text-body hover:bg-inset');
+      a.textContent = item.label;
+      a.addEventListener('click', () => { document.getElementById('mobile-menu')?.classList.add('hidden'); });
+      li.appendChild(a);
+      mobileNav.appendChild(li);
+    });
+  }
+
+  // Mobile more
+  const mobileMore = document.getElementById('mobile-more');
+  if (mobileMore) {
+    MORE.forEach(item => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = item.to;
+      a.className = 'flex min-h-12 items-center rounded-xl px-3 text-base font-semibold ' +
+        (path === item.to ? 'bg-fill text-on-fill' : 'text-body hover:bg-inset');
+      a.textContent = item.label;
+      a.addEventListener('click', () => { document.getElementById('mobile-menu')?.classList.add('hidden'); });
+      li.appendChild(a);
+      mobileMore.appendChild(li);
+    });
+  }
+
+  // Mobile menu toggle
+  const menuBtn = document.getElementById('menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener('click', () => {
+      const isOpen = !mobileMenu.classList.contains('hidden');
+      mobileMenu.classList.toggle('hidden', isOpen);
+      menuBtn.setAttribute('aria-expanded', String(!isOpen));
+      menuBtn.setAttribute('aria-label', isOpen ? 'Open menu' : 'Close menu');
+    });
+  }
+
+  // HC toggle
+  const hcBtn = document.getElementById('hc-btn');
+  if (hcBtn) {
+    const saved = localStorage.getItem('bi-hc');
+    if (saved === '1') {
+      document.documentElement.classList.add('hc');
+      hcBtn.textContent = 'Standard';
+      hcBtn.setAttribute('aria-pressed', 'true');
+    }
+    hcBtn.addEventListener('click', () => {
+      const isHc = document.documentElement.classList.toggle('hc');
+      localStorage.setItem('bi-hc', isHc ? '1' : '0');
+      hcBtn.textContent = isHc ? 'Standard' : 'Contrast';
+      hcBtn.setAttribute('aria-pressed', String(isHc));
+    });
+  }
+
+  // ES button
+  const esBtn = document.getElementById('es-btn');
+  if (esBtn) {
+    esBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const url = 'https://translate.google.com/translate?sl=en&tl=es&u=' + encodeURIComponent(window.location.href);
+      window.open(url, '_blank', 'noopener');
+    });
+  }
+
+  // Triage button (placeholder)
+  const triageBtn = document.getElementById('triage-btn');
+  if (triageBtn) {
+    triageBtn.addEventListener('click', () => {
+      alert('Triage sheet coming soon');
+    });
+  }
+</script>

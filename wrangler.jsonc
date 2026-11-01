@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "compatibility_date": "2026-10-23",
+  "compatibility_flags": ["global_fetch_strictly_public"],
+  "name": "baseimpact-org",
+  "main": "@astrojs/cloudflare/entrypoints/server",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  },
+  "d1_databases": [
+    {
+      "binding": "baseimpact_verify",
+      "database_name": "baseimpact-verify",
+      "database_id": "d60b0270-bc07-445f-b4fc-da0bcaa2af24"
+    }
+  ]
+}
