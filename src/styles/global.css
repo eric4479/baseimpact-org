@@ -788,3 +788,62 @@ p {
 
 .font-display { font-family: var(--font-display); }
 .font-sans { font-family: var(--font-sans); }
+
+/* ── Kairo-inspired design upgrades (stage 6) ── */
+
+/* Typography refinements (Kairo-style) */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+/* Body text improvements */
+body {
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  letter-spacing: -0.005em;
+}
+
+/* Better paragraph spacing */
+p {
+  text-wrap: pretty;
+  line-height: 1.65;
+}
+
+/* Navigation link hover */
+nav a {
+  transition: color 0.2s var(--ease-out-expo), opacity 0.2s var(--ease-out-expo);
+}
+nav a:hover {
+  opacity: 0.8;
+}
+
+/* Footer improvements */
+footer a {
+  transition: color 0.2s var(--ease-out-expo), text-decoration-color 0.2s var(--ease-out-expo);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.2em;
+}
+footer a:hover {
+  text-decoration-color: var(--color-signal);
+}
+
+/* Better list styling */
+ul, ol {
+  line-height: 1.65;
+}
+li {
+  margin-top: 0.375rem;
+}
+
+/* Improved horizontal rule */
+hr {
+  border: none;
+  border-top: 1px solid var(--color-line);
+  margin: 2rem 0;
+  opacity: 0.5;
+}
