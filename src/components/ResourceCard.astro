@@ -14,11 +14,11 @@ const canNavigate = !resource.mobileOnly && resource.address.trim().length > 0;
 ---
 
 <article class="rounded-2xl bg-card p-6 shadow-[var(--shadow-border)] sm:p-7 flex flex-col h-full" data-resource-id={resource.id}>
-  <div class="relative pr-0">
-    <h3 class="font-display text-xl font-semibold leading-snug text-body pr-12">{resource.name}</h3>
+  <div class="relative">
+    <h3 class="font-display text-xl font-semibold leading-snug text-body pr-16">{resource.name}</h3>
     <button
       type="button"
-      class="save-btn absolute top-0 right-0 size-10 rounded-xl text-muted after:absolute after:left-1/2 after:top-1/2 after:size-10 after:-translate-x-1/2 after:-translate-y-1/2"
+      class="save-btn absolute top-0 right-0 size-9 rounded-xl text-muted after:absolute after:left-1/2 after:top-1/2 after:size-9 after:-translate-x-1/2 after:-translate-y-1/2"
       data-resource-id={resource.id}
       aria-pressed="false"
       aria-label="Save for later"
