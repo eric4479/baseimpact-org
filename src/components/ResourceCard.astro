@@ -14,11 +14,16 @@ const canNavigate = !resource.mobileOnly && resource.address.trim().length > 0;
 ---
 
 <article class="rounded-2xl bg-card p-6 shadow-[var(--shadow-border)] sm:p-7 flex flex-col h-full" data-resource-id={resource.id}>
-  <div class="relative">
-    <h3 class="font-display text-xl font-semibold leading-snug text-body pr-16">{resource.name}</h3>
+  <h3 class="font-display text-xl font-semibold leading-snug text-body">{resource.name}</h3>
+  <div class="mt-1 flex items-center justify-between gap-2">
+    <p class="text-sm font-semibold uppercase tracking-wide text-muted">
+      {resource.category}
+      <span class="mx-1.5 text-faint">·</span>
+      {resource.partnerType}
+    </p>
     <button
       type="button"
-      class="save-btn absolute top-0 right-0 size-9 rounded-xl text-muted after:absolute after:left-1/2 after:top-1/2 after:size-9 after:-translate-x-1/2 after:-translate-y-1/2"
+      class="save-btn relative shrink-0 size-9 rounded-xl text-muted after:absolute after:left-1/2 after:top-1/2 after:size-9 after:-translate-x-1/2 after:-translate-y-1/2"
       data-resource-id={resource.id}
       aria-pressed="false"
       aria-label="Save for later"
@@ -26,11 +31,6 @@ const canNavigate = !resource.mobileOnly && resource.address.trim().length > 0;
       <svg class="mx-auto size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
     </button>
   </div>
-  <p class="mt-1 text-sm font-semibold uppercase tracking-wide text-muted">
-    {resource.category}
-    <span class="mx-1.5 text-faint">·</span>
-    {resource.partnerType}
-  </p>
   <div class="mt-2">
     <StatusBadge avail={resource.nextAvail} className="max-w-full" />
   </div>
